@@ -1,0 +1,135 @@
+.setPage {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* title */
+.setPage_room_title {
+  width: 100%;
+  height: 60px;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+}
+.setPage_room_title .setPage_room_title_left {
+  width: 41px;
+  height: 100%;
+  padding-left: 10px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  background: var(--bg-color);
+}
+.setPage_room_title .room_title_left img {
+  width: 24px;
+  height: 24px;
+}
+.setPage_room_title .room_title_center {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: -0.3px;
+  color: var(--main-text-color);
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  padding-right: 51px;
+  box-sizing: border-box;
+}
+
+/* avatar */
+.setPage_user_avatar {
+  width: 100px;
+  height: 100px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* alias */
+.alias-label {
+  width: 100%;
+  padding-left: 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  line-height: 17px;
+  color: #838791;
+}
+.alias-input {
+  width: calc(100% - 30px);
+  height: 52px;
+  margin: 10px 12px 20px 12px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: #F2F3F3;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  line-height: 18px;
+  color: var(--main-text-color);
+  outline: none;
+}
+.alias-input::placeholder {
+  color: #999;
+}
+
+/* userinfo-box-item */
+.userinfo-box-item {
+  width: 100%;
+  height: 20px;
+  margin-top: 8px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.userinfo-box-item p {
+  width: calc(100% - 30px);
+  font-size: 14px;
+  line-height: 17px;
+  color: #38CA9F;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.userinfo-box-item img {
+  height: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+
+/* btns-box */
+.btns-box {
+  width: 100%;
+  padding: 0 15px;
+  margin-top: 50px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btns-box .btns-box-item {
+  width: calc(50% - 8px);
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+.btns-box .btn-cancel {
+  background: #50545A;
+  color: #CDCDCD;
+}
+.btns-box .btn-confirm {
+  background: #38CA9F;
+  color: #FFFFFF; 
+}

@@ -1,0 +1,6 @@
+{
+  "build": {
+    "componentPath": "direflow-components",
+    "filename": "sdnChatWidget.js"
+  }
+}

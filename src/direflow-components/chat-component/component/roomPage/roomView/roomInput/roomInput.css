@@ -1,0 +1,162 @@
+/* room-input-box */
+.room-input-box {
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  height: 72px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: var(--bg-color);
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #DCDEE0;
+}
+
+/* @ show box */
+.room-input_at {
+  width: 60%;
+  max-height: 200px;
+  position: absolute;
+  left: 80px;
+  bottom: 58px;
+  z-index: 50;
+  border-radius: 8px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+  background-color: #f7f7f7;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.room-input_at::-webkit-scrollbar {
+  display: none;
+}
+.room-input_at_item {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.room-input_at_item_bgFocus {
+  background-color: #EAECEE;
+}
+.room-input_at_item_avatar {
+  width: 26px;
+  height: 26px;
+  background-color: antiquewhite;
+}
+.room-input_at_item_name {
+  width: calc(100% - 35px);
+  height: 26px;
+  line-height: 26px;
+  margin-left: 10px;
+  font-size: 14px;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* pic-upload */
+.room-input-box .room-input-box-upload {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* input */
+.room-input-box .room-input-box-input {
+  height: 40px;
+  box-sizing: border-box;
+  background: var(--sendMessage-bg-color);
+  border: 1px solid #2C3038;
+  border-color: var(--sendMessage-border-color);
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  margin-left: 10px;
+  display: flex;
+  flex-grow: 1;
+  color: var(--message-sender-color);
+  outline: none;
+  padding: 0 16px;
+}
+.room-input-box .room-input-box-input::placeholder {
+  color: #999;
+}
+
+/* tokenSwap & transferTip */
+.tip {
+  width: 100%;
+  position: absolute;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  left: 0px;
+  top: -5px;
+}
+
+.tip .active {
+  color: green;
+}
+
+.dappList {
+  position: absolute;
+  bottom: 70px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dappItem {
+  color: #000;
+  cursor: pointer;
+  background: #fff;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  padding: 0 10px;
+  display: block;
+}
+
+.dappItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+
+.dapp {
+  height: 44px;
+  width: 44px;
+  border-radius: 50%;
+  color: #838791;
+  margin-right: 10px;
+  background: #1e212b;
+  text-align: center;
+  cursor: pointer;
+  min-width: 44px;
+  position: relative;
+}
+
+.dapp.close {
+  transform: rotate(45deg);
+}
+
+.dapp::before {
+  content: "+";
+  font-size: 34px;
+  position: absolute;
+  left: 12px;
+  top: -6px;
+}
+
+.video {
+  padding: 0 10px;
+  color: #fff;
+  cursor: pointer;
+}

@@ -1,0 +1,17 @@
+.urlPreviewComp .urlPreview_url {
+  text-decoration: none;
+  color: #38ca9f;
+}
+
+.urlPreviewComp .urlPreview_title {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #38ca9f;
+}
+
+.urlPreviewComp .urlPreview_description {
+  margin-top: 2px;
+  font-size: 14px;
+  margin-bottom: 2px;
+}

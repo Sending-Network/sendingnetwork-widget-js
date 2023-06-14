@@ -1,0 +1,57 @@
+.roomView {
+  height: calc(100% - 60px);
+  padding: 0 2px 70px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  background-color: var(--bg-color);
+}
+.roomView::-webkit-scrollbar {
+  display: none;
+}
+
+.chat_content {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0 20px;
+}
+
+/* message_join */
+.msgBox_join {
+  width: 100%;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 16px;
+  color: #999;  
+}
+
+/* previewImg */
+.previewImg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewImg img {
+  width: 75%;
+}
+
+.msg-top-station, .msg-bottom-station {
+  width: 100%;
+  height: 50px;
+}

@@ -1,0 +1,32 @@
+.UrlPreviewWidget {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+}
+
+.UrlPreviewWidget .handleFun {
+  display: flex;
+  justify-content: flex-end;
+  height: 50px;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.UrlPreviewWidget .handleFun img {
+  cursor: pointer;
+}
+
+.UrlPreviewWidget .iframeContainer {
+  flex: 1;
+}
+
+.iframe {
+  width: 100%;
+  border: none;
+  height: 100%;
+}

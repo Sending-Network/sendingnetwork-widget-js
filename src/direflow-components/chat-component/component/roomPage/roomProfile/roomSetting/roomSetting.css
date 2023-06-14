@@ -1,0 +1,140 @@
+.room_setting {
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.room_setting_wrap {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.room_setting .room_setting_label {
+    height: 17px;
+    margin: 10px 0 8px 0;
+    font-size: 15px;
+    line-height: 17px;
+    color: #838791;
+}
+.room_setting_input_box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.room_setting .room_setting_input {
+    height: 52px;
+    background: #F2F3F3;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    padding: 0 12px;
+    font-size: 16px;
+    line-height: 18px;
+    color: var(--main-text-color);
+    border: none;
+    display: flex;
+    flex-grow: 1;
+}
+.room_setting .room_setting_input::placeholder {
+    color: #999;
+}
+.room_setting_input_box button {
+    width: 100px;
+    height: 100%;
+    border-radius: 8px;
+    margin-left: 12px;
+    background: #38CA9F;
+    color: #fff;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.room_setting_leave {
+    height: 48px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FF675E;
+    margin-bottom: 13px;
+    cursor: pointer;
+}
+
+/* leave dialog */
+.room_setting .room_setting_dialog {
+    width: 100%;
+    height: calc(100% + 60px);
+    position: absolute;
+    z-index: 100;
+    top: -60px;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+.room_setting .room_setting_dialog .room_setting_dialog_content{
+    position: absolute;
+    left: calc(50% - 138px);
+    top: calc(50% - 100px);
+    width: 268px;
+    height: 178px;
+    background: #303336;
+    border-radius: 14px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+    display: flex;
+    flex-direction: column;
+}
+
+.room_setting_dialog_content .info {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+.room_setting_dialog_content .info-title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #fff;
+}
+.room_setting_dialog_content .info-desc {
+    width: 186px;
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.room_setting_dialog_content .btns {
+    width: 100%;
+    height: 44px;
+    border-top: 1px solid rgba(84, 84, 88, 0.65);
+    display: flex;
+    cursor: pointer;
+}
+.room_setting_dialog_content .btns-item {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #4D94FF;
+    cursor: pointer;
+}
+.room_setting_dialog_content .btns-cancel {
+    border-right: 1px solid rgba(84, 84, 88, 0.65);
+}

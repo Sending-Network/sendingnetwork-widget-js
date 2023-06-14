@@ -1,0 +1,41 @@
+.chat_widget_content * {
+  box-sizing: border-box;
+}
+
+.chat_widget_content {
+  width: 100%;
+  height: calc(100% - 50px);
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  /* position: relative; */
+}
+
+.chat_widget_content .chat_widget_content_title {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-family: PingFangSC;
+  font-size: 17px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: -0.41px;
+  color: var(--main-text-color);
+  position: relative;
+}
+
+.chat_widget_content .chat_widget_content_title.componentType_0 {
+  justify-content: center;
+}
+
+.chat_widget_content_title_bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}

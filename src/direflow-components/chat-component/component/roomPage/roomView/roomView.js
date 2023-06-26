@@ -92,6 +92,7 @@ const RoomView = ({
   };
 
   const onTimeLine = async (event) => {
+    if (event.getRoomId() !== roomId) return;
     if (event.getType() == "m.call.invite") {
       // call func
     } else {

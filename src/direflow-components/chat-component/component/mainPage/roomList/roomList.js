@@ -8,7 +8,11 @@ const RoomList = ({ rooms, myUserData, enterRoom }) => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    let fRooms = rooms.filter(({ name }) => name.indexOf(filterStr) !== -1);
+    let fRooms = rooms.filter(({ calculateName }) => {
+      const nameStr = String.prototype.toLowerCase.call(calculateName || "");
+      const fltStr = String.prototype.toLowerCase.call(filterStr);
+      return nameStr.indexOf(fltStr) !== -1;
+    });
     const inviteRooms = fRooms.filter((room) => {
       return room.getMyMembership() === "invite";
     });

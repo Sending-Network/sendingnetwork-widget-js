@@ -7,6 +7,7 @@ class Api {
     this._client = null;
     this.widgetDisplay = false;
     this.userData = null;
+    this.touristClient = null;
     this.showWidget = this.showWidget;
     this.joinRoom = this.joinRoom;
     this.createDMRoom = this.createDMRoom;
@@ -158,10 +159,13 @@ class Api {
     }
   };
 
-  logout = async () => {
-    const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
-    keyList.map(key => localStorage.removeItem(key));
-    return this._client.logout();
+  logout = async (callback) => {
+    if (window && window.toLogout) {
+      window.toLogout(() => {
+        this.userData = null;
+        callback && callback();
+      });
+    }
   };
 
   joinRoom = (roomId, callBack) => {
@@ -328,6 +332,15 @@ class Api {
     const transaction = await this._client.smartTradingTextParse(text, address);
     return transaction;
   };
+
+  // tourist
+  getTouristClient = () => {
+    return this.touristClient;
+  }
+
+  setTouristClient = (cli) => {
+    this.touristClient = cli;
+  }
 }
 export const api = new Api();
 

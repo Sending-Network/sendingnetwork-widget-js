@@ -189,7 +189,7 @@ const MessageItem = ({
             ) : (
               <div className="msgBox_left" key={message.event_id}>
                 <div className="msgBox_left_avatar" onClick={() => memberAvatarClick(sender)}>
-                  <AvatarComp url={userData.avatarUrl} />
+                  <AvatarComp url={userData?.avatarUrl} />
                 </div>
                 <div className="msgBox_left_info">
                   <p className="msgBox_left_info_user">{formatSender(sender)}</p>

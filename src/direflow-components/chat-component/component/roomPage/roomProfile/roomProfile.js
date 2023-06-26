@@ -4,12 +4,11 @@ import styles from "./roomProfile.css";
 import { api } from "../../../api";
 import {
 	roomTitleBackIcon,
-	morePagePersonIcon,
 	roomProfileInviteIcon,
 	roomProfileSetIcon
 } from "../../../imgs/index";
 import RoomSetting from "./roomSetting/roomSetting";
-import { AvatarComp } from "../../avatarComp/avatarComp";
+import { AvatarComp, AvatarMutiComp } from "../../avatarComp/avatarComp";
 import { formatTextLength, calculateRoomName } from "../../../utils/index";
 
 const RoomProfile = ({ room = {}, backClick }) => {
@@ -31,6 +30,26 @@ const RoomProfile = ({ room = {}, backClick }) => {
 	const handleSettingLeave = async () => {
 		await api.leave(room.roomId);
 		backClick('leaved');
+	}
+
+	const renderAvatar = () => {
+		if (joinedMembers.length === 2) {
+			const list = joinedMembers.filter(v => v.userId !== api.getUserId())
+			const anotherUser = list[0] || {};
+			return <AvatarComp url={anotherUser?.user?.avatarUrl} />
+		} else if (joinedMembers.length >= 3) {
+			const urls = [];
+			joinedMembers.map(m => {
+				if (m && m.user && m.user.avatarUrl) {
+					urls.push(m.user.avatarUrl)
+				}
+			})
+			const fillArr = new Array(joinedMembers.length - urls.length).fill(null);
+			urls.push(...fillArr)
+			return <AvatarMutiComp urls={urls} />
+		} else {
+			return <AvatarComp />
+		}
 	}
 
   return (
@@ -55,7 +74,7 @@ const RoomProfile = ({ room = {}, backClick }) => {
 						{/* info */}
 						<div className="room_profile_info">
 							<div className="info_img_box">
-								<img src={morePagePersonIcon} />
+								{renderAvatar()}
 							</div>
 							<div className="info_room_title">{formatTextLength(roomName, 30, 15)}</div>
 							<div className="info_room_roomId">{formatTextLength(room.roomId, 30, 15)}</div>

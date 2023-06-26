@@ -10,14 +10,12 @@ const RoomItem = ({ room, enterRoom, myUserData }) => {
 	const [membership, setMembership] = useState("");
 	const [lastTime, setLastTime] = useState("");
 	const [lastMsg, setLastMsg] = useState("");
-	const [roomName, setRoomName] = useState("");
 	const [showAtMention, setShowAtMention] = useState(false);
 
 	useEffect(() => {
 		if (room) {
 			const ship = room.getMyMembership();
 			const members = room.getJoinedMembers();
-			handleJoinedRoomName(ship, members, room)
 			setMembership(ship)
 			getLastEventMsg(room)
 			setMemberList(members)
@@ -87,21 +85,6 @@ const RoomItem = ({ room, enterRoom, myUserData }) => {
 		return text
 	}
 
-	const handleJoinedRoomName = (tmpShip, tmpMembers, tmpRoom) => {
-		let result = "";
-		if (tmpShip === 'join') {
-			result = calculateRoomName(room);
-		} else if (tmpShip === 'invite') {
-			const { name, roomId } = tmpRoom;
-			result = name;
-			if (/^@sdn_/.test(name)) {
-				const inviterId = roomId.split('-')[1];
-				result = inviterId || name;
-			}
-		}
-		setRoomName(result);
-	}
-
 	const accept = (roomId) => {
     api.joinRoom(roomId, () => {
 			setMembership('join')
@@ -115,14 +98,23 @@ const RoomItem = ({ room, enterRoom, myUserData }) => {
   };
 
 	const renderAvatar = () => {
-		// if (memberList.length >= 3) {
-		// 	// const arr = memberList.map
-		// 	console.log('widget---=', memberList)
-		// 	return <AvatarMutiComp />
-		// } else {
-		// 	return <AvatarComp />
-		// }
-		return <AvatarComp />
+		if (memberList.length === 2) {
+			const list = memberList.filter(v => v.userId !== api.getUserId())
+			const anotherUser = list[0] || {};
+			return <AvatarComp url={anotherUser?.user?.avatarUrl} />
+		} else if (memberList.length >= 3) {
+			const urls = [];
+			memberList.map(m => {
+				if (m && m.user && m.user.avatarUrl) {
+					urls.push(m.user.avatarUrl)
+				}
+			})
+			const fillArr = new Array(memberList.length - urls.length).fill(null);
+			urls.push(...fillArr)
+			return <AvatarMutiComp urls={urls} />
+		} else {
+			return <AvatarComp />
+		}
 	}
 
   return (
@@ -137,7 +129,7 @@ const RoomItem = ({ room, enterRoom, myUserData }) => {
 				</div>
 				{membership === "join" && (
 					<div className="room-item-center">
-						<p className="room-item-roomName">{formatTextLength(roomName, 30, 10)}</p>
+						<p className="room-item-roomName">{formatTextLength(room?.calculateName, 30, 10)}</p>
 						{showAtMention ? (
 							<p className="room-item-msg-at">@ You're mentioned</p>
 						) : (
@@ -147,7 +139,7 @@ const RoomItem = ({ room, enterRoom, myUserData }) => {
 				)}
 				{membership === "invite" && (
 					<div className="room-item-center">
-						<p className="room-item-roomName">{formatTextLength(roomName, 30, 10)}</p>
+						<p className="room-item-roomName">{formatTextLength(room?.calculateName, 30, 10)}</p>
 						<div className="room-item-invite">
 							<div className="room-item-invite-btns" onClick={() => accept(room.roomId)} >accept</div>
 							<div className="room-item-invite-btns" onClick={() => reject(room.roomId)} >reject</div>

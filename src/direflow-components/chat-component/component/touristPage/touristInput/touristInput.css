@@ -1,0 +1,45 @@
+/* tourist-input-box */
+.tourist-input-box {
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  height: 72px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: var(--bg-color);
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #DCDEE0;
+}
+
+/* pic-upload */
+.tourist-input-box .tourist-input-box-upload {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* input */
+.tourist-input-box .tourist-input-box-input {
+  height: 40px;
+  box-sizing: border-box;
+  background: var(--sendMessage-bg-color);
+  border: 1px solid #2C3038;
+  border-color: var(--sendMessage-border-color);
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  margin-left: 10px;
+  display: flex;
+  flex-grow: 1;
+  color: var(--message-sender-color);
+  outline: none;
+  padding: 0 16px;
+}
+.tourist-input-box .tourist-input-box-input::placeholder {
+  color: #999;
+}

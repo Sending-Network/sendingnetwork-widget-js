@@ -31,6 +31,24 @@
   left: 4px;
 }
 
+/* backIcon */
+.loginPage-backIcon {
+  position: absolute;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.loginPage-backIcon img {
+  width: 24px;
+  height: 24px;
+}
+
 /* sending.me logo */
 .loginPage-logo {
   width: 100%;

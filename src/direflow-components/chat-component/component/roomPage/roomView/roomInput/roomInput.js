@@ -242,7 +242,7 @@ const RoomInput = ({ roomId }) => {
   }
 
   const sendMessage = async ( e ) => {
-    const { key } = e;
+    const { key, keyCode } = e;
     if (['ArrowUp', 'ArrowDown'].includes(key) && showMemberList) {
       let index = memberListFocus;
       const len = memberList.length - 1;
@@ -257,7 +257,7 @@ const RoomInput = ({ roomId }) => {
       e.preventDefault();
       return;
     }
-    if (key === 'Enter' && showMemberList) {
+    if (key === 'Enter' && keyCode === 13 && showMemberList) {
       const m = memberList[memberListFocus];
       const val = sendValue + m.name + " ";
       setShowMemberList(false);
@@ -265,7 +265,7 @@ const RoomInput = ({ roomId }) => {
       setSendValue(val);
       return;
     }
-    if (key == "Enter" && sendValue.trim()) {
+    if (key == "Enter" && keyCode === 13 && sendValue.trim()) {
       try {
         const formatBodyStr = await valueAtCheck();
         const content = {

@@ -9,8 +9,9 @@ import {
   loginBgCircle2,
   loginBgCircle3
 } from "../../imgs/login";
+import { roomTitleBackIcon } from "../../imgs/index";
 
-const LoginPage = ({ useThirdLogin, loginSuccess }) => {
+const LoginPage = ({ useTouristMode, useThirdLogin, loginSuccess, backToTourist }) => {
   const [showAutoLogin, setShowAutoLogin] = useState(false);
 
   useEffect(() => {
@@ -47,6 +48,12 @@ const LoginPage = ({ useThirdLogin, loginSuccess }) => {
         <img className="loginPage-bg-1" src={loginBgCircle1} />
         <img className="loginPage-bg-2" src={loginBgCircle2} />
         <img className="loginPage-bg-3" src={loginBgCircle3} />
+
+        {useTouristMode && (
+          <div className="loginPage-backIcon" onClick={() => backToTourist()}>
+            <img src={roomTitleBackIcon} />
+          </div>
+        )}
 
         <div className="loginPage-logo">
           <img src={sendingMelogo} />

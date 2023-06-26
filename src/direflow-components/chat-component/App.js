@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import LoginPage from "./component/loginPage/loginPage";
-import MainPage from './component/mainPage/mainPage'
-import RoomPage from './component/roomPage/roomPage'
-import InvitePage from './component/invitePage/invitePage'
-import SetPage from './component/setPage/setPage'
+import MainPage from './component/mainPage/mainPage';
+import RoomPage from './component/roomPage/roomPage';
+import InvitePage from './component/invitePage/invitePage';
+import SetPage from './component/setPage/setPage';
+import TouristPage from './component/touristPage/touristPage';
 import PropTypes from "prop-types";
 import styles from "./App.css";
 import { Styled } from "direflow-component";
 import { api } from "./api";
-import { filterLibrary, showToast } from "./utils/index"
+import { filterLibrary, showToast } from "./utils/index";
 
 const App = (props) => {
   // console.log('widget-props-', props);
@@ -20,6 +21,7 @@ const App = (props) => {
 
   useEffect(() => {
     window.setShowWidget = (show) => { setShowWidget(show) };
+    window.toLogout = (callback) => { handleLogout(callback) };
     window.widgetRootDom = widgetRootRef.current;
     init();
     return stop;
@@ -33,8 +35,10 @@ const App = (props) => {
     if (access_token && user_id) {
       setPageType('mainPage');
       start();
+    } else if (props.useTouristMode) {
+      setPageType('touristPage');
     } else {
-      setPageType('loginPage')
+      setPageType('loginPage');
     }
   }
 
@@ -58,24 +62,46 @@ const App = (props) => {
 
 	const onRoom = () => {
     const rooms = api._client.getRooms()
-    // .filter((room) => {
-    //   return room.getMyMembership() === "join";
-    // });
     // console.log('myWidget==onRoom', rooms)
     setRooms(() => {
       return [...rooms];
     });
   };
 
+  const handleLogout = async (callback) => {
+    await stop();
+    api._client.logout(() => {
+      const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
+      keyList.map(key => localStorage.removeItem(key));
+      setRooms([]);
+      showToast({
+        type: 'success',
+        msg: 'Operation successful',
+        callback: () => {
+          setPageType('loginPage');
+          callback && callback();
+        }
+      });
+    })
+  }
+
   const renderPage = () => {
     switch (pageType) {
+      case 'touristPage': 
+        return <TouristPage
+          baseUrl={props.baseUrl}
+          roomId={props.useTouristMode}
+          toLogin={() => setPageType('loginPage')}
+        />;
       case 'loginPage': 
         return <LoginPage
           useThirdLogin={props.useThirdLogin}
+          useTouristMode={props.useTouristMode}
           loginSuccess={() => {
             init();
             setPageType('mainPage')
           }}
+          backToTourist={() => setPageType('touristPage')}
         />;
       case 'mainPage':
         return <MainPage
@@ -88,16 +114,7 @@ const App = (props) => {
             switch (type) {
               case 'create': setPageType('invitePage'); break;
               case 'set': setPageType('setPage'); break;
-              case 'logout': 
-                api.logout();
-                stop();
-                setRooms([]);
-                showToast({
-                  type: 'success',
-                  msg: 'Operation successful',
-                  callback: () => setPageType('loginPage')
-                });
-                break;
+              case 'logout': handleLogout(); break;
             }
           }}
         />
@@ -156,6 +173,7 @@ App.defaultProps = {
   baseUrl: "http://localhost",
   defaultShowWidget: true,
   useThirdLogin: false,
+  useTouristMode: "",
   filterWords: [],
   widgetWidth: "350px",
   widgetHeight: "680px",
@@ -179,6 +197,7 @@ App.propTypes = {
   baseUrl: PropTypes.string,
   defaultShowWidget: PropTypes.bool,
   useThirdLogin: PropTypes.bool,
+  useTouristMode: PropTypes.string,
   filterWords: PropTypes.array,
   widgetWidth: PropTypes.string,
   widgetHeight: PropTypes.string,

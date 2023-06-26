@@ -115,7 +115,7 @@ export const calculateRoomName = (room, isShowCount) => {
   }
   // show member count
   if (isShowCount) {
-    if (membersLen >= 2) {
+    if (membersLen > 2) {
       result = `${result} (${membersLen})`
     }
   }
@@ -331,9 +331,10 @@ export const tokenList = [["SHIB", "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"]
  * 
  * get event by room & eventId
  */
-export const getEventById = async (roomId, eventId) => {
+export const getEventById = async (roomId, eventId, isTouristMode) => {
+  const client = isTouristMode ? api.touristClient : api._client;
   try {
-    const { ...res } = await api._client.fetchRoomEvent(roomId, eventId);
+    const { ...res } = await client.fetchRoomEvent(roomId, eventId);
     return res;
   } catch (err) {
     console.error("Error getEventById" + eventId + " in room " + roomId);

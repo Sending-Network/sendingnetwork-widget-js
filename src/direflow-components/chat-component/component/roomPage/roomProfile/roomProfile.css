@@ -63,11 +63,6 @@
     border-radius: 16px;
     overflow: hidden;
 }
-.room_profile_info .info_img_box img {
-    width: 45%;
-    height: 45%;
-}
-
 .room_profile_info .info_room_title {
     margin-top: 10px;
     font-weight: 500;

@@ -27,9 +27,10 @@ const App = (props) => {
     return stop;
   }, []);
 
-  const init = () => {
-    api.init(props.baseUrl);
+  const init = async () => {
+    await api.init(props.baseUrl);
     filterLibrary.init(props.filterWords);
+    await api.getUserData();
     const access_token = localStorage.getItem("sdn_access_token");
     const user_id = localStorage.getItem("sdn_user_id");
     if (access_token && user_id) {
@@ -50,6 +51,7 @@ const App = (props) => {
     api._client.on("Room.myMembership", onRoom);
     api._client.on("RoomState.events", onRoom);
     api._client.on("Room.timeline", onRoom);
+    api._client.on("Session.logged_out", onSessionLogout);
   };
 
   const stop = () => {
@@ -57,6 +59,7 @@ const App = (props) => {
     api._client.removeListener("RoomState.events", onRoom);
     api._client.removeListener("Room.myMembership", onRoom);
     api._client.removeListener("Room.timeline", onRoom);
+    api._client.removeListener("Session.logged_out", onSessionLogout);
     api._client.stopClient();
   };
 
@@ -67,6 +70,20 @@ const App = (props) => {
       return [...rooms];
     });
   };
+
+  const onSessionLogout = async () => {
+    await stop();
+    api._client.logout(() => {
+      const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
+      keyList.map(key => localStorage.removeItem(key));
+      setRooms([]);
+      showToast({
+        type: 'info',
+        msg: 'Session expired',
+        callback: () => setPageType('loginPage')
+      });
+    })
+  }
 
   const handleLogout = async (callback) => {
     await stop();
@@ -97,10 +114,7 @@ const App = (props) => {
         return <LoginPage
           useThirdLogin={props.useThirdLogin}
           useTouristMode={props.useTouristMode}
-          loginSuccess={() => {
-            init();
-            setPageType('mainPage')
-          }}
+          loginSuccess={() => init()}
           backToTourist={() => setPageType('touristPage')}
         />;
       case 'mainPage':

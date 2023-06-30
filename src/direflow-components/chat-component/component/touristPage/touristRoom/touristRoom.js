@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Styled } from "direflow-component";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroller";
 import Censor from "mini-censor";
 import styles from "./touristRoom.css";
 import TouristMsgItem from "../touristMsgItem/touristMsgItem";
@@ -20,6 +20,9 @@ const TouristRoom = ({ roomId, toLogin }) => {
   const [previewImgUrl, setPreviewImgUrl] = useState("");
   const [isShowPreviewImg, setIsShowPreviewImg] = useState(false);
   const [curRoom, setCurRoom] = useState(null);
+  const [fetchDataLoading, setFetchDataLoading] = useState(false);
+  const [canStartFetchData, setCanStartFetchData] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     init();
@@ -88,28 +91,25 @@ const TouristRoom = ({ roomId, toLogin }) => {
   }
 
   const queryMessage = async (flag) => {
+    setFetchDataLoading(true);
+    const { end, chunk } = await api.touristClient.createMessagesRequest(
+      roomId,
+      fromToken,
+      20,
+      "b"
+    );
     if (!flag && !fromToken) {
-      const { end, chunk } = await api.touristClient.createMessagesRequest(
-        roomId,
-        fromToken,
-        20,
-        "b"
-      );
       const msgs = chunk.reverse();
-      const filteredMsgs = msgCensorFilter(msgs);
-      setFromToken(end);
+      const filteredMsgs = msgCensorFilter(msgs);      
       setMessages(filteredMsgs);
+      setTimeout(() => setCanStartFetchData(true), 2000);
     }
     if (flag === "start" && fromToken) {
-      const { end, chunk } = await api.touristClient.createMessagesRequest(
-        roomId,
-        fromToken,
-        20,
-        "b"
-      );
-      setFromToken(end);
       setMessages((val) => [...chunk.reverse(), ...val]);
     }
+    setHasMore(!!end);
+    setFromToken(end);
+    setFetchDataLoading(false);
   };
 
   const scrollToBottom = (oh) => {
@@ -135,6 +135,7 @@ const TouristRoom = ({ roomId, toLogin }) => {
   }
 
 	const onTimeLine = (event) => {
+    if (event.getRoomId() !== roomId) return;
     if (event.getType() !== "m.call.invite") {
       const eventArr = msgCensorFilter([event.event])
       setMessages((messages) => {
@@ -148,9 +149,8 @@ const TouristRoom = ({ roomId, toLogin }) => {
   };
 
   const loadMore = async () => {
-    const curSH = roomViewRef.current.scrollHeight;
+    if (fetchDataLoading || !canStartFetchData) return;
     await queryMessage("start");
-    // setTimeout(() => scrollToBottom(curSH), 100);
   };
 
   const handleWalletConnect = () => {
@@ -169,26 +169,18 @@ const TouristRoom = ({ roomId, toLogin }) => {
         )}
         <div
           className="touristRoom_roomview"
-          id="scrollableDiv"
           ref={roomViewRef}
           style={{backgroundImage: `url(${roomViewBg})`}}
         >
           <InfiniteScroll
-            dataLength={messages.length}
-            hasMore={true}
-            refreshFunction={loadMore}
-            pullDownToRefresh
-            pullDownToRefreshThreshold={10}
-            pullDownToRefreshContent={
-              <h3 style={{ textAlign: "center", color: "#fff" }}>
-                Pull down to refresh
-              </h3>
-            }
-            releaseToRefreshContent={
-              <h3 style={{ textAlign: "center", color: "#fff" }}>loading...</h3>
-            }
-            scrollableTarget="scrollableDiv"
+            useWindow={false}
+            isReverse={true}
+            hasMore={hasMore}
+            loadMore={loadMore}
+            threshold={80}
+            loader={<div className="touristRoom_roomview_scroll_loader" key={0}>Loading ...</div>}
           >
+            {!hasMore && <div className="touristRoom_roomview_scroll_noMore">--- there's no more ---</div>}
             <div className="touristRoom_msg-top-station"></div>
             {messages.map((message, index) => {
               return <TouristMsgItem

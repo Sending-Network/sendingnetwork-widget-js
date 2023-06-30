@@ -37,6 +37,13 @@
 .touristRoom_roomview::-webkit-scrollbar {
   display: none;
 }
+.touristRoom_roomview_scroll_noMore,
+.touristRoom_roomview_scroll_loader {
+  height: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
 
 .touristRoom_msg-top-station, .touristRoom_msg-bottom-station {
   width: 100%;

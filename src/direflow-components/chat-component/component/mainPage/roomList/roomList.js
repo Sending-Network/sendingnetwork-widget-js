@@ -32,9 +32,13 @@ const RoomList = ({ rooms, myUserData, enterRoom }) => {
           onChange={(e) => setFilterStr(e.target.value)}
         />
         <div className="rooms-list">
-          {list.map((room) => {
-            return <RoomItem key={room.roomId} room={room} enterRoom={enterRoom} myUserData={myUserData} />
-          })}
+          {list.length > 0 ? 
+            list.map((room) => {
+              return <RoomItem key={room.roomId} room={room} enterRoom={enterRoom} />
+            })
+           : (
+            <div className="rooms-list_noData">there's no room yet</div>
+          )}          
         </div>
       </div>
     </Styled>

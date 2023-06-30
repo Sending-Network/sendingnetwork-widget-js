@@ -19,8 +19,7 @@ const SetPage = ({ onBack }) => {
   }, []);
 
   const getProfileInfo = async () => {
-    const userId = api._client.getUserId();
-    const { avatar_url, displayname, wallet_address } = await api._client.getProfileInfo(userId);
+    const { avatar_url, displayname, wallet_address } = api.userData;
     setWalletAddr(wallet_address);
     setAvatarUrl(avatar_url);
     setOldDisplayname(displayname);

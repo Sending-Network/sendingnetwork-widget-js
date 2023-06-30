@@ -32,3 +32,10 @@
 .filter-box::placeholder {
   color: #999;
 }
+
+.rooms-list_noData {
+  margin-top: calc(50%);
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+}

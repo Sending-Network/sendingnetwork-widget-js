@@ -97,6 +97,7 @@ export const AvatarMutiComp = ({ urls = [] }) => {
               {listArr.map((img, imgIndex) => {
                 if ([0, 1, 2].includes(imgIndex)) {
                   return <div
+                    key={'9_1_1'+imgIndex}
                     className="avatar-mult-comp-9_1_imgBox"
                     style={{
                       backgroundImage: 'url('+ morePagePersonIcon +')',
@@ -111,6 +112,7 @@ export const AvatarMutiComp = ({ urls = [] }) => {
               {listArr.map((img, imgIndex) => {
                 if ([3, 4, 5].includes(imgIndex)) {
                   return <div
+                    key={'9_1_2'+imgIndex}
                     className="avatar-mult-comp-9_1_imgBox"
                     style={{
                       backgroundImage: 'url('+ morePagePersonIcon +')',
@@ -125,6 +127,7 @@ export const AvatarMutiComp = ({ urls = [] }) => {
               {listArr.map((img, imgIndex) => {
                 if ([6, 7, 8].includes(imgIndex)) {
                   return <div
+                    key={'9_1_3'+imgIndex}
                     className="avatar-mult-comp-9_1_imgBox"
                     style={{
                       backgroundImage: 'url('+ morePagePersonIcon +')',

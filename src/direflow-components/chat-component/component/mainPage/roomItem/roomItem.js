@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./roomItem.css";
 import { api } from "../../../api";
-import { formatTextLength, calculateRoomName } from "../../../utils/index";
+import { formatTextLength } from "../../../utils/index";
 import { AvatarMutiComp, AvatarComp } from "../../avatarComp/avatarComp";
 
-const RoomItem = ({ room, enterRoom, myUserData }) => {
+const RoomItem = ({ room, enterRoom }) => {
 	const [memberList, setMemberList] = useState([]);
 	const [membership, setMembership] = useState("");
 	const [lastTime, setLastTime] = useState("");
@@ -28,7 +28,7 @@ const RoomItem = ({ room, enterRoom, myUserData }) => {
 	}, [room.notificationCounts.total])
 
 	const atCheck = () => {
-		const { displayname } = myUserData;
+		const { displayname } = api.userData;
 		const timeline = room.getLiveTimeline();
 		const events = timeline.getEvents();
 		const evList = events.slice(events.length - room.notificationCounts.total);

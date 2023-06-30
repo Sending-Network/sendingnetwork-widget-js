@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroller";
 import Censor from "mini-censor";
 import { Styled } from "direflow-component";
 import styles from "./roomView.css";
@@ -26,21 +26,17 @@ const RoomView = ({
   const [members, setMembers] = useState([]);
   const [previewImgUrl, setPreviewImgUrl] = useState("");
   const [isShowPreviewImg, setIsShowPreviewImg] = useState(false);
-  const [myUserData, setMyUserData] = useState({});
+  const [fetchDataLoading, setFetchDataLoading] = useState(false);
+  const [canStartFetchData, setCanStartFetchData] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     roomViewStart();
     api._client.on("Room.timeline", onTimeLine);
-    initMyData();
     return () => {
       api._client.removeListener("Room.timeline", onTimeLine);
     };
   }, []);
-
-  const initMyData = async () => {
-    const userData = await api._client.getProfileInfo(room.myUserId);
-    setMyUserData(userData);
-  }
 
   // fun
   const roomViewStart = async () => {
@@ -54,28 +50,25 @@ const RoomView = ({
   };
 
   const queryMessage = async (flag) => {
-    if (!flag && !fromToken) {
-      const { end, chunk } = await api._client.createMessagesRequest(
-        roomId,
-        fromToken,
-        20,
-        "b"
-      );
+    setFetchDataLoading(true);
+    const { end, chunk } = await api._client.createMessagesRequest(
+      roomId,
+      fromToken,
+      20,
+      "b"
+    );
+    if (!flag && !fromToken) {      
       const messages = chunk.reverse();
-      const filteredMsgs = msgCensorFilter(messages)
-      setFromToken(end);
+      const filteredMsgs = msgCensorFilter(messages);
       setMessages(filteredMsgs);
+      setTimeout(() => setCanStartFetchData(true), 2000);
     }
     if (flag === "start" && fromToken) {
-      const { end, chunk } = await api._client.createMessagesRequest(
-        roomId,
-        fromToken,
-        20,
-        "b"
-      );
-      setFromToken(end);
       setMessages((val) => [...chunk.reverse(), ...val]);
     }
+    setHasMore(!!end);
+    setFromToken(end);
+    setFetchDataLoading(false);
   };
 
   const queryMembers = async () => {
@@ -101,7 +94,6 @@ const RoomView = ({
       setMessages((messages) => {
         return [...messages, ...eventArr];
       });
-      setTimeout(scrollToBottom, 100);
     }
   };
 
@@ -149,35 +141,26 @@ const RoomView = ({
   };
 
   const loadMore = async () => {
-    const curSH = roomViewRef.current.scrollHeight;
+    if (fetchDataLoading || !canStartFetchData) return;
     await queryMessage("start");
-    setTimeout(() => scrollToBottom(curSH), 100);
   };
 
   return (
     <Styled styles={styles}>
       <div
         className="roomView"
-        id="scrollableDiv"
         ref={roomViewRef}
         style={{backgroundImage: `url(${roomViewBg})`}}
       >
         <InfiniteScroll
-          dataLength={messages.length} //This is important field to render the next data
-          hasMore={true}
-          refreshFunction={loadMore}
-          pullDownToRefresh
-          pullDownToRefreshThreshold={10}
-          pullDownToRefreshContent={
-            <h3 style={{ textAlign: "center", color: "#fff" }}>
-              Pull down to refresh
-            </h3>
-          }
-          releaseToRefreshContent={
-            <h3 style={{ textAlign: "center", color: "#fff" }}>loading...</h3>
-          }
-          scrollableTarget="scrollableDiv"
+          useWindow={false}
+          isReverse={true}
+          hasMore={hasMore}
+          loadMore={loadMore}
+          threshold={80}
+          loader={<div className="roomView_scroll_loader" key={0}>Loading ...</div>}
         >
+          {!hasMore && <div className="roomView_scroll_noMore">--- there's no more ---</div>}
           <div className="msg-top-station"></div>
           {messages.map((message, index) => {
             return <MessageItem
@@ -186,7 +169,6 @@ const RoomView = ({
               message={message}
               members={members}
               pinnedIds={pinnedIds}
-              myUserData={myUserData}
               openUrlPreviewWidget={openUrlPreviewWidget}
               showPreviewImg={showPreviewImg}
               pinClick={pinClick}

@@ -13,6 +13,16 @@
   border-top: 1px solid #DCDEE0;
 }
 
+/* input maximum prompt */
+.room-input-box-maxsize {
+  position: absolute;
+  z-index: 5;
+  top: -2px;
+  left: 70px;
+  font-size: 12px;
+  color: red;
+}
+
 /* @ show box */
 .room-input_at {
   width: 60%;

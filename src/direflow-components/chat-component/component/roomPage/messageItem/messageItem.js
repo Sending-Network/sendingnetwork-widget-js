@@ -12,7 +12,6 @@ const MessageItem = ({
   message,
   members,
   pinnedIds,
-  myUserData,
   openUrlPreviewWidget,
   showPreviewImg,
   pinClick,
@@ -21,7 +20,7 @@ const MessageItem = ({
   const { event_id, sender, type, content, origin_server_ts } = message;
   const userId = room.myUserId;
   const userData = api._client.getUser(sender);
-  const { displayname } = myUserData;
+  const { displayname } = api.userData;
   const atUserName = '@'+displayname;
 
   const [showMore, setShowMore] = useState(false);

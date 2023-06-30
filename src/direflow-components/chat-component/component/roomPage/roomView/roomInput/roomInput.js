@@ -5,7 +5,7 @@ import Web3 from "web3";
 import { MaxUint256 } from "@ethersproject/constants";
 import { api } from "../../../../api";
 import { roomInputUploadIcon } from "../../../../imgs/index";
-import { web3ContractConstant, tokenList } from "../../../../utils/index";
+import { web3ContractConstant, tokenList, showToast } from "../../../../utils/index";
 import { checkChain } from "../../../../utils/gasFee";
 import { AvatarComp } from "../../../avatarComp/avatarComp";
 
@@ -18,7 +18,7 @@ const RoomInput = ({ roomId }) => {
   const [showTransferTip, setShowTransferTip] = useState(false);
   const [tokenSwapCount, setTokenSwapCount] = useState(0);
   const [showTokenSwapTip, setShowTokenSwapTip] = useState(false);
-  
+  const [showInputMaxPrompt, setShowInputMaxPrompt] = useState(false);
   const [showMemberList, setShowMemberList] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [memberListFocus, setMemberListFocus] = useState(0);
@@ -204,26 +204,37 @@ const RoomInput = ({ roomId }) => {
 
   const upload = async (e) => {
     const file = e.target.files[0];
-    try {
-      const url = await api._client.uploadContent(file);
-      await api._client.sendEvent(
-        roomId,
-        "m.room.message",
-        {
-          body: file.name,
-          msgtype: "m.image",
-          url,
-        },
-        ""
-      );
-    } catch (error) {}
-    uploadRef.current.value = "";
+    const MaxUploadSize = 20 * 1024 * 1024;  // 20 MB
+    if (file.size && file.size > MaxUploadSize) {
+      showToast({
+        type: 'info',
+        msg: 'image size exceeds max 20 MB'
+      })
+    } else {
+      try {
+        const url = await api._client.uploadContent(file);
+        await api._client.sendEvent(
+          roomId,
+          "m.room.message",
+          {
+            body: file.name,
+            msgtype: "m.image",
+            url,
+          },
+          ""
+        );
+      } catch (error) {}
+      uploadRef.current.value = "";
+    }
   };
 
   const inputChange = (e) => {
     const val = e.target.value;
-    setSendValue(val);
-    setShowMemberList(/\@$/.test(val))
+    setShowInputMaxPrompt(val.length > 2000)
+    if (val.length <= 2000) {
+      setSendValue(val);
+      setShowMemberList(/\@$/.test(val))
+    }
   }
 
   const valueAtCheck = async () => {
@@ -290,6 +301,11 @@ const RoomInput = ({ roomId }) => {
       <div className="room-input-box">
           {/* { renderTransferTip() }
           { renderTokenSwapTip() } */}
+
+          {/* input maximum prompt */}
+          {showInputMaxPrompt && (
+            <div className="room-input-box-maxsize">Input charatars exceeds maximum 4000</div>
+          )}
 
           {/* @ show box */}
           {showMemberList && (

@@ -10,13 +10,12 @@
 .roomView::-webkit-scrollbar {
   display: none;
 }
-
-.chat_content {
-  flex: 1;
-  overflow: auto;
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 0 20px;
+.roomView_scroll_noMore,
+.roomView_scroll_loader {
+  height: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
 }
 
 /* message_join */

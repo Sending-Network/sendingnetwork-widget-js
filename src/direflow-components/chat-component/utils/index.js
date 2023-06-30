@@ -346,3 +346,19 @@ export const getEventById = async (roomId, eventId, isTouristMode) => {
   }
   return {};
 }
+
+
+/**
+ * throttled: first execution after delay milliseconds
+ */
+export const throttled = (fn, delay = 500) => {
+  let timer = null
+  return function (...args) {
+      if (!timer) {
+          timer = setTimeout(() => {
+              fn.apply(this, args)
+              timer = null
+          }, delay);
+      }
+  }
+}

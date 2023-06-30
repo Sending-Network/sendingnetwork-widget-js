@@ -30,16 +30,18 @@ const App = (props) => {
   const init = async () => {
     await api.init(props.baseUrl);
     filterLibrary.init(props.filterWords);
-    await api.getUserData();
     const access_token = localStorage.getItem("sdn_access_token");
     const user_id = localStorage.getItem("sdn_user_id");
+    if (!access_token || !user_id) {
+      setPageType('loginPage');
+      return;
+    }
+    await api.getUserData();
     if (access_token && user_id) {
       setPageType('mainPage');
       start();
     } else if (props.useTouristMode) {
       setPageType('touristPage');
-    } else {
-      setPageType('loginPage');
     }
   }
 

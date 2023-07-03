@@ -79,10 +79,14 @@ const App = (props) => {
       const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
       keyList.map(key => localStorage.removeItem(key));
       setRooms([]);
+      api.setUserData(null);
       showToast({
         type: 'info',
         msg: 'Session expired',
-        callback: () => setPageType('loginPage')
+        callback: () => {
+          setPageType('loginPage');
+          api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('logout');
+        }
       });
     })
   }
@@ -93,12 +97,14 @@ const App = (props) => {
       const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
       keyList.map(key => localStorage.removeItem(key));
       setRooms([]);
+      api.setUserData(null);
       showToast({
         type: 'success',
         msg: 'Operation successful',
         callback: () => {
           setPageType('loginPage');
           callback && callback();
+          api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('logout');
         }
       });
     })

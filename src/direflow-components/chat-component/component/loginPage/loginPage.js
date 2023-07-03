@@ -34,9 +34,9 @@ const LoginPage = ({ useTouristMode, useThirdLogin, loginSuccess, backToTourist 
 
   const handleLoginClick = () => {
     setShowAutoLogin(true);
-    api.DIDLogin((res) => {
+    api.DIDLogin(async (res) => {
       if (res) {
-        loginSuccess();
+        await loginSuccess();
       }
       setShowAutoLogin(false);
     });

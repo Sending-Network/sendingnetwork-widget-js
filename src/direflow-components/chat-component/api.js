@@ -1,5 +1,6 @@
 import sdk from "sendingnetwork-js-sdk";
 import { randomBytes } from "crypto";
+import EventEmitter from "event-emitter";
 import { payGasFee } from "./utils/gasFee";
 
 class Api {
@@ -8,6 +9,7 @@ class Api {
     this.widgetDisplay = false;
     this.userData = null;
     this.touristClient = null;
+    this.eventEmitter = null;
     this.showWidget = this.showWidget;
     this.joinRoom = this.joinRoom;
     this.createDMRoom = this.createDMRoom;
@@ -49,6 +51,7 @@ class Api {
         baseUrl,
       });
     }
+    this.eventEmitter = new EventEmitter();
   };
 
   DIDLogin = async (callBack) => {
@@ -105,6 +108,7 @@ class Api {
         localStorage.setItem("sdn_user_id", user_id);
         localStorage.setItem("sdn_user_address", address);
         if (callBack && typeof callBack == "function") {
+          this.eventEmitter && this.eventEmitter.emit && this.eventEmitter.emit('login');
           callBack(true);
         }
       } catch (error) {
@@ -149,6 +153,7 @@ class Api {
       localStorage.setItem("sdn_user_id", user_id);
       localStorage.setItem("sdn_user_address", address);
       if (callBack && typeof callBack == "function") {
+        this.eventEmitter && this.eventEmitter.emit && this.eventEmitter.emit('login');
         window && window['thirdLoginWatch'] && window.thirdLoginWatch();
         callBack(true);
       }
@@ -162,7 +167,6 @@ class Api {
   logout = async (callback) => {
     if (window && window.toLogout) {
       window.toLogout(() => {
-        this.userData = null;
         callback && callback();
       });
     }
@@ -291,6 +295,20 @@ class Api {
 
   setUserNickname = async (name, callback) => {
     await api._client.setDisplayName(name, callback)
+  };
+
+  on = (type, callback) => {
+    const typeList = ["login", "logout"];
+    if (!this.eventEmitter) return;
+    if (typeof type !== 'string' || !typeList.includes(type)) {
+      console.error(`chatWidgetApi.on received unsupport type: ${type}`);
+      return;
+    }
+    if (!callback || typeof callback !== 'function') {
+      console.error(`chatWidgetApi.on callback not a function: ${callback}`);
+      return;
+    }
+    this.eventEmitter.on(type, callback);
   }
 
   // getUnreadCounts
@@ -326,6 +344,10 @@ class Api {
       this.userData = res;
       return res
     }
+  }
+
+  setUserData = (data) => {
+    this.userData = data;
   }
 
   smartTradingTextParse = async (text, address) => {

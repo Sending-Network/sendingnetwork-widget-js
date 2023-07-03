@@ -3,7 +3,7 @@ import { Styled } from "direflow-component";
 import styles from "./roomList.css";
 import RoomItem from "../roomItem/roomItem";
 
-const RoomList = ({ rooms, myUserData, enterRoom }) => {
+const RoomList = ({ rooms, enterRoom }) => {
   const [filterStr, setFilterStr] = useState("");
   const [list, setList] = useState([]);
 

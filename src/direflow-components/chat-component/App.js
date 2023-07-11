@@ -22,6 +22,7 @@ const App = (props) => {
   useEffect(() => {
     window.setShowWidget = (show) => { setShowWidget(show) };
     window.toLogout = (callback) => { handleLogout(callback) };
+    window.thirdLoginWatch = () => { handleLoginSuccess() };
     window.widgetRootDom = widgetRootRef.current;
     init();
     return stop;
@@ -33,15 +34,17 @@ const App = (props) => {
     const access_token = localStorage.getItem("sdn_access_token");
     const user_id = localStorage.getItem("sdn_user_id");
     if (!access_token || !user_id) {
-      setPageType('loginPage');
+      if (props.useTouristMode) {
+        setPageType('touristPage');
+      } else {
+        setPageType('loginPage');
+      }
       return;
     }
     await api.getUserData();
     if (access_token && user_id) {
       setPageType('mainPage');
       start();
-    } else if (props.useTouristMode) {
-      setPageType('touristPage');
     }
   }
 
@@ -76,14 +79,14 @@ const App = (props) => {
   const onSessionLogout = async () => {
     await stop();
     api._client.logout(() => {
-      const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
-      keyList.map(key => localStorage.removeItem(key));
-      setRooms([]);
-      api.setUserData(null);
       showToast({
         type: 'info',
         msg: 'Session expired',
         callback: () => {
+          const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
+          keyList.map(key => localStorage.removeItem(key));
+          setRooms([]);
+          api.setUserData(null);
           setPageType('loginPage');
           api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('logout');
         }
@@ -94,20 +97,34 @@ const App = (props) => {
   const handleLogout = async (callback) => {
     await stop();
     api._client.logout(() => {
-      const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
-      keyList.map(key => localStorage.removeItem(key));
-      setRooms([]);
-      api.setUserData(null);
       showToast({
         type: 'success',
         msg: 'Operation successful',
         callback: () => {
+          const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
+          keyList.map(key => localStorage.removeItem(key));
+          setRooms([]);
+          api.setUserData(null);
           setPageType('loginPage');
           callback && callback();
           api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('logout');
         }
       });
     })
+  }
+
+  const handleLoginSuccess = async () => {
+    await api.getUserData();
+    await start();
+    if (props.useTouristMode) {
+      const touristRoomId = props.useTouristMode;
+      api.joinRoom(touristRoomId, () => {
+        setCurRoomId(touristRoomId);
+        setPageType('roomPage');
+      });
+    } else {
+      setPageType('mainPage');
+    }
   }
 
   const renderPage = () => {
@@ -122,7 +139,7 @@ const App = (props) => {
         return <LoginPage
           useThirdLogin={props.useThirdLogin}
           useTouristMode={props.useTouristMode}
-          loginSuccess={() => init()}
+          loginSuccess={() => handleLoginSuccess()}
           backToTourist={() => setPageType('touristPage')}
         />;
       case 'mainPage':

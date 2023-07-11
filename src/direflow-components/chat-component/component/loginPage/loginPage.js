@@ -16,9 +16,6 @@ const LoginPage = ({ useTouristMode, useThirdLogin, loginSuccess, backToTourist 
 
   useEffect(() => {
     if (useThirdLogin) {
-      window['thirdLoginWatch'] = () => {
-        loginSuccess();
-      }
       const access_token = localStorage.getItem("sdn_access_token");
       const user_id = localStorage.getItem("sdn_user_id");
       if (access_token && user_id) {
@@ -34,11 +31,11 @@ const LoginPage = ({ useTouristMode, useThirdLogin, loginSuccess, backToTourist 
 
   const handleLoginClick = () => {
     setShowAutoLogin(true);
-    api.DIDLogin(async (res) => {
+    api.DIDLogin((res) => {
       if (res) {
-        await loginSuccess();
+        loginSuccess();
       }
-      setShowAutoLogin(false);
+      // setShowAutoLogin(false);
     });
   };
 

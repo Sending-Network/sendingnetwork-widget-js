@@ -252,6 +252,13 @@ const RoomInput = ({ roomId }) => {
     return hasAt ? resultStr : "";
   }
 
+  const handleAtMemberClick = (m) => {
+    const val = sendValue + m.name + " ";
+    setShowMemberList(false);
+    setMemberListFocus(0);
+    setSendValue(val);
+  }
+
   const sendMessage = async ( e ) => {
     const { key, keyCode } = e;
     if (['ArrowUp', 'ArrowDown'].includes(key) && showMemberList) {
@@ -318,6 +325,7 @@ const RoomInput = ({ roomId }) => {
                       "room-input_at_item",
                       mIndex === memberListFocus && "room-input_at_item_bgFocus"
                     ].join(' ')}
+                    onClick={() => handleAtMemberClick(m)}
                   >
                     <div className="room-input_at_item_avatar">
                       <AvatarComp url={m?.user?.avatarUrl} />

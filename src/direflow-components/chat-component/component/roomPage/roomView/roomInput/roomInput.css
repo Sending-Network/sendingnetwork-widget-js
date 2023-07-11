@@ -47,6 +47,7 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .room-input_at_item_bgFocus {
   background-color: #EAECEE;

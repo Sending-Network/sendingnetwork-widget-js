@@ -87,7 +87,7 @@ const RoomProfile = ({ room = {}, backClick }) => {
 							</div>
 							<div className="info_room_btns-item info_room_btns-item-setting" onClick={() => setShowSetting(true)}>
 								<img src={roomProfileSetIcon} />
-								<span>Setting</span>
+								<span>Settings</span>
 							</div>
 						</div>
 						{/* members */}

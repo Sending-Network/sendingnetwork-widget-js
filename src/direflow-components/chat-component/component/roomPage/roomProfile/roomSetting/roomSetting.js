@@ -68,7 +68,7 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
           </div>
 
           {/* room description */}
-          <p className="room_setting_label">Room Description</p>
+          {/* <p className="room_setting_label">Room Description</p>
           <div className="room_setting_input_box">
             <input
               className="room_setting_input"
@@ -76,7 +76,7 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
               onChange={(e) => setDesc(e.target.value)}
             />
             <button onClick={descriptionClick}>Save</button>
-          </div>
+          </div> */}
         </div>
 
         {/* leave btn */}

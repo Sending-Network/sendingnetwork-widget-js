@@ -44,7 +44,7 @@
   font-size: 14px;
   line-height: 22px;
   color: var(--left-message-color);
-  word-break: break-all;
+  word-break: break-word;
 }
 .msgBox_left_info_msg .msgBox_left_info_msg_time {
   font-size: 12px;

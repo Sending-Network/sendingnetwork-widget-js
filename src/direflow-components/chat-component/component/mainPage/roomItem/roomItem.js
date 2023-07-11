@@ -59,9 +59,9 @@ const RoomItem = ({ room, enterRoom }) => {
 				switch (content.msgtype) {
 					case 'm.text': msgStr = content.body;
 						break;
-					case 'm.image': msgStr = '[picture]';
+					case 'm.image': msgStr = '[Image]';
 						break;
-					case 'm.file': msgStr = '[file]';
+					case 'm.file': msgStr = '[File]';
 						break;
 				}
 			}
@@ -141,8 +141,8 @@ const RoomItem = ({ room, enterRoom }) => {
 					<div className="room-item-center">
 						<p className="room-item-roomName">{formatTextLength(room?.calculateName, 30, 10)}</p>
 						<div className="room-item-invite">
-							<div className="room-item-invite-btns" onClick={() => accept(room.roomId)} >accept</div>
-							<div className="room-item-invite-btns" onClick={() => reject(room.roomId)} >reject</div>
+							<div className="room-item-invite-btns" onClick={() => accept(room.roomId)} >Accept</div>
+							<div className="room-item-invite-btns" onClick={() => reject(room.roomId)} >Reject</div>
 						</div>
 					</div>
 				)}

@@ -21,6 +21,7 @@ class Api {
     this.backUp = this.backUp;
     this.restore = this.restore;
     this.setUserNickname = this.setUserNickname;
+    this.getUidByAddress = this.getUidByAddress;
     this.init = this.init;
   }
 
@@ -296,6 +297,14 @@ class Api {
   setUserNickname = async (name, callback) => {
     await api._client.setDisplayName(name, callback)
   };
+
+  getUidByAddress = async (addr) => {
+    if (!addr) return null;
+    const contAddr = addr.replace(/^0[x|X]/, '');
+    const { data: [did] } = await this._client.getDIDList(addr);
+    const uid = did ? `@sdn_${contAddr}:${contAddr}` : null;
+    return uid;
+  }
 
   on = (type, callback) => {
     const typeList = ["login", "logout"];

@@ -76,12 +76,7 @@ const RoomItem = ({ room, enterRoom }) => {
 		const date = new Date(time);
 		const m = date.getMinutes().toString();
 		let h = date.getHours().toString();
-		let flag = 'AM';
-		if (h > 12) {
-			h = h - 12;
-			flag = 'PM'
-		}
-		text = `${h < 10 ? ('0' + h) : h}:${m < 10 ? ('0' + m) : m} ${flag}`
+		text = `${h < 10 ? ('0' + h) : h}:${m < 10 ? ('0' + m) : m}`
 		return text
 	}
 

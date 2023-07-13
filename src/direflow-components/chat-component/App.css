@@ -111,6 +111,18 @@ textarea {
   transform: translate(0, 0);
 }
 
+.chat_widget_loading {
+  width: 200px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 100px);
+  color: #999;
+}
+
 .P2P_logo {
   position: fixed;
   right: 50px;

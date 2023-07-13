@@ -1,0 +1,23 @@
+.chat_widget_main_menu {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	border-radius: 8px;
+	justify-content: center;
+	align-items: center;
+	background-color: #E7EAF3;
+	cursor: pointer;
+}
+
+.chat_widget_main_menu.open{
+	background-color: var(--primary-color);
+	color: #ffffff;
+}
+
+
+.chat_widget_main_menu_item{
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}

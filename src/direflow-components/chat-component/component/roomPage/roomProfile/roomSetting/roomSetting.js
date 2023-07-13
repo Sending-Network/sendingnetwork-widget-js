@@ -32,7 +32,7 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
     api._client.setRoomName(room.roomId, name, () => {
       showToast({
         type: 'success',
-        msg: 'Operation successful',
+        msg: 'Success',
       })
       refreshRoomName(name);
     })
@@ -48,7 +48,7 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
     }
     showToast({
       type: 'success',
-      msg: 'Operation successful',
+      msg: 'Success',
     })
   }
 
@@ -64,7 +64,6 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
               defaultValue={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <button onClick={roomNameClick}>Save</button>
           </div>
 
           {/* room description */}
@@ -79,6 +78,7 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
           </div> */}
         </div>
 
+        <div className="room_setting_save" onClick={roomNameClick}>Save</div>
         {/* leave btn */}
         <div className="room_setting_leave" onClick={() => setShowDialog(true)}>Leave Room</div>
 

@@ -318,7 +318,7 @@ class Api {
       return;
     }
     this.eventEmitter.on(type, callback);
-  }
+  };
 
   // getUnreadCounts
   getUnreadCounts = (callBack) => {

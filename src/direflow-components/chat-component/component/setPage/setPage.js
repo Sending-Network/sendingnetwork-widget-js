@@ -3,7 +3,7 @@ import { Styled } from "direflow-component";
 import styles from "./setPage.css";
 import { api } from "../../api";
 import { roomTitleBackIcon, copyIcon } from "../../imgs/index";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { showToast } from "../../utils/index";
 import { AvatarComp } from "../avatarComp/avatarComp";
 
@@ -29,16 +29,16 @@ const SetPage = ({ onBack }) => {
   const handleSave = async () => {
     if (!displayname) {
       showToast({
-        type: 'info',
-        msg: 'the display name not allow null'
-      })
+        type: "info",
+        msg: "the display name not allow null",
+      });
     } else {
       await api._client.setDisplayName(displayname);
       getProfileInfo();
       showToast({
-        type: 'success',
-        msg: 'Operation successful'
-      })
+        type: "success",
+        msg: "Success",
+      });
     }
   };
 
@@ -49,14 +49,14 @@ const SetPage = ({ onBack }) => {
       await api._client.setAvatarUrl(url);
       getProfileInfo();
       showToast({
-        type: 'success',
-        msg: 'Operation successful'
-      })
+        type: "success",
+        msg: "Success",
+      });
     } catch (error) {
       showToast({
-        type: 'error',
-        msg: error
-      })
+        type: "error",
+        msg: error,
+      });
     }
     uploadRef.current.value = "";
   };
@@ -72,45 +72,61 @@ const SetPage = ({ onBack }) => {
           <div className="room_title_center">Settings</div>
         </div>
 
-        {/* avatar */}
-        <div className="setPage_user_avatar" onClick={() => uploadRef.current.click()}>
-          <AvatarComp url={avatarUrl} />
+        <div className="setPage_content">
+          {/* avatar */}
+          <div
+            className="setPage_user_avatar"
+            onClick={() => uploadRef.current.click()}>
+            <AvatarComp url={avatarUrl} />
+            <input
+              ref={uploadRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              style={{ display: "none" }}
+            />
+          </div>
+
+          {/* userName */}
+          <p className="alias-label">Display Name</p>
           <input
-            ref={uploadRef}
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarUpload}
-            style={{ display: "none" }}
+            className="alias-input"
+            value={displayname}
+            onChange={(e) => setDisplayname(e.target.value)}
           />
-        </div>
 
-        {/* userName */}
-        <p className="alias-label">Display Name</p>
-        <input className="alias-input" value={displayname} onChange={(e) => setDisplayname(e.target.value)} />
-
-        {/* userInfo */}
-        <p className="alias-label">Wallet Address</p>
-        <div className="userinfo-box-item">
-          <p>{walletAddr}</p>
-          <CopyToClipboard text={walletAddr} onCopy={(text, result) => {
-            if (result) {
-              showToast({
-                type: 'success',
-                msg: 'Copied successful',
-              })
-            }
-          }}>
+          {/* userInfo */}
+          <p className="alias-label">Wallet Address</p>
+          <div className="userinfo-box-item">
+            <p>{walletAddr}</p>
+            <CopyToClipboard
+              text={walletAddr}
+              onCopy={(text, result) => {
+                if (result) {
+                  showToast({
+                    type: "success",
+                    msg: "Copied",
+                  });
+                }
+              }}>
               <img src={copyIcon} />
-          </CopyToClipboard>
+            </CopyToClipboard>
+          </div>
         </div>
 
         {/* userInfo */}
         <div className="btns-box">
-          <button className="btns-box-item btn-cancel" onClick={() => setDisplayname(oldDisplayName)}>Cancel</button>
-          <button className="btns-box-item btn-confirm" onClick={handleSave}>Save</button>
+          <button className="btns-box-item btn-confirm" onClick={handleSave}>
+            Save
+          </button>
+          <button
+            className="btns-box-item btn-cancel"
+            onClick={() => onBack()}>
+            Cancel
+          </button>
         </div>
       </div>
-		</Styled>
+    </Styled>
   );
 };
 

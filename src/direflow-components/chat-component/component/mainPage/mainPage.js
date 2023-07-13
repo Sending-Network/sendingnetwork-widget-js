@@ -18,9 +18,9 @@ const MainPage = ({ rooms, goToRoom, onMenuClick }) => {
 		for (let i = 0; i < list.length; i++) {
 			const m = list[i];
 			m.calculateName = handleRoomName(m);
-			if (m.calculateName !== 'Empty Room') {
+			// if (m.calculateName !== 'Empty Room') {
 				resultList.push(m);
-			}
+			// }
 		}
 		setRoomList(resultList);
 	}
@@ -44,8 +44,8 @@ const MainPage = ({ rooms, goToRoom, onMenuClick }) => {
   return (
 		<Styled styles={styles}>
 			<div className="chat_widget_main_page" onClick={() => { setCloseModalms(new Date().getTime()) }}>
-				<ListTitle closeModalms={closeModalms} menuClick={onMenuClick} />
-				<RoomList rooms={roomList} enterRoom={(roomId) => goToRoom(roomId)} />
+				{/* <ListTitle closeModalms={closeModalms} menuClick={onMenuClick} /> */}
+				<RoomList rooms={roomList} enterRoom={(roomId) => goToRoom(roomId)} menuClick={onMenuClick} />
 			</div>
 		</Styled>
   );

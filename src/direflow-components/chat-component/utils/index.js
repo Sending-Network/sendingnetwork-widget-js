@@ -27,7 +27,7 @@ export const filterLibrary = new FilterWordsLibrary();
  * 
  * show toast
  */
-export const showToast = ({ type, msg, duration = 2000, callback }) => {
+export const showToast = ({ type, msg, duration = 1250, callback }) => {
   let typeIcon = "";
   switch (type) {
     case 'success': typeIcon = toastSuccessIcon; break;
@@ -98,12 +98,29 @@ export const formatTextLength = (name, limit, len) => {
  * calculate the room name
  */
 export const calculateRoomName = (room, isShowCount) => {
+  const getInviteMembers = (allMembers, joinedMembers) => {
+    const list = allMembers.filter(m => !joinedMembers.find(v => v.userId === m.userId))
+    return list;
+  }
+  const getInviteRoomName = (inviteList) => {
+    let name = "";
+    if (inviteList.length <= 1) {
+      name = formatTextLength(inviteList[0].name || inviteList[0].userId, 30, 12);
+    } else {
+      name = `You and ${inviteList.length} others`
+    }
+    return name;
+  }
+
   const { name, roomId } = room;
+  const allMembers = room.getMembers();
   const members = room.getJoinedMembers();
+  const inviteMembers = getInviteMembers(allMembers, members);
   let membersLen = members.length;
   let result = name;
+
   if (membersLen <= 1) {
-    result = 'Empty Room'
+    result = getInviteRoomName(inviteMembers);
   } else if (membersLen === 2) {
     if (/^@sdn_/.test(name)) {
       const currentUserId = api.getUserId();
@@ -345,6 +362,15 @@ export const getEventById = async (roomId, eventId, isTouristMode) => {
     })
   }
   return {};
+}
+
+
+/**
+ * getAddressByUserId
+ */
+export const getAddressByUserId = (userId) => {
+  const cont = userId.split(':')[1];
+  return cont ? `0x${cont}` : userId;
 }
 
 

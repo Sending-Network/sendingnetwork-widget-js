@@ -3,16 +3,16 @@ import { Styled } from "direflow-component";
 import styles from "./invitePage.css";
 import {
 	roomTitleBackIcon,
-	morePagePersonIcon,
 	inviteSelectedIcon,
 	inviteUnselectIcon,
 	dialogLoadingIcon
 } from "../../imgs/index"
 import { api } from "../../api";
-import { formatTextLength, showToast } from "../../utils/index";
+import { formatTextLength, showToast, getAddressByUserId } from "../../utils/index";
 import InputDialogComp from "../inputDialogComp/inputDialogComp";
+import { AvatarComp } from "../avatarComp/avatarComp";
 
-const InvitePage = ({ roomId, onBack }) => {
+const InvitePage = ({ roomId, onBack, title }) => {
 	const [filterStr, setFilterStr] = useState("");
 	const [searchList, setSearchList] = useState([]);
 	const [selectList, setSelectList] = useState([]);
@@ -135,7 +135,7 @@ const InvitePage = ({ roomId, onBack }) => {
 					<div className="title_back" onClick={handleBackClick}>
 						<img src={roomTitleBackIcon} />
 					</div>
-					<div className="title_text">New Chat</div>
+					<div className="title_text">{title ||"New Chat"}</div>
 				</div>
 
 				{/* search */}
@@ -158,11 +158,11 @@ const InvitePage = ({ roomId, onBack }) => {
 										<img src={item.isSelected ? inviteSelectedIcon : inviteUnselectIcon} />
 									</div>
 									<div className="members_item_avatar">
-										<img src={morePagePersonIcon} />
+										<AvatarComp url={item.avatar_url} />
 									</div>
 									<div className="members_item_desc">
 										<p className="members_item_desc_name">{formatTextLength(item.display_name, 13, 5)}</p>
-										<p className="members_item_desc_addr">{formatTextLength(item.user_id, 13, 5)}</p>
+										<p className="members_item_desc_addr">{getAddressByUserId(item.user_id)}</p>
 									</div>
 								</div>
 							)

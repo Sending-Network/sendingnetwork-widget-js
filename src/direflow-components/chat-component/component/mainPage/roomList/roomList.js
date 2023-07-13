@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./roomList.css";
 import RoomItem from "../roomItem/roomItem";
+import MainMenu from "../mainMenu/mainMenu";
+import { mainChatIcon } from "../../../imgs/index";
 
-const RoomList = ({ rooms, enterRoom }) => {
+const RoomList = ({ rooms, enterRoom, menuClick }) => {
   const [filterStr, setFilterStr] = useState("");
   const [list, setList] = useState([]);
 
@@ -25,20 +27,26 @@ const RoomList = ({ rooms, enterRoom }) => {
   return (
     <Styled styles={styles}>
       <div className="rooms">
-        <input
-          className="filter-box"
-          placeholder="Search"
-          value={filterStr}
-          onChange={(e) => setFilterStr(e.target.value)}
-        />
+        <div className="rooms-header">
+          <input
+            className="filter-box"
+            placeholder="Search"
+            value={filterStr}
+            onChange={(e) => setFilterStr(e.target.value)}
+          />
+          <MainMenu menuClick={menuClick} />
+        </div>
         <div className="rooms-list">
           {list.length > 0 ? 
             list.map((room) => {
               return <RoomItem key={room.roomId} room={room} enterRoom={enterRoom} />
             })
            : (
-            <div className="rooms-list_noData">there's no room yet</div>
-          )}          
+            <div className="rooms-list_noData">
+              <img src={mainChatIcon} />
+              <p>Tap 'New Chat' in the right corner to connect<br />instantly. Send messages to any wallets</p>
+            </div>
+          )}
         </div>
       </div>
     </Styled>

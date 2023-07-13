@@ -4,6 +4,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 12px;
+}
+
+.rooms .rooms-header{
+  margin: 6px 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .rooms-list {
@@ -16,16 +23,15 @@
 }
 
 .filter-box {
-  margin: 10px;
-  width: calc(100% - 20px);
+  margin-bottom: 10px;
+  width: calc(100% - 50px);
   height: 40px;
   padding: 0 10px;
   box-sizing: border-box;
-  border-radius: 10px;
-  background-color: #F2F3F3;
-  border: 0px;
-  font-size: 14px;
-  line-height: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  line-height: 22px;
   outline: none;
   color: #333;
 }
@@ -33,9 +39,14 @@
   color: #999;
 }
 
+/* no data */
 .rooms-list_noData {
   margin-top: calc(50%);
   text-align: center;
   font-size: 14px;
   color: #ccc;
+}
+.rooms-list_noData img {
+  width: 60px;
+  margin-bottom: 10px;
 }

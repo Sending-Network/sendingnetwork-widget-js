@@ -100,7 +100,7 @@ const RoomPage = ({ roomId, callback }) => {
     <Styled styles={styles}>
       <div className="roomPage">
         {showType === 'profile' && <RoomProfile room={curRoom} backClick={handleProfileBack} />}
-        {showType === 'invite' && <InvitePage roomId={curRoomId} onBack={() => setShowType('room')} />}
+        {showType === 'invite' && <InvitePage title="Invite User" roomId={curRoomId} onBack={() => setShowType('room')} />}
         {showType === 'memberProfile' && <MemberProfile memberId={memberProfileId} onBack={() => {
           setMemberProfileId("");
           setShowType('room');

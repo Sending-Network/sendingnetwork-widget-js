@@ -9,7 +9,7 @@ import {
 } from "../../../imgs/index";
 import RoomSetting from "./roomSetting/roomSetting";
 import { AvatarComp, AvatarMutiComp } from "../../avatarComp/avatarComp";
-import { formatTextLength, calculateRoomName } from "../../../utils/index";
+import { formatTextLength, calculateRoomName, getAddressByUserId } from "../../../utils/index";
 
 const RoomProfile = ({ room = {}, backClick }) => {
 	const [showSetting, setShowSetting] = useState(false);
@@ -82,17 +82,16 @@ const RoomProfile = ({ room = {}, backClick }) => {
 						{/* btns */}
 						<div className="info_room_btns">
 							<div className="info_room_btns-item info_room_btns-item-invite" onClick={() => backClick('invite')}>
-								<img src={roomProfileInviteIcon} />
 								<span>Invite</span>
 							</div>
 							<div className="info_room_btns-item info_room_btns-item-setting" onClick={() => setShowSetting(true)}>
-								<img src={roomProfileSetIcon} />
 								<span>Settings</span>
 							</div>
 						</div>
 						{/* members */}
 						<div className="room_members">
 							{joinedMembers.map(member => {
+								const addr = getAddressByUserId(member.userId)
 								return (
 									<div className="room_members_item" key={member.userId}>
 										<div className="room_members_item_avatar">
@@ -100,7 +99,7 @@ const RoomProfile = ({ room = {}, backClick }) => {
 										</div>
 										<div className="room_members_item_desc">
 											<p className="room_members_item_desc_name">{member.name}</p>
-											<p className="room_members_item_desc_addr">{member.userId}</p>
+											<p className="room_members_item_desc_addr">{addr}</p>
 										</div>
 									</div>
 								)

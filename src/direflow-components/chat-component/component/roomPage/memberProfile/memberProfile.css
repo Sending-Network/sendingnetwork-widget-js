@@ -68,8 +68,9 @@
   margin: 10px 12px 20px 12px;
   padding: 0 12px;
   box-sizing: border-box;
-  background: #F2F3F3;
-  border-radius: 8px;
+  /* background: #F2F3F3; */
+  border-radius: 10px;
+  border: 1px solid #CCC;
   font-size: 16px;
   color: var(--main-text-color);
   overflow: hidden;

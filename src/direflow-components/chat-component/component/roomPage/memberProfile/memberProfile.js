@@ -51,7 +51,7 @@ const MemberProfile = ({ memberId, onBack }) => {
             if (result) {
               showToast({
                 type: 'success',
-                msg: 'Copied successful',
+                msg: 'Copied',
               })
             }
           }}>

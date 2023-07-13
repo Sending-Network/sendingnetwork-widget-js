@@ -59,7 +59,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ccc;
     border-radius: 16px;
     overflow: hidden;
 }
@@ -81,7 +80,7 @@
 /* btns */
 .info_room_btns {
     width: 100%;
-    height: 60px;
+    height: 45px;
     margin-top: 18px;
     display: flex;
     align-items: center;
@@ -89,9 +88,9 @@
 }
 .info_room_btns .info_room_btns-item {
     width: 150px;
-    height: 60px;
+    height: 45px;
     margin: 0 10px;
-    background: #38CA9F;
+    background: var(--primary-color);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -99,12 +98,12 @@
     justify-content: center;
     cursor: pointer;
 }
-.info_room_btns .info_room_btns-item-invite {
+/* .info_room_btns .info_room_btns-item-invite {
     background: #38CA9F;
 }
 .info_room_btns .info_room_btns-item-setting {
     background: #50545A;
-}
+} */
 .info_room_btns .info_room_btns-item img {
     height: 18px;
     margin-bottom: 4px;
@@ -131,7 +130,7 @@
 .room_members_item {
     width: 100%;
     height: 42px;
-    padding: 0 20px;
+    padding: 0 12px;
     margin-bottom: 20px;
     box-sizing: border-box;
     display: flex;

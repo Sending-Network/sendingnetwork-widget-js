@@ -196,7 +196,7 @@ const RoomInput = ({ roomId }) => {
   const initMembers = () => {
     if (!roomId) return;
     const room = api._client.getRoom(roomId);
-    const members = room.getJoinedMembers();
+    const members = room?.getJoinedMembers() || [];
     const currentUserId = api._client.getUserId();
     const memberArr = members.filter(v => v.userId !== currentUserId);
     setMemberList(memberArr);

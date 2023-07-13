@@ -56,6 +56,22 @@
     cursor: pointer;
 }
 
+.room_setting_save{
+    height: 48px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    margin-bottom: 13px;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
 .room_setting_leave {
     height: 48px;
     display: flex;

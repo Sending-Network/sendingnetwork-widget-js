@@ -18,6 +18,7 @@ const App = (props) => {
   const [rooms, setRooms] = useState([]);
   const [curRoomId, setCurRoomId] = useState('');
   const [showWidget, setShowWidget] = useState(props.defaultShowWidget);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     window.setShowWidget = (show) => { setShowWidget(show) };
@@ -41,10 +42,16 @@ const App = (props) => {
       }
       return;
     }
+    // here has logined
+    setIsLoading(true);
     await api.getUserData();
-    if (access_token && user_id) {
+    await start();
+    if (props.useQuickChat) {
+      handleUseQuickChat();
+    } else {
       setPageType('mainPage');
       start();
+      setIsLoading(false);
     }
   }
 
@@ -99,7 +106,7 @@ const App = (props) => {
     api._client.logout(() => {
       showToast({
         type: 'success',
-        msg: 'Operation successful',
+        msg: 'Success',
         callback: () => {
           const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
           keyList.map(key => localStorage.removeItem(key));
@@ -114,6 +121,7 @@ const App = (props) => {
   }
 
   const handleLoginSuccess = async () => {
+    setIsLoading(true);
     await api.getUserData();
     await start();
     if (props.useTouristMode) {
@@ -122,9 +130,41 @@ const App = (props) => {
         setCurRoomId(touristRoomId);
         setPageType('roomPage');
       });
+    } else if (props.useQuickChat) {
+      handleUseQuickChat();
     } else {
       setPageType('mainPage');
+      setIsLoading(false);
     }
+  }
+
+  const handleUseQuickChat = async () => {
+    const targetDid = await api.getUidByAddress(props.useQuickChat);
+    let quickRoomId = null;
+    if (targetDid) {
+      const { dm_rooms } =  api._client.findDMRoomByUserId(targetDid);
+      quickRoomId = dm_rooms && dm_rooms.length > 0 ? dm_rooms[0] : await api.createDMRoom(targetDid);
+    } else {
+      const { room_id } = await api._client.sendMessByWallet(props.useQuickChat, {})
+      quickRoomId = room_id;
+    }
+    await checkRoomExist(quickRoomId);
+    setCurRoomId(quickRoomId);
+    setPageType('roomPage');
+    setIsLoading(false);
+  }
+
+  const checkRoomExist = async (_roomId) => {
+    await new Promise((resolve, reject) => {
+      const hasRoomInterval = setInterval(() => {
+        const room = api._client.getRoom(_roomId);
+        console.log('widget__interval', room);
+        if (room) {
+          clearInterval(hasRoomInterval);
+          resolve('wasm live: success');
+        }
+      }, 100)
+    })
   }
 
   const renderPage = () => {
@@ -180,6 +220,7 @@ const App = (props) => {
           "--widget-box-shadow": props.widgetBoxShadow,
           "--bg-color": props.bgColor,
           "--main-text-color": props.mainTextColor,
+          "--primary-color": props.primaryColor,
           "--contact-last-message-time-color": props.contactLastMessageTimeColor,
           "--contact-room-bg-color": props.contactRoomBgColor,
           "--left-message-color": props.leftMessageColor,
@@ -201,7 +242,11 @@ const App = (props) => {
             backgroundColor: pageType === 'loginPage' ? '#1B1D21' : props.bgColor,
           }}
         >
-          { renderPage() }
+          {isLoading ? (
+            <div className="chat_widget_loading">loading...</div>
+          ) : (
+            renderPage()
+          )}
         </div>
       </div>
     </Styled>
@@ -209,23 +254,25 @@ const App = (props) => {
 };
 
 App.defaultProps = {
-  baseUrl: "http://localhost",
+  baseUrl: "https://portal0101.sending.network",
   defaultShowWidget: true,
   useThirdLogin: false,
   useTouristMode: "",
+  useQuickChat: "",
   filterWords: [],
   widgetWidth: "350px",
   widgetHeight: "680px",
-  widgetBoxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)",
-  bgColor: "#EAECEE",
+  widgetBoxShadow: "2px 0px 20px rgba(0, 0, 0, 0.3)",
+  bgColor: "#ffffff",
   mainTextColor: "#333",
+  primaryColor: '#8448E1',
   contactLastMessageTimeColor: "#B4B5B8",
   contactRoomBgColor: "red",
   leftMessageColor: "#333",
-  leftMessageBgColor: "#fff",
+  leftMessageBgColor: "#E7EAF3",
   leftMessageTsColor: "#999",
   rightMessageColor: "#fff",
-  rightMessageBgColor: "#227A60",
+  rightMessageBgColor: "#8448E1",
   rightMessageTsColor: "rgba(255, 255, 255, 0.5)",
   sendMessageBgColor: "#fff",
   messageSenderColor: "#333",
@@ -237,11 +284,13 @@ App.propTypes = {
   defaultShowWidget: PropTypes.bool,
   useThirdLogin: PropTypes.bool,
   useTouristMode: PropTypes.string,
+  useQuickChat: PropTypes.string,
   filterWords: PropTypes.array,
   widgetWidth: PropTypes.string,
   widgetHeight: PropTypes.string,
   widgetBoxShadow: PropTypes.string,
   bgColor: PropTypes.string,
+  primaryColor: PropTypes.string,
   mainTextColor: PropTypes.string,
   contactLastMessageTimeColor: PropTypes.string,
   contactRoomBgColor: PropTypes.string,

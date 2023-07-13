@@ -160,7 +160,7 @@ const RoomView = ({
           threshold={80}
           loader={<div className="roomView_scroll_loader" key={0}>Loading ...</div>}
         >
-          {!hasMore && <div className="roomView_scroll_noMore">--- there's no more ---</div>}
+          {!hasMore && <div className="roomView_scroll_noMore">-- This is the beginning of the conversation --</div>}
           <div className="msg-top-station"></div>
           {messages.map((message, index) => {
             return <MessageItem

@@ -88,7 +88,7 @@ const MessageItem = ({
           } else if (content.format && content.format === 'org.sdn.custom.html') {
             const arrs = highlightAt(body)
             msgContent = arrs.length > 0 ?
-              <p>{arrs.map((v, vIndex) => {
+              <p className="msgBox_at_p">{arrs.map((v, vIndex) => {
                 return <span key={vIndex} className={[v === atUserName ? "msgBox_at_highlight" : ""]}>{v}</span>
               })}</p> : body
           } else {

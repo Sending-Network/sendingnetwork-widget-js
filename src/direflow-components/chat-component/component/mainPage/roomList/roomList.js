@@ -5,7 +5,7 @@ import RoomItem from "../roomItem/roomItem";
 import MainMenu from "../mainMenu/mainMenu";
 import { mainChatIcon } from "../../../imgs/index";
 
-const RoomList = ({ rooms, enterRoom, menuClick }) => {
+const RoomList = ({ rooms, enterRoom, closeModalms, menuClick }) => {
   const [filterStr, setFilterStr] = useState("");
   const [list, setList] = useState([]);
 
@@ -34,7 +34,7 @@ const RoomList = ({ rooms, enterRoom, menuClick }) => {
             value={filterStr}
             onChange={(e) => setFilterStr(e.target.value)}
           />
-          <MainMenu menuClick={menuClick} />
+          <MainMenu closeModalms={closeModalms} menuClick={menuClick} />
         </div>
         <div className="rooms-list">
           {list.length > 0 ? 

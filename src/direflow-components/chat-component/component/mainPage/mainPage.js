@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./mainPage.css";
-import ListTitle from './listTitle/listTitle'
 import RoomList from './roomList/roomList.js'
 import { calculateRoomName } from "../../utils/index";
 
@@ -44,8 +43,12 @@ const MainPage = ({ rooms, goToRoom, onMenuClick }) => {
   return (
 		<Styled styles={styles}>
 			<div className="chat_widget_main_page" onClick={() => { setCloseModalms(new Date().getTime()) }}>
-				{/* <ListTitle closeModalms={closeModalms} menuClick={onMenuClick} /> */}
-				<RoomList rooms={roomList} enterRoom={(roomId) => goToRoom(roomId)} menuClick={onMenuClick} />
+				<RoomList
+					rooms={roomList}
+					enterRoom={(roomId) => goToRoom(roomId)}
+					closeModalms={closeModalms}
+					menuClick={onMenuClick}
+				/>
 			</div>
 		</Styled>
   );

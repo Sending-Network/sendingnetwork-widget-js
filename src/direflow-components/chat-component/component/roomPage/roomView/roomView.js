@@ -132,6 +132,7 @@ const RoomView = ({
 
   const scrollToBottom = (oh) => {
     const domWrapper = roomViewRef.current;
+    if (!domWrapper) return;
     if (oh) {
       const h = roomViewRef.current.scrollHeight - oh;
       domWrapper.scrollTo(0, h);

@@ -24,6 +24,7 @@ const App = (props) => {
     window.setShowWidget = (show) => { setShowWidget(show) };
     window.toLogout = (callback) => { handleLogout(callback) };
     window.thirdLoginWatch = () => { handleLoginSuccess() };
+    window.chatToAddressWatch = (addr, callback) => { handleChatToAddress(addr, callback) };
     window.widgetRootDom = widgetRootRef.current;
     init();
     return stop;
@@ -43,16 +44,9 @@ const App = (props) => {
       return;
     }
     // here has logined
-    setIsLoading(true);
     await api.getUserData();
     await start();
-    if (props.useQuickChat) {
-      handleUseQuickChat();
-    } else {
-      setPageType('mainPage');
-      start();
-      setIsLoading(false);
-    }
+    setPageType('mainPage');
   }
 
   const start = async () => {
@@ -121,7 +115,6 @@ const App = (props) => {
   }
 
   const handleLoginSuccess = async () => {
-    setIsLoading(true);
     await api.getUserData();
     await start();
     if (props.useTouristMode) {
@@ -130,28 +123,41 @@ const App = (props) => {
         setCurRoomId(touristRoomId);
         setPageType('roomPage');
       });
-    } else if (props.useQuickChat) {
-      handleUseQuickChat();
     } else {
       setPageType('mainPage');
-      setIsLoading(false);
     }
   }
 
-  const handleUseQuickChat = async () => {
-    const targetDid = await api.getUidByAddress(props.useQuickChat);
+  const handleChatToAddress = async (addr, callback) => {
+    // to check
+    const access_token = localStorage.getItem("sdn_access_token");
+    const user_id = localStorage.getItem("sdn_user_id");
+    if (!access_token || !user_id || !api._client || !addr) {
+      showToast({
+        type: 'warn',
+        msg: !addr ? 'wallet address is empty' : 'please log in first'
+      })
+      callback(false);
+      return;
+    }
+    // do quick chat
+    setIsLoading(true);
+    const targetDid = await api.getUidByAddress(addr);
     let quickRoomId = null;
     if (targetDid) {
       const { dm_rooms } =  api._client.findDMRoomByUserId(targetDid);
       quickRoomId = dm_rooms && dm_rooms.length > 0 ? dm_rooms[0] : await api.createDMRoom(targetDid);
     } else {
-      const { room_id } = await api._client.sendMessByWallet(props.useQuickChat, {})
+      const { room_id } = await api._client.sendMessByWallet(addr, {})
       quickRoomId = room_id;
     }
     await checkRoomExist(quickRoomId);
     setCurRoomId(quickRoomId);
     setPageType('roomPage');
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+      callback(true);
+    }, 500);
   }
 
   const checkRoomExist = async (_roomId) => {
@@ -258,7 +264,6 @@ App.defaultProps = {
   defaultShowWidget: true,
   useThirdLogin: false,
   useTouristMode: "",
-  useQuickChat: "",
   filterWords: [],
   widgetWidth: "350px",
   widgetHeight: "680px",
@@ -284,7 +289,6 @@ App.propTypes = {
   defaultShowWidget: PropTypes.bool,
   useThirdLogin: PropTypes.bool,
   useTouristMode: PropTypes.string,
-  useQuickChat: PropTypes.string,
   filterWords: PropTypes.array,
   widgetWidth: PropTypes.string,
   widgetHeight: PropTypes.string,

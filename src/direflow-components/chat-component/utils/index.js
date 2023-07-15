@@ -99,13 +99,13 @@ export const formatTextLength = (name, limit, len) => {
  */
 export const calculateRoomName = (room, isShowCount) => {
   const getInviteMembers = (allMembers, joinedMembers) => {
-    const list = allMembers.filter(m => !joinedMembers.find(v => v.userId === m.userId))
+    const list = allMembers.filter(m => !joinedMembers.find(v => v?.userId === m?.userId))
     return list;
   }
   const getInviteRoomName = (inviteList) => {
     let name = "";
     if (inviteList.length <= 1) {
-      name = formatTextLength(inviteList[0].name || inviteList[0].userId, 30, 12);
+      name = formatTextLength(inviteList[0]?.name || inviteList[0]?.userId, 30, 12);
     } else {
       name = `You and ${inviteList.length} others`
     }
@@ -124,7 +124,7 @@ export const calculateRoomName = (room, isShowCount) => {
   } else if (membersLen === 2) {
     if (/^@sdn_/.test(name)) {
       const currentUserId = api.getUserId();
-      const index = members.findIndex(v => v.userId === currentUserId);
+      const index = members.findIndex(v => v?.userId === currentUserId);
       members.splice(index, 1);
       const anotherUser = members[0];
       result = anotherUser?.name || anotherUser?.userId

@@ -241,11 +241,11 @@ const RoomInput = ({ roomId }) => {
     let resultStr = sendValue;
     let hasAt = false;
     memberList.map(item => {
-      if (resultStr.indexOf('@'+item.name) !== -1) {
+      if (resultStr.indexOf('@'+item?.name) !== -1) {
         hasAt = true;
-        const reg = new RegExp("@"+item.name, "g")
+        const reg = new RegExp("@"+item?.name, "g")
         const address = item.userId.split(":")[1];
-        const result = `<a href=\"https://app.sending.me/#/user/@0x${address}:hs.sending.me\">${item.name}</a>`
+        const result = `<a href=\"https://app.sending.me/#/user/@0x${address}:hs.sending.me\">${item?.name}</a>`
         resultStr = resultStr.replace(reg, result);
       }
     })
@@ -253,7 +253,7 @@ const RoomInput = ({ roomId }) => {
   }
 
   const handleAtMemberClick = (m) => {
-    const val = sendValue + m.name + " ";
+    const val = sendValue + m?.name + " ";
     setShowMemberList(false);
     setMemberListFocus(0);
     setSendValue(val);
@@ -277,7 +277,7 @@ const RoomInput = ({ roomId }) => {
     }
     if (key === 'Enter' && keyCode === 13 && showMemberList) {
       const m = memberList[memberListFocus];
-      const val = sendValue + m.name + " ";
+      const val = sendValue + m?.name + " ";
       setShowMemberList(false);
       setMemberListFocus(0);
       setSendValue(val);
@@ -330,7 +330,7 @@ const RoomInput = ({ roomId }) => {
                     <div className="room-input_at_item_avatar">
                       <AvatarComp url={m?.user?.avatarUrl} />
                     </div>
-                    <div className="room-input_at_item_name">{m.name}</div>
+                    <div className="room-input_at_item_name">{m?.name}</div>
                   </div>
                 )
               })}

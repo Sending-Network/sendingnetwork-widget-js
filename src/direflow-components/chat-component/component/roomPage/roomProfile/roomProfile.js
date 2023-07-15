@@ -98,7 +98,7 @@ const RoomProfile = ({ room = {}, backClick }) => {
 											<AvatarComp url={member?.user?.avatarUrl}/>
 										</div>
 										<div className="room_members_item_desc">
-											<p className="room_members_item_desc_name">{member.name}</p>
+											<p className="room_members_item_desc_name">{member?.name}</p>
 											<p className="room_members_item_desc_addr">{addr}</p>
 										</div>
 									</div>

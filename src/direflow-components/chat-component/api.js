@@ -22,6 +22,7 @@ class Api {
     this.restore = this.restore;
     this.setUserNickname = this.setUserNickname;
     this.getUidByAddress = this.getUidByAddress;
+    this.chatToAddress = this.chatToAddress;
     this.init = this.init;
   }
 
@@ -304,6 +305,14 @@ class Api {
     const { data: [did] } = await this._client.getDIDList(addr);
     const uid = did ? `@sdn_${contAddr}:${contAddr}` : null;
     return uid;
+  };
+
+  chatToAddress = (addr, callback) => {
+    if (window.chatToAddressWatch) {
+      window.chatToAddressWatch(addr, callback);
+    } else {
+      callback && callback(false);
+    }
   }
 
   on = (type, callback) => {
@@ -322,6 +331,10 @@ class Api {
 
   // getUnreadCounts
   getUnreadCounts = (callBack) => {
+    if (!this._client) {
+      callBack && callBack(0);
+      return;
+    }
     const rooms = this._client.getRooms();
     const counts = rooms.map((room) => room.notificationCounts.total);
     const num = counts.reduce((old, now) => {

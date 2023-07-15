@@ -114,6 +114,7 @@ const TouristRoom = ({ roomId, toLogin }) => {
 
   const scrollToBottom = (oh) => {
     const domWrapper = roomViewRef.current;
+    if (!domWrapper) return;
     if (domWrapper) {
       if (oh) {
         const h = roomViewRef.current.scrollHeight - oh;

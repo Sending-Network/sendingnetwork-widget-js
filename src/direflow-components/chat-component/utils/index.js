@@ -70,7 +70,7 @@ export const showToast = ({ type, msg, duration = 1250, callback }) => {
   content.appendChild(contentLeft);
   content.appendChild(contentRight);
   wrap.appendChild(content);
-  const rootDom = window.widgetRootDom;
+  const rootDom = window.widgetChatDom;
   rootDom.appendChild(wrap);
 
   setTimeout(() => {
@@ -387,4 +387,74 @@ export const throttled = (fn, delay = 500) => {
           }, delay);
       }
   }
+}
+
+
+/**
+ * Drag and drop an element to move freely
+ */
+export const dragging = (rootDom) => {
+  var draggingObj = null;
+  var diffX = 0;
+  var diffY = 0;
+
+  const mouseDown = (e) => {
+    draggingObj = rootDom;
+    diffX = e.clientX - draggingObj.offsetLeft;
+    diffY = e.clientY - draggingObj.offsetTop;
+  }
+  const mouseHandler = (e) => {
+    switch (e.type) {
+      case "mousemove":
+        if (draggingObj) {
+          draggingObj.style.left = e.clientX - diffX + 'px';
+          draggingObj.style.top = e.clientY - diffY + 'px';
+        }
+        break;
+      case "mouseup":
+        draggingObj = null;
+        diffX = 0;
+        diffY = 0;
+        break;
+    }
+  }
+  return {
+    enable: function () {
+      rootDom.addEventListener("mousedown", mouseDown);
+      document.addEventListener("mousemove", mouseHandler);
+      document.addEventListener("mouseup", mouseHandler);
+    },
+    disable: function () {
+      rootDom.removeEventListener("mousedown", mouseDown);
+      document.removeEventListener("mousemove", mouseHandler);
+      document.removeEventListener("mouseup", mouseHandler);
+    },
+  };
+};
+
+
+/**
+ * Parsing and transmitting parameters with useWidgetBtn
+ */
+export const parseUseWidgetBtn = (str, width, height) => {
+  let styleObj = {};
+  const posMap = {
+    'leftTop': { left: '70px', top: '70px' },
+    'rightTop': { left: `-${width}`, top: '70px' },
+    'leftBottom': { left: '70px', top: `-${height}` },
+    'rightBottom': { left: `-${width}`, top: `-${height}` },
+  }
+  const propertyArr = str.split(";");
+  propertyArr.map(item => {
+    const keyValArr = item.split(':');
+    if (keyValArr.length === 2) {
+      styleObj[keyValArr[0]] = keyValArr[1]
+    }
+  })
+  styleObj.widgetPos = posMap[styleObj['pos']];
+  styleObj.btnPos = {
+    left: styleObj.left,
+    top: styleObj.top
+  }
+  return styleObj;
 }

@@ -14,6 +14,7 @@
   z-index: 10;
   top: 23px;
   right: 0;
+  pointer-events: none;
 }
 
 .loginPage-bg-2 {
@@ -22,6 +23,7 @@
   z-index: 10;
   top: 116px;
   left: 14px;
+  pointer-events: none;
 }
 
 .loginPage-bg-3 {
@@ -29,6 +31,7 @@
   position: absolute;
   bottom: 0px;
   left: 4px;
+  pointer-events: none;
 }
 
 /* backIcon */

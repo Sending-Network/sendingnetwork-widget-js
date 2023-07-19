@@ -35,6 +35,7 @@ const RoomView = ({
     api._client.on("Room.timeline", onTimeLine);
     return () => {
       api._client.removeListener("Room.timeline", onTimeLine);
+      api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('unReadCount');
     };
   }, []);
 

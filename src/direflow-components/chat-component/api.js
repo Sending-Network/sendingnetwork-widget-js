@@ -316,7 +316,7 @@ class Api {
   }
 
   on = (type, callback) => {
-    const typeList = ["login", "logout"];
+    const typeList = ["login", "logout", "unReadCount"];
     if (!this.eventEmitter) return;
     if (typeof type !== 'string' || !typeList.includes(type)) {
       console.error(`chatWidgetApi.on received unsupport type: ${type}`);
@@ -326,7 +326,15 @@ class Api {
       console.error(`chatWidgetApi.on callback not a function: ${callback}`);
       return;
     }
-    this.eventEmitter.on(type, callback);
+    if (type === 'unReadCount') {
+      this.eventEmitter.on(type, () => {
+        this.getUnreadCounts((num) => {
+          callback(num);
+        })
+      });
+    } else {
+      this.eventEmitter.on(type, callback);
+    }
   };
 
   // getUnreadCounts

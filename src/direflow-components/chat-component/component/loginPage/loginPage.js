@@ -10,6 +10,7 @@ import {
   loginBgCircle3
 } from "../../imgs/login";
 import { roomTitleBackIcon } from "../../imgs/index";
+import { showToast } from "../../utils/index";
 
 const LoginPage = ({ useTouristMode, useThirdLogin, loginSuccess, backToTourist }) => {
   const [showAutoLogin, setShowAutoLogin] = useState(false);
@@ -34,8 +35,14 @@ const LoginPage = ({ useTouristMode, useThirdLogin, loginSuccess, backToTourist 
     api.DIDLogin((res) => {
       if (res) {
         loginSuccess();
+      } else {
+        showToast({
+          type: 'warn',
+          msg: 'failed, please try again',
+          duration: 2000
+        })
+        setShowAutoLogin(false);
       }
-      // setShowAutoLogin(false);
     });
   };
 

@@ -100,6 +100,17 @@ textarea {
   resize: vertical;
 }
 
+/* widget_root */
+.widget_root {
+  position: fixed;
+  left: 500px;
+  top: 800px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+/* chat_widget */
 .chat_widget {
   position: relative;
   width: var(--widget-width);
@@ -109,6 +120,12 @@ textarea {
   background-color: var(--bg-color);
   box-shadow: var(--widget-box-shadow);
   transform: translate(0, 0);
+}
+.chat_widget_useBtn {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 10000;
 }
 
 .chat_widget_loading {
@@ -133,4 +150,37 @@ textarea {
 .P2P_logo img {
   width: 50px;
   height: 50px;
+}
+
+/* widget show */
+.chat_widget_btn {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  float: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.chat_widget_btn img {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.chat_widget_btn_bage {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  z-index: 10;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 20px;
+  background-color: var(--contact-room-bg-color);
+  color: #fff;
+  font-size: 12px;
 }

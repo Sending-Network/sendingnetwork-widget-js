@@ -282,6 +282,8 @@ const App = (props) => {
         }}
         className={[props.useWidgetBtn ? "widget_root" : ""].join(" ")}
         ref={widgetRootRef}
+        onScroll={e => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* widget btn */}
         {props.useWidgetBtn && (

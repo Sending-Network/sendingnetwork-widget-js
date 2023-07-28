@@ -65,34 +65,22 @@ class Api {
         });
         const [address] = accounts;
         let { data: [did] } = await this._client.getDIDList(address);
-        // if (!did) {
-        //   const {
-        //     did: newDid,
-        //     message: cMessage,
-        //     updated: cUpdated,
-        //   } = await this._client.createDID(`${prefix}${address}`);
-        //   did = newDid;
-        //   let signature = await window.ethereum.request({
-        //     method: "personal_sign",
-        //     params: [cMessage, address, ""],
-        //   });
-        //   await this._client.saveDID(newDid, {
-        //     signature,
-        //     operation: "create",
-        //     updated: cUpdated,
-        //     address: `${prefix}${address}`,
-        //   });
-        // }
         const preloginParams = did ? { did } : { address: `${prefix}${address}` }
         const { message: lMessage, updated, random_server } = await this._client.preDiDLogin1(preloginParams);
         let sign = await window.ethereum.request({
           method: "personal_sign",
           params: [lMessage, address, ""],
         });
+        // developer key signature
+        let devSign = null;
+        if (window.signWithDevKey) {
+          devSign = await window.signWithDevKey({message: lMessage});
+        }
         let identifier = {
           did,
           address: did || `${prefix}${address}`,
           token: sign,
+          app_token: devSign ? devSign : undefined,
           message: lMessage
         };
         const deviceId = localStorage.getItem("mx_device_id") || null;
@@ -135,10 +123,16 @@ class Api {
       const preloginParams = did ? { did } : { address: `${prefix}${address}` }
       const { message: lMessage, updated, random_server } = await this._client.preDiDLogin1(preloginParams);
       const sign = await thirdSignFunc({message: lMessage});
+      // developer key signature
+      let devSign = null;
+      if (window.signWithDevKey) {
+        devSign = await window.signWithDevKey({message: lMessage});
+      }
       let identifier = {
         did,
         address: did || `${prefix}${address}`,
         token: sign,
+        app_token: devSign ? devSign : undefined,
         message: lMessage
       };
       const deviceId = localStorage.getItem("mx_device_id") || null;
@@ -344,7 +338,14 @@ class Api {
       return;
     }
     const rooms = this._client.getRooms();
-    const counts = rooms.map((room) => room.notificationCounts.total);
+    const counts = rooms.map((room) => {
+      if (room.getMyMembership() === 'invite') {
+        return 1;
+      } else if (room.getMyMembership() === 'join') {
+        return room.notificationCounts.total || 0;
+      }
+      return 0;
+    });
     const num = counts.reduce((old, now) => {
       return old + now;
     }, 0);

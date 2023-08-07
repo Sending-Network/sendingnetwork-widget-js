@@ -81,6 +81,7 @@
   font-size: 16px;
   line-height: 18px;
   color: var(--main-text-color);
+  background-color: var(--userSettings-inputName-bg-color);
   outline: none;
 }
 .alias-input::placeholder {

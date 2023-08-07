@@ -10,13 +10,14 @@ import MemberProfile from "./memberProfile/memberProfile";
 import { api } from "../../api";
 
 
-const RoomPage = ({ roomId, callback }) => {
+const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
   const [curRoomId, setCurRoomId] = useState("");
   const [curRoom, setCurRoom] = useState(null);
   const [showUrlPreviewWidget, setShowUrlPreviewWidget] = useState(false);
   const [urlPreviewWidgetUrl, setUrlPreviewWidgetUrl] = useState("");
   const [showType, setShowType] = useState('room');
   const [pinnedIds, setPinnedIds] = useState([]);
+  const [closeEmoji, setCloseEmoji] = useState('');
   const [memberProfileId, setMemberProfileId] = useState("");
 
   useEffect(() => {
@@ -98,7 +99,7 @@ const RoomPage = ({ roomId, callback }) => {
 
   return (
     <Styled styles={styles}>
-      <div className="roomPage">
+      <div className="roomPage" onClick={() => {setCloseEmoji(new Date().getTime())}}>
         {showType === 'profile' && <RoomProfile room={curRoom} backClick={handleProfileBack} />}
         {showType === 'invite' && <InvitePage title="Invite User" roomId={curRoomId} onBack={() => setShowType('room')} />}
         {showType === 'memberProfile' && <MemberProfile memberId={memberProfileId} onBack={() => {
@@ -116,8 +117,10 @@ const RoomPage = ({ roomId, callback }) => {
               />
             )}
             <RoomView
+              roomViewBgUrl={roomViewBgUrl}
               roomId={roomId}
               pinnedIds={pinnedIds}
+              closeEmoji={closeEmoji}
               openUrlPreviewWidget={openUrlPreviewWidget}
               pinClick={pinClick}
               pinEventSync={pinEventSync}

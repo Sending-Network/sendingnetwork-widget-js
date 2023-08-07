@@ -155,6 +155,7 @@ const App = (props) => {
   }
 
   const handleChatToAddress = async (addr, callback) => {
+    api.showWidget(true);
     // to check
     const access_token = localStorage.getItem("sdn_access_token");
     const user_id = localStorage.getItem("sdn_user_id");
@@ -163,12 +164,11 @@ const App = (props) => {
         type: 'warn',
         msg: !addr ? 'wallet address is empty' : 'please log in first'
       })
-      callback(false);
+      callback && callback(false);
       return;
     }
     // do quick chat
     setIsLoading(true);
-    api.showWidget(true);
     const targetDid = await api.getUidByAddress(addr);
     let quickRoomId = null;
     if (targetDid) {
@@ -183,7 +183,7 @@ const App = (props) => {
     setPageType('roomPage');
     setTimeout(() => {
       setIsLoading(false);
-      callback(true);
+      callback && callback(true);
     }, 500);
   }
 
@@ -244,10 +244,14 @@ const App = (props) => {
           }}
         />
       case 'roomPage':
-        return <RoomPage roomId={curRoomId} callback={() => {
-          setCurRoomId("")
-          setPageType('mainPage')
-        }} />
+        return <RoomPage
+          roomViewBgUrl={props.roomViewBgUrl}
+          roomId={curRoomId}
+          callback={() => {
+            setCurRoomId("")
+            setPageType('mainPage')
+          }}
+        />
       case 'invitePage':
         return <InvitePage onBack={() => setPageType('mainPage')} />
       case 'setPage':
@@ -278,6 +282,9 @@ const App = (props) => {
           "--sendMessage-bg-color": props.sendMessageBgColor,
           "--message-sender-color": props.messageSenderColor,
           "--sendMessage-border-color": props.sendMessageBorderColor,
+          "--dropMenu-bg-color": props.dropMenuBgColor,
+          "--dropMenu-item-hover-color": props.dropMenuItemHoverColor,
+          "--userSettings-inputName-bg-color": props.userSettingsInputNameBgColor,
           ...(props.useWidgetBtn ? btnStyle.btnPos : {})
         }}
         className={[props.useWidgetBtn ? "widget_root" : ""].join(" ")}
@@ -328,7 +335,7 @@ App.defaultProps = {
   widgetWidth: "350px",
   widgetHeight: "680px",
   widgetBoxShadow: "2px 0px 20px rgba(0, 0, 0, 0.3)",
-  bgColor: "#ffffff",
+  bgColor: "#fff",
   mainTextColor: "#333",
   primaryColor: '#8448E1',
   contactLastMessageTimeColor: "#B4B5B8",
@@ -341,7 +348,11 @@ App.defaultProps = {
   rightMessageTsColor: "rgba(255, 255, 255, 0.5)",
   sendMessageBgColor: "#fff",
   messageSenderColor: "#333",
-  sendMessageBorderColor: "#fff"
+  sendMessageBorderColor: "#fff",
+  dropMenuBgColor: "#fff",
+  dropMenuItemHoverColor: "#E7EAF3",
+  userSettingsInputNameBgColor: "#fff",
+  roomViewBgUrl: "",
 };
 
 App.propTypes = {
@@ -368,6 +379,10 @@ App.propTypes = {
   sendMessageBgColor: PropTypes.string,
   messageSenderColor: PropTypes.string,
   sendMessageBorderColor: PropTypes.string,
+  dropMenuBgColor: PropTypes.string,
+  dropMenuItemHoverColor: PropTypes.string,
+  userSettingsInputNameBgColor: PropTypes.string,
+  roomViewBgUrl: PropTypes.string,
 };
 
 export default App;

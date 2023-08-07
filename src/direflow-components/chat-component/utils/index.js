@@ -1,5 +1,7 @@
 import { toastInfoIcon, toastErrorIcon, toastSuccessIcon } from "../imgs/index";
 import { api } from "../api";
+import EMOJIBASE from 'emojibase-data/en/compact.json';
+import SHORTCODES from 'emojibase-data/en/shortcodes/iamcal.json';
 
 class FilterWordsLibrary {
   constructor() {
@@ -457,4 +459,13 @@ export const parseUseWidgetBtn = (str, width, height) => {
     top: styleObj.top
   }
   return styleObj;
+}
+
+
+/**
+ * get emoji collections
+ */
+export const getEmojis = () => {
+  const emojis = EMOJIBASE.filter(emoji => emoji.group === 0);
+  return emojis;
 }

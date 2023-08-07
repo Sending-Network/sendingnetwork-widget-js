@@ -10,12 +10,14 @@ import RoomInput from "./roomInput/roomInput";
 import MessageItem from "../messageItem/messageItem";
 
 const RoomView = ({
+  roomViewBgUrl,
   roomId,
   pinnedIds,
   openUrlPreviewWidget,
   pinClick,
   memberAvatarClick,
-  pinEventSync
+  pinEventSync,
+  closeEmoji
 }) => {
   const roomViewRef = useRef(null);
   const room = api._client.getRoom(roomId);
@@ -150,9 +152,13 @@ const RoomView = ({
   return (
     <Styled styles={styles}>
       <div
-        className="roomView"
         ref={roomViewRef}
-        style={{backgroundImage: `url(${roomViewBg})`}}
+        className="roomView"
+        style={{
+          backgroundImage: `url(${roomViewBgUrl || roomViewBg})`,
+          backgroundRepeat: roomViewBgUrl ? 'no-repeat' : '',
+          backgroundSize: roomViewBgUrl ? 'auto 100%' : ''
+        }}
       >
         <InfiniteScroll
           useWindow={false}
@@ -181,7 +187,7 @@ const RoomView = ({
         </InfiniteScroll>
         
         {/* input Comp */}
-        <RoomInput roomId={roomId} />
+        <RoomInput roomId={roomId} closeEmoji={closeEmoji} />
         
         {/* img preview */}
         {isShowPreviewImg && (

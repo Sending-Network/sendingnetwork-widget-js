@@ -4,15 +4,16 @@ import styles from "./roomInput.css";
 import Web3 from "web3";
 import { MaxUint256 } from "@ethersproject/constants";
 import { api } from "../../../../api";
-import { roomInputUploadIcon } from "../../../../imgs/index";
-import { web3ContractConstant, tokenList, showToast } from "../../../../utils/index";
+import { roomInputUploadIcon, roomInputEmojiIcon } from "../../../../imgs/index";
+import { web3ContractConstant, tokenList, showToast, getEmojis } from "../../../../utils/index";
 import { checkChain } from "../../../../utils/gasFee";
 import { AvatarComp } from "../../../avatarComp/avatarComp";
 
-const RoomInput = ({ roomId }) => {
+const RoomInput = ({ roomId, closeEmoji }) => {
   const ethereum = window.ethereum;
   const web3 = new Web3(ethereum);
   const uploadRef = useRef(null);
+  const emojis = getEmojis();
   const [sendValue, setSendValue] = useState("");
   const [transferCount, setTransferCount] = useState(0);
   const [showTransferTip, setShowTransferTip] = useState(false);
@@ -20,12 +21,17 @@ const RoomInput = ({ roomId }) => {
   const [showTokenSwapTip, setShowTokenSwapTip] = useState(false);
   const [showInputMaxPrompt, setShowInputMaxPrompt] = useState(false);
   const [showMemberList, setShowMemberList] = useState(false);
+  const [showEmojiPanel, setShowEmojiPanel] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [memberListFocus, setMemberListFocus] = useState(0);
 
   useEffect(() => {
     initMembers();
   }, [roomId])
+
+  useEffect(() => {
+    setShowEmojiPanel(false);
+  }, [closeEmoji])
 
   // useEffect(() => {
   //   handleTransferTip()
@@ -252,6 +258,16 @@ const RoomInput = ({ roomId }) => {
     return hasAt ? resultStr : "";
   }
 
+  const handleEmojiClick = (e) => {
+    e.stopPropagation();
+    setShowEmojiPanel(!showEmojiPanel);
+  }
+
+  const handleEmojiItemClick = (emoji) => {
+    const val = sendValue + emoji.unicode;
+    setSendValue(val);
+  }
+
   const handleAtMemberClick = (m) => {
     const val = sendValue + m?.name + " ";
     setShowMemberList(false);
@@ -360,6 +376,26 @@ const RoomInput = ({ roomId }) => {
             onChange={inputChange}
             onKeyDown={sendMessage}
           />
+
+          {/* emoji */}
+          <div className="room-input-emoji" onClick={handleEmojiClick}>
+            <img className="room-input-emoji-icon" src={roomInputEmojiIcon} />
+          </div>
+          {showEmojiPanel && (
+            <div className="room-input-emoji-panel" onClick={e => e.stopPropagation()}>
+              {emojis.map((emoji, emojiIndex) => {
+                return (
+                  <div
+                    className="room-input-emoji-panel-item"
+                    key={emojiIndex}
+                    onClick={() => handleEmojiItemClick(emoji)}
+                  >
+                    <span>{emoji.unicode}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 		</Styled>
   );

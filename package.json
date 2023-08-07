@@ -35,6 +35,7 @@
     "antd": "^5.0.1",
     "direflow-component": "3.5.5",
     "direflow-scripts": "3.5.5",
+    "emojibase-data": "^15.0.0",
     "ethereumjs-util": "^7.1.5",
     "event-emitter": "^0.3.5",
     "lodash": "^4.17.21",

@@ -24,12 +24,13 @@
 	right: 10px;
 	top: 63px;
 	width: 125px;
-	background: #fff;
+	background: var(--dropMenu-bg-color);
 	box-shadow: -2px 4px 10px rgba(0, 0, 0, 0.3);
 	border-radius: 8px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	overflow: hidden;
 }
 
 .chat_widget_title_setBox_item {
@@ -42,7 +43,7 @@
 	cursor: pointer;
 }
 .chat_widget_title_setBox_item:hover {
-	background: #E7EAF3;
+	background: var(--dropMenu-item-hover-color);
 }
 
 .chat_widget_title_setBox_item img {

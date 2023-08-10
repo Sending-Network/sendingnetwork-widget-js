@@ -122,7 +122,7 @@ export const calculateRoomName = (room, isShowCount) => {
   let result = name;
 
   if (membersLen <= 1) {
-    result = getInviteRoomName(inviteMembers);
+    result = getInviteRoomName(inviteMembers) || name;
   } else if (membersLen === 2) {
     if (/^@sdn_/.test(name)) {
       const currentUserId = api.getUserId();

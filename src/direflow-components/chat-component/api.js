@@ -1,6 +1,8 @@
 import sdk from "sendingnetwork-js-sdk";
 import { randomBytes } from "crypto";
 import EventEmitter from "event-emitter";
+import Web3 from "web3";
+import * as util from "ethereumjs-util";
 import { payGasFee } from "./utils/gasFee";
 
 class Api {
@@ -38,6 +40,10 @@ class Api {
     return this._client.turnServers;
   };
 
+  clearClient = () => {
+    this._client = null;
+  }
+
   // func
   init = (baseUrl) => {
     const user_id = localStorage.getItem("sdn_user_id");
@@ -65,7 +71,8 @@ class Api {
         });
         const [address] = accounts;
         let { data: [did] } = await this._client.getDIDList(address);
-        const preloginParams = did ? { did } : { address: `${prefix}${address}` }
+        const client_key = await this.getWeb3PublicKey();
+        const preloginParams = did ? { did, client_key } : { address: `${prefix}${address}`, client_key };
         const { message: lMessage, updated, random_server } = await this._client.preDiDLogin1(preloginParams);
         let sign = await window.ethereum.request({
           method: "personal_sign",
@@ -91,6 +98,7 @@ class Api {
           random_server,
           device_id: deviceId,
           initial_device_display_name: this.defaultDeviceDisplayName,
+          client_key
         };
 
         const { access_token, user_id } = await this._client.DIDLogin(loginParams);
@@ -120,7 +128,8 @@ class Api {
     try {
       const prefix = "did:pkh:eip155:1:";
       let { data: [did] } = await this._client.getDIDList(address);
-      const preloginParams = did ? { did } : { address: `${prefix}${address}` }
+      const client_key = await this.getWeb3PublicKey();
+      const preloginParams = did ? { did, client_key } : { address: `${prefix}${address}`, client_key };
       const { message: lMessage, updated, random_server } = await this._client.preDiDLogin1(preloginParams);
       const sign = await thirdSignFunc({message: lMessage});
       // developer key signature
@@ -143,6 +152,7 @@ class Api {
         random_server,
         device_id: deviceId,
         initial_device_display_name: this.defaultDeviceDisplayName,
+        client_key
       };
       const { access_token, user_id } = await this._client.DIDLogin(loginParams);
       localStorage.setItem("sdn_access_token", access_token);
@@ -230,7 +240,7 @@ class Api {
   };
 
   getUrlPreview = async (link, ts) => {
-    return await this._client.getUrlPreviewNew(link, ts);
+    return await this._client.getUrlPreview(link, ts);
   };
 
   queryMessageType = async () => {
@@ -298,7 +308,7 @@ class Api {
     const contAddr = addr.replace(/^0[x|X]/, '');
     const { data: [did] } = await this._client.getDIDList(addr);
     const uid = did ? `@sdn_${contAddr}:${contAddr}` : null;
-    return uid;
+    return uid ? uid.toLowerCase() : null;
   };
 
   chatToAddress = (addr, callback) => {
@@ -385,6 +395,23 @@ class Api {
     const transaction = await this._client.smartTradingTextParse(text, address);
     return transaction;
   };
+
+  getWeb3PublicKey = async () => {
+    const web3 = new Web3();
+    let tmpPrivateKey = localStorage.getItem('sdn_web3_key');
+    if (!tmpPrivateKey) {
+      const { privateKey, address } = web3.eth.accounts.create();
+      tmpPrivateKey = privateKey;
+      localStorage.setItem('sdn_web3_key', privateKey);
+    }
+    const msg = tmpPrivateKey.replace('0x', '');
+    const publicKeyBuffer = util.privateToPublic(Buffer.from(msg, 'hex'));
+    const publicKey = `${publicKeyBuffer.toString('hex')}`
+    return {
+      public_key: publicKey,
+      key_type: 'EcdsaSecp256k1RecoveryMethod2020'
+    }
+  }
 
   // tourist
   getTouristClient = () => {

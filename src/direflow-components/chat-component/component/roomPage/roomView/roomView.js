@@ -11,6 +11,7 @@ import MessageItem from "../messageItem/messageItem";
 
 const RoomView = ({
   roomViewBgUrl,
+  useRoomFuncs,
   roomId,
   pinnedIds,
   openUrlPreviewWidget,
@@ -157,7 +158,7 @@ const RoomView = ({
         style={{
           backgroundImage: `url(${roomViewBgUrl || roomViewBg})`,
           backgroundRepeat: roomViewBgUrl ? 'no-repeat' : '',
-          backgroundSize: roomViewBgUrl ? 'auto 100%' : ''
+          backgroundSize: roomViewBgUrl ? 'auto 100%' : '100% auto'
         }}
       >
         <InfiniteScroll
@@ -187,7 +188,12 @@ const RoomView = ({
         </InfiniteScroll>
         
         {/* input Comp */}
-        <RoomInput roomId={roomId} closeEmoji={closeEmoji} />
+        <RoomInput
+          roomId={roomId}
+          useRoomFuncs={useRoomFuncs}
+          openUrlPreviewWidget={openUrlPreviewWidget}
+          closeEmoji={closeEmoji}
+        />
         
         {/* img preview */}
         {isShowPreviewImg && (

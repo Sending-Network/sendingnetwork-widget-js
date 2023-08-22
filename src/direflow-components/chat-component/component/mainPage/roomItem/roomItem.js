@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./roomItem.css";
 import { api } from "../../../api";
-import { formatTextLength } from "../../../utils/index";
+import { formatTextLength, timeFormat } from "../../../utils/index";
 import { AvatarMutiComp, AvatarComp } from "../../avatarComp/avatarComp";
 
 const RoomItem = ({ room, enterRoom }) => {
@@ -53,7 +53,7 @@ const RoomItem = ({ room, enterRoom }) => {
 		if (events.length) {
 			const lastEvent = events[events.length - 1];
 			const content = lastEvent.getContent();
-			const timeStr = formatTime(lastEvent.getTs());
+			const timeStr = timeFormat(lastEvent.getTs());
 			let msgStr = ""
 			if (lastEvent.getType() === 'm.room.message' && content) {
 				switch (content.msgtype) {
@@ -68,16 +68,6 @@ const RoomItem = ({ room, enterRoom }) => {
 			setLastTime(timeStr);
 			setLastMsg(msgStr);
 		}
-	}
-
-	const formatTime = (time) => {
-		if (!time) return "";
-		let text = "";
-		const date = new Date(time);
-		const m = date.getMinutes().toString();
-		let h = date.getHours().toString();
-		text = `${h < 10 ? ('0' + h) : h}:${m < 10 ? ('0' + m) : m}`
-		return text
 	}
 
 	const accept = (roomId) => {

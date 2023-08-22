@@ -1,6 +1,7 @@
 /* more menu */
 .chat_widget-menu {
-
+	display: flex;
+	flex-shrink: 0;
 }
 
 .chat_widget-menu-btn {

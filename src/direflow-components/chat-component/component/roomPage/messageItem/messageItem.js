@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./messageItem.css";
 import { api } from "../../../api";
-import { formatTextLength } from "../../../utils/index";
+import { formatTextLength, renderTs, getAddressByUserId } from "../../../utils/index";
 import { AvatarComp } from "../../../component/avatarComp/avatarComp";
 import UrlPreviewComp from "../../UrlPreviewComp/UrlPreviewComp";
 import { roomTitleMoreIcon } from "../../../imgs/index";
@@ -70,6 +70,27 @@ const MessageItem = ({
       const { pinned = [] } = content;
       const userNick = formatSender(sender);
       msgContent = pinned.length > 0 ? `${userNick} Pinned a message` : `${userNick} UnPinned message`;
+    } else if (type === 'm.room.customized_events') {
+      const { body, icon, link, link_text } = content;
+      const userNick = formatSender(sender);
+      msgContent = (
+        <span className="red_envelope_event_item_cont">
+          <img src={icon} />
+          <a className="sender" onClick={() => memberAvatarClick(sender)}>{userNick}</a>
+          <span>{body.replace(link_text, '')}</span>
+          <a className="link" onClick={() => openUrlPreviewWidget(link)}>{link_text}</a>
+        </span>
+      )
+    } else if (type === 'm.room.member') {
+      const { displayname, membership } = content;
+      const addr = getAddressByUserId(sender);
+      const nameStr = formatTextLength(displayname ||  addr, 24, 5);
+      if (membership === 'join') {
+        msgContent = <p>
+          <span className="member_event_item_highlight" onClick={() => memberAvatarClick(sender)}>{nameStr}</span>
+          joined room.
+        </p>;
+      }
     } else if (type === 'm.room.message') {
       const { body, msgtype, ...other } = content;
       switch (msgtype) {
@@ -82,6 +103,7 @@ const MessageItem = ({
                 url={urlBody}
                 message={body}
                 ts={origin_server_ts}
+                isRight={sender === userId}
                 openUrlPreviewWidget={openUrlPreviewWidget}
               />
             );
@@ -96,7 +118,10 @@ const MessageItem = ({
           }
           break;
         case "m.image":
-          let url = api._client.mxcUrlToHttp(other.url);
+          let url = other.url;
+          if (/^mxc\:\/\/.+/.test(url)) {
+            url = api._client.mxcUrlToHttp(url);
+          }      
           msgContent = (
             <img
               style={{ maxWidth: "100%", cursor: 'pointer', marginTop: '2px' }}
@@ -105,19 +130,15 @@ const MessageItem = ({
             />
           );
           break;
+        case "nic.custom.confetti":
+          msgContent = (
+            <span style={{fontSize: '32px', lineHeight: '40px'}}>{body}</span>
+          );
+          break;
         default: break;
       }
     }
     return msgContent;
-  };
-
-  const renderTs = (ts) => {
-    const h = new Date(ts).getHours();
-    let m = new Date(ts).getMinutes();
-    if (m <= 9) {
-      m = '0' + m;
-    }
-    return `${h}:${m}`;
   };
 
   const handleMoreClick = (e) => {
@@ -130,6 +151,24 @@ const MessageItem = ({
     e.stopPropagation();
     setShowMore(false);
     setShowMoreMenu(false);
+  }
+
+  const isPreviewCard = () => {
+    const { body, msgtype } = content;
+    const urls = httpString(body);
+    if (type === 'm.room.message' && msgtype === 'm.text' && urls) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const shouldShowUserName = () => {
+    if (room?.getJoinedMemberCount() <= 2 || room?.isDmRoom()) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   const handlePinClick = async (e) => {
@@ -156,7 +195,12 @@ const MessageItem = ({
     }
   }
 
-  return ['m.room.message', 'm.room.pinned_events'].includes(type) ? (
+  return [
+    'm.room.message',
+    'm.room.pinned_events',
+    'm.room.customized_events',
+    'm.room.member'
+  ].includes(type) ? (
     <Styled styles={styles}>
       <div className="msgItem">
         {/* m.room.message */}
@@ -168,9 +212,9 @@ const MessageItem = ({
             {sender === userId ? (
               <div className="msgBox_right" key={event_id}>
                 <div className="msgBox_right_info">
-                  <div className="msgBox_right_info_msg">
+                  <div className={["msgBox_right_info_msg", isPreviewCard() && "msgBox_show_card"].join(" ")}>
                     {renderMsgContent()}
-                    <p className="msgBox_right_info_msg_time">{renderTs(origin_server_ts)}</p>
+                    {!isPreviewCard() && <p className="msgBox_right_info_msg_time">{renderTs(origin_server_ts)}</p>}
                     {(showMore || showMoreMenu) && (
                       <div className="msgBox_more msgBox_more_right" onClick={handleMoreClick}>
                         <img className="msgBox_more_img" src={roomTitleMoreIcon} />
@@ -191,30 +235,41 @@ const MessageItem = ({
                   <AvatarComp url={userData?.avatarUrl} />
                 </div>
                 <div className="msgBox_left_info">
-                  <p className="msgBox_left_info_user">{formatSender(sender)}</p>
-                  <div className="msgBox_left_info_msg">
+                  {shouldShowUserName() && <p className="msgBox_left_info_user">{formatSender(sender)}</p>}
+                  <div className={["msgBox_left_info_msg", isPreviewCard() && "msgBox_show_card"].join(" ")}>
                     {renderMsgContent()}
-                    <span className="msgBox_left_info_msg_time">{renderTs(origin_server_ts)}</span>
+                    {!isPreviewCard() && <span className="msgBox_left_info_msg_time">{renderTs(origin_server_ts)}</span>}
+                    {(showMore || showMoreMenu) && (
+                      <div className="msgBox_more msgBox_more_left" onClick={handleMoreClick}>
+                        <img className="msgBox_more_img" src={roomTitleMoreIcon} />
+                        {showMoreMenu && (<div className="msgBox_more_menu_wrap" onClick={closeMoreWrap}></div>)}
+                        {showMoreMenu && (
+                          <div className="msgBox_more_menu msgBox_more_menu_left">
+                            <div className="msgBox_more_menu_item" onClick={handlePinClick}>{pinText}</div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  {(showMore || showMoreMenu) && (
-                    <div className="msgBox_more msgBox_more_left" onClick={handleMoreClick}>
-                      <img className="msgBox_more_img" src={roomTitleMoreIcon} />
-                      {showMoreMenu && (<div className="msgBox_more_menu_wrap" onClick={closeMoreWrap}></div>)}
-                      {showMoreMenu && (
-                        <div className="msgBox_more_menu msgBox_more_menu_left">
-                          <div className="msgBox_more_menu_item" onClick={handlePinClick}>{pinText}</div>
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
               </div>
             )}
           </div>
         )}
+        
         {/* m.room.pinned_events */}
         {type === 'm.room.pinned_events' && (
           <div className="pin_event_item">{renderMsgContent()}</div>
+        )}
+
+        {/* m.room.customized_events */}
+        {type === 'm.room.customized_events' && (
+          <div className="red_envelope_event_item">{renderMsgContent()}</div>
+        )}
+
+        {/* m.room.member event */}
+        {type === 'm.room.member' && content.membership === 'join' && (
+          <div className="member_event_item">{renderMsgContent()}</div>
         )}
       </div>
 		</Styled>

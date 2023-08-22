@@ -1,7 +1,8 @@
-import { toastInfoIcon, toastErrorIcon, toastSuccessIcon } from "../imgs/index";
-import { api } from "../api";
+import dayjs from 'dayjs';
 import EMOJIBASE from 'emojibase-data/en/compact.json';
-import SHORTCODES from 'emojibase-data/en/shortcodes/iamcal.json';
+import { api } from "../api";
+import { toastInfoIcon, toastErrorIcon, toastSuccessIcon } from "../imgs/index";
+
 
 class FilterWordsLibrary {
   constructor() {
@@ -100,6 +101,15 @@ export const formatTextLength = (name, limit, len) => {
  * calculate the room name
  */
 export const calculateRoomName = (room, isShowCount) => {
+  const handleNameUserId = (nameStr) => {
+    if (!nameStr) return '';
+    nameStr = nameStr.trim().toLowerCase();
+    if (/^@sdn_/.test(nameStr)) {
+      return getAddressByUserId(nameStr) || '';
+    } else {
+      return nameStr;
+    }
+  }
   const getInviteMembers = (allMembers, joinedMembers) => {
     const list = allMembers.filter(m => !joinedMembers.find(v => v?.userId === m?.userId))
     return list;
@@ -107,7 +117,9 @@ export const calculateRoomName = (room, isShowCount) => {
   const getInviteRoomName = (inviteList) => {
     let name = "";
     if (inviteList.length <= 1) {
-      name = formatTextLength(inviteList[0]?.name || inviteList[0]?.userId, 30, 12);
+      const addr = getAddressByUserId(inviteList[0]?.userId);
+      const nameStr = handleNameUserId(inviteList[0]?.name);
+      name = formatTextLength(nameStr || addr, 30, 12);
     } else {
       name = `You and ${inviteList.length} others`
     }
@@ -119,17 +131,17 @@ export const calculateRoomName = (room, isShowCount) => {
   const members = room.getJoinedMembers();
   const inviteMembers = getInviteMembers(allMembers, members);
   let membersLen = members.length;
-  let result = name;
+  let result = handleNameUserId(name);
 
   if (membersLen <= 1) {
-    result = getInviteRoomName(inviteMembers) || name;
+    result = getInviteRoomName(inviteMembers) || handleNameUserId(name);
   } else if (membersLen === 2) {
     if (/^@sdn_/.test(name)) {
       const currentUserId = api.getUserId();
       const index = members.findIndex(v => v?.userId === currentUserId);
       members.splice(index, 1);
       const anotherUser = members[0];
-      result = anotherUser?.name || anotherUser?.userId
+      result = anotherUser?.name || getAddressByUserId(anotherUser?.userId)
     }
   }
   // show member count
@@ -371,10 +383,19 @@ export const getEventById = async (roomId, eventId, isTouristMode) => {
  * getAddressByUserId
  */
 export const getAddressByUserId = (userId) => {
+  if (!userId || typeof userId !== 'string') return '';
   const cont = userId.split(':')[1];
   return cont ? `0x${cont}` : userId;
 }
 
+
+/**
+ * getAddressByUserId
+ */
+export const getDidByUserId = (userId) => {
+  const cont = userId.split(':')[1];
+  return `did:sdn:${cont}`;
+}
 
 /**
  * throttled: first execution after delay milliseconds
@@ -468,4 +489,44 @@ export const parseUseWidgetBtn = (str, width, height) => {
 export const getEmojis = () => {
   const emojis = EMOJIBASE.filter(emoji => emoji.group === 0);
   return emojis;
+}
+
+/**
+ * format msg time show
+ */
+export const renderTs = (ts) => {
+  const h = new Date(ts).getHours();
+    let m = new Date(ts).getMinutes();
+    if (m <= 9) {
+      m = '0' + m;
+    }
+    return `${h}:${m}`;
+}
+
+
+/**
+ * isMobile judge
+ */
+export const isMobile = () => {
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  return isIos || isAndroid;
+}
+
+
+/**
+ * format time to show
+ */
+export const timeFormat = (timeStr) => {
+  if (!timeStr) return '';
+  const time = dayjs(timeStr);
+  const today = dayjs().startOf('day');
+  const week = dayjs().subtract(6, 'day');
+  if (time.isAfter(today)) {
+    return time.format('HH:mm');
+  } else if (time.isAfter(week)) {
+    return time.format('ddd');
+  } else {
+    return time.format('MMM') + '.' + time.format('DD');
+  }
 }

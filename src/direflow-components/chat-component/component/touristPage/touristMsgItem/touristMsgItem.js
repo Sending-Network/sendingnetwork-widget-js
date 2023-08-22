@@ -1,7 +1,7 @@
 import React from "react";
 import { Styled } from "direflow-component";
 import styles from "./touristMsgItem.css";
-import { formatTextLength } from "../../../utils/index";
+import { formatTextLength, renderTs, getAddressByUserId } from "../../../utils/index";
 import { AvatarComp } from "../../avatarComp/avatarComp";
 import UrlPreviewComp from "../../UrlPreviewComp/UrlPreviewComp";
 import { api } from "../../../api";
@@ -31,6 +31,27 @@ const TouristMsgItem = ({
       const { pinned = [] } = content;
       const userNick = formatSender(sender);
       msgContent = pinned.length > 0 ? `${userNick} Pinned a message` : `${userNick} UnPinned message`;
+    } else if (type === 'm.room.customized_events') {
+      const { body, icon, link, link_text } = content;
+      const userNick = formatSender(sender);
+      msgContent = (
+        <span className="red_envelope_event_item_cont">
+          <img src={icon} />
+          <a className="sender">{userNick}</a>
+          <span>{body.replace(link_text, '')}</span>
+          <a className="link">{link_text}</a>
+        </span>
+      )
+    } else if (type === 'm.room.member') {
+      const { displayname, membership } = content;
+      const addr = getAddressByUserId(sender);
+      const nameStr = formatTextLength(displayname ||  addr, 24, 5);
+      if (membership === 'join') {
+        msgContent = <p>
+          <span className="member_event_item_highlight">{nameStr}</span>
+          joined room.
+        </p>;
+      }
     } else if (type === 'm.room.message') {
       const { body, msgtype, ...other } = content;
       switch (msgtype) {
@@ -51,7 +72,10 @@ const TouristMsgItem = ({
           }
           break;
         case "m.image":
-          let url = api.touristClient.mxcUrlToHttp(other.url);
+          let url = other.url;
+          if (/^mxc\:\/\/.+/.test(url)) {
+            url = api._client.mxcUrlToHttp(url);
+          }      
           msgContent = (
             <img
               style={{ maxWidth: "100%", cursor: 'pointer', marginTop: '2px' }}
@@ -60,22 +84,23 @@ const TouristMsgItem = ({
             />
           );
           break;
+        case "nic.custom.confetti":
+          msgContent = (
+            <span style={{fontSize: '32px', lineHeight: '40px'}}>{body}</span>
+          );
+          break;
         default: break;
       }
     }
     return msgContent;
   };
 
-  const renderTs = (ts) => {
-    const h = new Date(ts).getHours();
-    let m = new Date(ts).getMinutes();
-    if (m <= 9) {
-      m = '0' + m;
-    }
-    return `${h}:${m}`;
-  };
-
-  return ['m.room.message', 'm.room.pinned_events'].includes(type) ? (
+  return [
+    'm.room.message',
+    'm.room.pinned_events',
+    'm.room.customized_events',
+    'm.room.member'
+  ].includes(type) ? (
     <Styled styles={styles}>
       <div className="msgItem">
         {/* m.room.message */}
@@ -95,9 +120,20 @@ const TouristMsgItem = ({
             </div>
           </div>
         )}
+
         {/* m.room.pinned_events */}
         {type === 'm.room.pinned_events' && (
           <div className="pin_event_item">{renderMsgContent()}</div>
+        )}
+
+        {/* m.room.customized_events */}
+        {type === 'm.room.customized_events' && (
+          <div className="red_envelope_event_item">{renderMsgContent()}</div>
+        )}
+
+        {/* m.room.member event */}
+        {type === 'm.room.member' && content.membership === 'join' && (
+          <div className="member_event_item">{renderMsgContent()}</div>
         )}
       </div>
 		</Styled>

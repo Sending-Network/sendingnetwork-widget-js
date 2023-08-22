@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./roomPage.css";
 import RoomTitle from "./roomTitle/roomTitle";
@@ -8,17 +8,19 @@ import PinnedMsgCard from "./pinnedMsgCard/pinnedMsgCard";
 import InvitePage from "../invitePage/invitePage";
 import MemberProfile from "./memberProfile/memberProfile";
 import { api } from "../../api";
+import WebviewComp from "../webViewComp/webViewComp";
 
 
-const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
+const RoomPage = ({ roomViewBgUrl, useRoomFuncs, roomId, callback }) => {
   const [curRoomId, setCurRoomId] = useState("");
   const [curRoom, setCurRoom] = useState(null);
-  const [showUrlPreviewWidget, setShowUrlPreviewWidget] = useState(false);
-  const [urlPreviewWidgetUrl, setUrlPreviewWidgetUrl] = useState("");
+  const [showWebview, setShowWebview] = useState(false);
+  const [webviewUrl, setWebviewUrl] = useState("");
   const [showType, setShowType] = useState('room');
   const [pinnedIds, setPinnedIds] = useState([]);
   const [closeEmoji, setCloseEmoji] = useState('');
   const [memberProfileId, setMemberProfileId] = useState("");
+  const [isDMRoom, setIsDMRoom] = useState(false);
 
   useEffect(() => {
     if (roomId && roomId !== curRoomId) {
@@ -29,6 +31,8 @@ const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
 
   const initRoomData = () => {
     const room = api._client.getRoom(roomId);
+    const isDm = room.isDmRoom();
+    setIsDMRoom(isDm);
     if (room) {
       const events = room.getLiveTimeline().getEvents();
       if (events.length) {
@@ -45,8 +49,8 @@ const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
   }
 
   const openUrlPreviewWidget = (url) => {
-    setShowUrlPreviewWidget(true);
-    setUrlPreviewWidgetUrl(url);
+    setShowWebview(true);
+    setWebviewUrl(url);
   };
 
   const onBack = () => {
@@ -100,7 +104,7 @@ const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
   return (
     <Styled styles={styles}>
       <div className="roomPage" onClick={() => {setCloseEmoji(new Date().getTime())}}>
-        {showType === 'profile' && <RoomProfile room={curRoom} backClick={handleProfileBack} />}
+        {showType === 'profile' && <RoomProfile room={curRoom} isDMRoom={isDMRoom} backClick={handleProfileBack} />}
         {showType === 'invite' && <InvitePage title="Invite User" roomId={curRoomId} onBack={() => setShowType('room')} />}
         {showType === 'memberProfile' && <MemberProfile memberId={memberProfileId} onBack={() => {
           setMemberProfileId("");
@@ -118,6 +122,7 @@ const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
             )}
             <RoomView
               roomViewBgUrl={roomViewBgUrl}
+              useRoomFuncs={useRoomFuncs}
               roomId={roomId}
               pinnedIds={pinnedIds}
               closeEmoji={closeEmoji}
@@ -127,6 +132,14 @@ const RoomPage = ({ roomViewBgUrl, roomId, callback }) => {
               memberAvatarClick={memberAvatarClick}
             />
           </div>
+        )}
+
+        {/* webview Comp */}
+        {showWebview && (
+          <WebviewComp
+            url={webviewUrl}
+            closeUrlPreviewWidget={() => setShowWebview(false)}
+          />
         )}
       </div>
 		</Styled>

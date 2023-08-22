@@ -175,11 +175,11 @@ textarea {
   top: -2px;
   right: -2px;
   z-index: 10;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 24px;
   background-color: var(--contact-room-bg-color);
   color: #fff;
   font-size: 12px;

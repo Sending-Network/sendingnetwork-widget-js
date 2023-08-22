@@ -23,9 +23,10 @@
 }
 
 .filter-box {
-  margin-bottom: 10px;
-  width: calc(100% - 50px);
+  display: flex;
+  flex-grow: 1;
   height: 40px;
+  margin: 0 10px 10px 0;
   padding: 0 10px;
   box-sizing: border-box;
   border-radius: 8px;
@@ -37,6 +38,19 @@
 }
 .filter-box::placeholder {
   color: #999;
+}
+.mobile-close-btn {
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  border-radius: 20px;
+  background-color: #E7EAF3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-close-btn img {
+  width: 20px;
 }
 
 /* no data */

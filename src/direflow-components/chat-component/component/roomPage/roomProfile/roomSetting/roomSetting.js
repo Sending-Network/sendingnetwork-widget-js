@@ -4,10 +4,9 @@ import styles from "./roomSetting.css";
 import { api } from "../../../../api";
 import { showToast, calculateRoomName } from "../../../../utils";
 
-const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
+const RoomSetting = ({ room = {}, openLeaveDialog, refreshRoomName }) => {
   const [name, setName] = useState("")
   const [desc, setDesc] = useState("")
-  const [showDialog, setShowDialog] = useState(false)
 
   useEffect(() => {
     const tmpName = calculateRoomName(room);
@@ -80,23 +79,7 @@ const RoomSetting = ({ room = {}, onLeave, refreshRoomName }) => {
 
         <div className="room_setting_save" onClick={roomNameClick}>Save</div>
         {/* leave btn */}
-        <div className="room_setting_leave" onClick={() => setShowDialog(true)}>Leave Room</div>
-
-        {/* leave dialog */}
-        {showDialog && (
-          <div className="room_setting_dialog">
-            <div className="room_setting_dialog_content">
-              <div className="info">
-                <p className="info-title">Leave Room</p>
-                <p className="info-desc">Are you certain about leaving the room?</p>
-              </div>
-              <div className="btns">
-                <div className="btns-item btns-cancel" onClick={() => setShowDialog(false)}>Cancel</div>
-                <div className="btns-item btns-confirm" onClick={() => onLeave()}>Leave</div>
-              </div>
-            </div>
-          </div>
-        )}
+        <div className="room_setting_leave" onClick={openLeaveDialog}>Leave Room</div>
 			</div>
 		</Styled>
   );

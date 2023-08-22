@@ -3,7 +3,9 @@ import { Styled } from "direflow-component";
 import styles from "./roomList.css";
 import RoomItem from "../roomItem/roomItem";
 import MainMenu from "../mainMenu/mainMenu";
-import { mainChatIcon } from "../../../imgs/index";
+import { mainChatIcon, mobileCloseIcon } from "../../../imgs/index";
+import { api } from "../../../api";
+import { isMobile } from "../../../utils";
 
 const RoomList = ({ rooms, enterRoom, closeModalms, menuClick }) => {
   const [filterStr, setFilterStr] = useState("");
@@ -24,6 +26,10 @@ const RoomList = ({ rooms, enterRoom, closeModalms, menuClick }) => {
     setList([...inviteRooms, ...joinRooms])
   }, [rooms, filterStr]);
 
+  const handleMobileCloseBtn = () => {
+    api.showWidget(false);
+  }
+
   return (
     <Styled styles={styles}>
       <div className="rooms">
@@ -35,6 +41,11 @@ const RoomList = ({ rooms, enterRoom, closeModalms, menuClick }) => {
             onChange={(e) => setFilterStr(e.target.value)}
           />
           <MainMenu closeModalms={closeModalms} menuClick={menuClick} />
+          {isMobile() && (
+            <div className="mobile-close-btn" onClick={handleMobileCloseBtn}>
+              <img src={mobileCloseIcon} />
+            </div>
+          )}
         </div>
         <div className="rooms-list">
           {list.length > 0 ? 

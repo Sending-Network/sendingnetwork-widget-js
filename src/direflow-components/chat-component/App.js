@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import styles from "./App.css";
 import { Styled } from "direflow-component";
 import { api } from "./api";
-import { dragging, filterLibrary, showToast, parseUseWidgetBtn } from "./utils/index";
+import { dragging, filterLibrary, showToast, parseUseWidgetBtn, isMobile } from "./utils/index";
 import { chatWidgetBtnIcon } from "./imgs/index";
 
 const App = (props) => {
@@ -96,7 +96,7 @@ const App = (props) => {
 
 	const onRoom = () => {
     const rooms = api._client.getRooms()
-    // console.log('myWidget==onRoom', rooms)
+    // console.log('widget==onRoom', rooms)
     setRooms(() => {
       return [...rooms];
     });
@@ -132,8 +132,9 @@ const App = (props) => {
           keyList.map(key => localStorage.removeItem(key));
           setRooms([]);
           api.setUserData(null);
-          setPageType('loginPage');
+          api.clearClient();
           callback && callback();
+          init();
           api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('logout');
         }
       });
@@ -246,6 +247,7 @@ const App = (props) => {
       case 'roomPage':
         return <RoomPage
           roomViewBgUrl={props.roomViewBgUrl}
+          useRoomFuncs={props.useRoomFuncs}
           roomId={curRoomId}
           callback={() => {
             setCurRoomId("")
@@ -310,6 +312,7 @@ const App = (props) => {
           ref={widgetChatRef}
           style={{
             display: showWidget ? 'block' : 'none',
+            borderRadius: isMobile() ? '0' : '20px',
             backgroundColor: pageType === 'loginPage' ? '#1B1D21' : props.bgColor,
             ...btnStyle.widgetPos
           }}
@@ -331,9 +334,10 @@ App.defaultProps = {
   useThirdLogin: false,
   useTouristMode: "",
   useWidgetBtn: "",
+  useRoomFuncs: "SendImage,MoneyGun,PeerSwap",
   filterWords: [],
-  widgetWidth: "350px",
-  widgetHeight: "680px",
+  widgetWidth: isMobile() ? "100vw" : "350px",
+  widgetHeight: isMobile() ? "100vh" : "680px",
   widgetBoxShadow: "2px 0px 20px rgba(0, 0, 0, 0.3)",
   bgColor: "#fff",
   mainTextColor: "#333",
@@ -361,6 +365,7 @@ App.propTypes = {
   useThirdLogin: PropTypes.bool,
   useTouristMode: PropTypes.string,
   useWidgetBtn: PropTypes.string,
+  useRoomFuncs: PropTypes.string,
   filterWords: PropTypes.array,
   widgetWidth: PropTypes.string,
   widgetHeight: PropTypes.string,

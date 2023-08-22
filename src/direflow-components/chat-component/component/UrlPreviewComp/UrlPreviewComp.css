@@ -1,17 +1,61 @@
-.urlPreviewComp .urlPreview_url {
-  text-decoration: none;
-  color: #38ca9f;
+.urlPreviewComp {
+  display: flex;
+  flex-direction: column;
 }
 
-.urlPreviewComp .urlPreview_title {
-  margin-top: 5px;
+/* urlPreview_url */
+.urlPreview_url_right {
+  background: var(--right-message-bg-color);
+  padding: 8px 8px 7px 10px;
+  border-radius: 12px 0 12px 12px;
+}
+.urlPreview_url_left {
+  border-radius: 0 12px 12px 12px;
+  background: var(--left-message-bg-color);
+  padding: 4px 8px;
+}
+.urlPreview_url_a {
+  color: #38ca9f;
+  word-break: break-all;
+  text-decoration: none;
+  cursor: "pointer";
+}
+.urlPreview_url_time {
+  font-size: 12px;
+  line-height: 22px;
+  padding-left: 10px;
+  float: right;
+  color: var(--left-message-ts-color);
+}
+.urlPreview_url_time_right {
+  color: var(--right-message-ts-color);
+}
+
+/* urlPreview_card */
+.urlPreview_card {
+  width: 60%;
+  min-width: 180px;
+  margin-top: 2px;
+  background: var(--right-message-bg-color);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.urlPreview_card .urlPreview_card_title {
+  margin: 5px 8px 0 8px;
   font-size: 14px;
   font-weight: 700;
   color: #38ca9f;
 }
 
-.urlPreviewComp .urlPreview_description {
-  margin-top: 2px;
+.urlPreview_card .urlPreview_card_description {
+  margin: 5px 8px 5px 8px;
   font-size: 14px;
-  margin-bottom: 2px;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }

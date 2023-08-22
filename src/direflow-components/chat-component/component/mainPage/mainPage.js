@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./mainPage.css";
 import RoomList from './roomList/roomList.js'
-import { calculateRoomName } from "../../utils/index";
+import { calculateRoomName, getAddressByUserId } from "../../utils/index";
 
 const MainPage = ({ rooms, goToRoom, onMenuClick }) => {
 	const [closeModalms, setCloseModalms] = useState('');
@@ -17,11 +17,25 @@ const MainPage = ({ rooms, goToRoom, onMenuClick }) => {
 		for (let i = 0; i < list.length; i++) {
 			const m = list[i];
 			m.calculateName = handleRoomName(m);
+			m.lastMsgTs = getLastMsgTs(m);
 			// if (m.calculateName !== 'Empty Room') {
 				resultList.push(m);
 			// }
 		}
+		resultList.sort((a, b) => b.lastMsgTs - a.lastMsgTs)
 		setRoomList(resultList);
+	}
+
+	const getLastMsgTs = (room) => {
+		let resultTs = 0;
+		if (!room) return resultTs;
+		const timeline = room.getLiveTimeline();
+		const events = timeline.getEvents();
+		if (events.length) {
+			const lastEvent = events[events.length - 1];
+			resultTs = lastEvent.getTs()
+		}
+		return resultTs;
 	}
 
 	const handleRoomName = (room) => {
@@ -34,7 +48,7 @@ const MainPage = ({ rooms, goToRoom, onMenuClick }) => {
 			result = name;
 			if (/^@sdn_/.test(name)) {
 				const inviterId = roomId.split('-')[1];
-				result = inviterId || name;
+				result = getAddressByUserId(inviterId) || name;
 			}
 		}
 		return result;

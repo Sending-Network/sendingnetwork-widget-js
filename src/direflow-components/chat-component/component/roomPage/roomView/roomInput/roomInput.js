@@ -4,12 +4,18 @@ import styles from "./roomInput.css";
 import Web3 from "web3";
 import { MaxUint256 } from "@ethersproject/constants";
 import { api } from "../../../../api";
-import { roomInputUploadIcon, roomInputEmojiIcon } from "../../../../imgs/index";
+import {
+  roomInputMoreMoney,
+  roomInputMorePic,
+  roomInputMorePeerSwap,
+  roomInputEmojiIcon
+} from "../../../../imgs/index";
 import { web3ContractConstant, tokenList, showToast, getEmojis } from "../../../../utils/index";
 import { checkChain } from "../../../../utils/gasFee";
 import { AvatarComp } from "../../../avatarComp/avatarComp";
+import { addTimestamp } from "../../../webViewComp/webViewComp";
 
-const RoomInput = ({ roomId, closeEmoji }) => {
+const RoomInput = ({ roomId, useRoomFuncs, openUrlPreviewWidget, closeEmoji}) => {
   const ethereum = window.ethereum;
   const web3 = new Web3(ethereum);
   const uploadRef = useRef(null);
@@ -21,15 +27,18 @@ const RoomInput = ({ roomId, closeEmoji }) => {
   const [showTokenSwapTip, setShowTokenSwapTip] = useState(false);
   const [showInputMaxPrompt, setShowInputMaxPrompt] = useState(false);
   const [showMemberList, setShowMemberList] = useState(false);
-  const [showEmojiPanel, setShowEmojiPanel] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [memberListFocus, setMemberListFocus] = useState(0);
+  const [showMoreBox, setShowMoreBox] = useState(false);
+  const [showEmojiPanel, setShowEmojiPanel] = useState(false);
 
   useEffect(() => {
     initMembers();
+    document.addEventListener('click', () => setShowMoreBox(false));
   }, [roomId])
 
   useEffect(() => {
+    setShowMoreBox(false);
     setShowEmojiPanel(false);
   }, [closeEmoji])
 
@@ -353,17 +362,59 @@ const RoomInput = ({ roomId, closeEmoji }) => {
             </div>
           )}
 
-          {/* pic-upload */}
-          <div className="room-input-box-upload" onClick={() => uploadRef.current.click()}>
-            <img src={roomInputUploadIcon} />
-            <input
-              ref={uploadRef}
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={upload}
-            />
-          </div>
+          {/* more menus */}
+          {useRoomFuncs && useRoomFuncs.split(',').length > 0 && (
+            <div
+              className={["room-input-more", showMoreBox ? "room-input-more-rotate" : ""].join(" ")}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMoreBox(!showMoreBox)
+              }}
+            >
+              <input
+                ref={uploadRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={upload}
+              />
+            </div>
+          )}
+          {showMoreBox && (
+            <div className="room-input-more-box" onClick={(e) => e.stopPropagation()}>
+              {useRoomFuncs.split(',').includes('SendImage') && (
+                <div className="room-input-more-box-item" onClick={() => {
+                  setShowMoreBox(false);
+                  uploadRef.current.click();
+                }}>
+                  <img src={roomInputMorePic} />
+                  <span>Send Image</span>
+                </div>
+              )}
+              {useRoomFuncs.split(',').includes('MoneyGun') && (
+                <div className="room-input-more-box-item" onClick={() => {
+                  const moneyGunUrl = `https://lucky.socialswap.com/create?st=wgsdn&roomId=${roomId}`
+                  const url = `${moneyGunUrl}${addTimestamp(moneyGunUrl)}`
+                  setShowMoreBox(false);
+                  openUrlPreviewWidget(url);
+                }}>
+                  <img src={roomInputMoreMoney} />
+                  <span>Money Gun</span>
+                </div>
+              )}
+              {useRoomFuncs.split(',').includes('PeerSwap') && (
+                <div className="room-input-more-box-item" onClick={() => {
+                  const peerSwapUrl = `https://swap.socialswap.com/create?st=wgsdn&roomId=${roomId}`
+                  const url = `${peerSwapUrl}${addTimestamp(peerSwapUrl)}`
+                  setShowMoreBox(false);
+                  openUrlPreviewWidget(url);
+                }}>
+                  <img src={roomInputMorePeerSwap} />
+                  <span>PeerSwap</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* input */}
           <input

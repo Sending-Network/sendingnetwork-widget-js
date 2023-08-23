@@ -5,6 +5,7 @@ import RoomPage from './component/roomPage/roomPage';
 import InvitePage from './component/invitePage/invitePage';
 import SetPage from './component/setPage/setPage';
 import TouristPage from './component/touristPage/touristPage';
+import TopFrame from './component/topFrame/topFrame';
 import PropTypes from "prop-types";
 import styles from "./App.css";
 import { Styled } from "direflow-component";
@@ -24,6 +25,7 @@ const App = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [btnStyle, setBtnStyle] = useState({btnPos: {}, widgetPos: {}});
   const [btnUnReadCount, setBtnUnReadCount] = useState(0);
+  const [openDappUrl, setOpenDappUrl] = useState(props.openDappUrl);
 
   useEffect(() => {
     window.setShowWidget = (show) => { setShowWidget(show) };
@@ -322,6 +324,7 @@ const App = (props) => {
           ) : (
             renderPage()
           )}
+          <TopFrame pageType={pageType} openDappUrl={openDappUrl}/>
         </div>
       </div>
     </Styled>
@@ -357,6 +360,7 @@ App.defaultProps = {
   dropMenuItemHoverColor: "#E7EAF3",
   userSettingsInputNameBgColor: "#fff",
   roomViewBgUrl: "",
+  openDappUrl: "",
 };
 
 App.propTypes = {
@@ -388,6 +392,7 @@ App.propTypes = {
   dropMenuItemHoverColor: PropTypes.string,
   userSettingsInputNameBgColor: PropTypes.string,
   roomViewBgUrl: PropTypes.string,
+  openDappUrl: PropTypes.string,
 };
 
 export default App;

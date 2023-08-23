@@ -17,7 +17,7 @@ const MessageItem = ({
   pinClick,
   memberAvatarClick
 }) => {
-  const { event_id, sender, type, content, origin_server_ts } = message;
+  const { event_id, sender, type, content, origin_server_ts, unsigned } = message;
   const userId = room.myUserId;
   const userData = api._client.getUser(sender);
   const { displayname } = api.userData;
@@ -36,6 +36,7 @@ const MessageItem = ({
   }, [pinnedIds])
 
   const httpString = (s) => {
+    if (!s) return '';
     var reg = /(https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/g;
     s = s.match(reg);
     return s;
@@ -85,7 +86,7 @@ const MessageItem = ({
       const { displayname, membership } = content;
       const addr = getAddressByUserId(sender);
       const nameStr = formatTextLength(displayname ||  addr, 24, 5);
-      if (membership === 'join') {
+      if (membership === 'join' && !unsigned) {
         msgContent = <p>
           <span className="member_event_item_highlight" onClick={() => memberAvatarClick(sender)}>{nameStr}</span>
           joined room.

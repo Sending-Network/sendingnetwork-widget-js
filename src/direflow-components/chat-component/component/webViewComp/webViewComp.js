@@ -26,12 +26,13 @@ const WebviewComp = ({ closeUrlPreviewWidget, url }) => {
     console.log('widget___payload', payload);
     if (payload.action === "getMyProfile") {
       const userId = api.getUserId();
-      const { displayname, wallet_address } = await api.getUserData();
+      const { displayname, wallet_address, avatar_url } = await api.getUserData();
       payload.callback({
         id: payload.id,
         data: {
           userId,
           name: displayname,
+          avatarUrl: api._client.mxcUrlToHttp(avatar_url),
           walletAddress: wallet_address,
           did: getDidByUserId(userId)
         },
@@ -194,6 +195,38 @@ const WebviewComp = ({ closeUrlPreviewWidget, url }) => {
         }
       }
     }
+    if (payload.action == "didLogin") {
+      api.DIDLogin((res)=>{
+        payload.callback({id:payload.id, data:res});
+        window.thirdLoginWatch();
+      });
+    }
+    if (payload.action == "thirdRegister") {
+      const data = payload.data;
+      api.thirdRegister(data, (res)=>{
+        payload.callback({id:payload.id, data:res});
+      }, (e)=>{
+        payload.callback({
+          id: payload.id,
+          error: { code: 40000, message: `thirdRegister failed`}
+        })
+      });
+    }
+    if (payload.action == "getProfileInfo") {
+      const {userId} = payload.data;
+      api._client.getProfileInfo(userId).then(value=>{
+        const {displayname, avatar_url, wallet_address} = value;
+        payload.callback({
+          id: payload.id,
+          data: {displayname, avatar_url, wallet_address}
+        })
+      }).catch(e=>{
+        payload.callback({
+          id: payload.id,
+          error: { code: 40000, message: `something went wrong`}
+        })
+      })
+    }
   };
 
   const bindPostmate = () => {
@@ -210,6 +243,9 @@ const WebviewComp = ({ closeUrlPreviewWidget, url }) => {
   };
 
   const renderFrame = () => {
+    if (!url) {
+      return
+    }
     postmateRef = new Postmate({
       url,
       container: frameContainerRef.current,
@@ -220,10 +256,12 @@ const WebviewComp = ({ closeUrlPreviewWidget, url }) => {
   };
 
   const destroyFrame = async () => {
-    await postmateRef.then((child) => {
-      child.destroy();
-    });
-    postmateRef = null;
+    if (postmateRef) {
+      await postmateRef.then((child) => {
+        child.destroy();
+      });
+      postmateRef = null;
+    }
   };
 
   return (

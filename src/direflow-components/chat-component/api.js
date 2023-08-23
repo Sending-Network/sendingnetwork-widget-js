@@ -12,6 +12,7 @@ class Api {
     this.userData = null;
     this.touristClient = null;
     this.eventEmitter = null;
+    this.thirdRegisterPromise = null;
     this.showWidget = this.showWidget;
     this.joinRoom = this.joinRoom;
     this.createDMRoom = this.createDMRoom;
@@ -420,6 +421,29 @@ class Api {
 
   setTouristClient = (cli) => {
     this.touristClient = cli;
+  }
+
+  // events
+  openDappUrl = (url) => {
+    this.eventEmitter.emit('openDappUrl', url);
+  };
+
+  closeDappUrl = () => {
+    this.eventEmitter.emit('closeDappUrl');
+  }
+
+  bindThirdRegister = (promise) => {
+    this.thirdRegisterPromise = promise;
+  }
+
+  thirdRegister = (data, onSuccess, onError) => {
+    if (this.thirdRegisterPromise) {
+      this.thirdRegisterPromise(data).then((res)=>{
+        onSuccess && onSuccess(res);
+      }).catch(e=>{
+        onError && onError(e);
+      });
+    }
   }
 }
 export const api = new Api();

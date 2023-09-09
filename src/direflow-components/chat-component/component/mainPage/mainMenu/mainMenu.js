@@ -26,7 +26,7 @@ const MainMenu = ({ closeModalms, menuClick }) => {
     <Styled styles={styles}>
       <div className="chat_widget-menu">
         <div
-          className={[ "chat_widget-menu-btn", showSetBox ? "chat_widget-menu-btn-active" : "" ].join(" ")}
+          className="chat_widget-menu-btn"
           onClick={(e) => {
             e.stopPropagation();
             setShowSetBox(!showSetBox);
@@ -40,10 +40,12 @@ const MainMenu = ({ closeModalms, menuClick }) => {
               <img src={widgetTitleMoreCreate} />
               <span>New Chat</span>
             </div>
+            <div className="chat_widget_title_setBox_item_line"></div>
             <div className="chat_widget_title_setBox_item" onClick={() => handleMenuClick('set')}>
               <img src={widgetTitleMoreSet} />
               <span>Settings</span>
             </div>
+            <div className="chat_widget_title_setBox_item_line"></div>
             <div className="chat_widget_title_setBox_item" onClick={() => handleMenuClick('logout')}>
               <img src={widgetTitleLogout} />
               <span>Logout</span>

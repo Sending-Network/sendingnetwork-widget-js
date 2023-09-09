@@ -119,7 +119,7 @@ export const calculateRoomName = (room, isShowCount) => {
     if (inviteList.length <= 1) {
       const addr = getAddressByUserId(inviteList[0]?.userId);
       const nameStr = handleNameUserId(inviteList[0]?.name);
-      name = formatTextLength(nameStr || addr, 30, 12);
+      name = nameStr || addr;
     } else {
       name = `You and ${inviteList.length} others`
     }
@@ -527,6 +527,6 @@ export const timeFormat = (timeStr) => {
   } else if (time.isAfter(week)) {
     return time.format('ddd');
   } else {
-    return time.format('MMM') + '.' + time.format('DD');
+    return time.format('MMM') + ' ' + time.format('DD');
   }
 }

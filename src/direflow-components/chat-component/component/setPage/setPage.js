@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Styled } from "direflow-component";
 import styles from "./setPage.css";
 import { api } from "../../api";
-import { roomTitleBackIcon, copyIcon } from "../../imgs/index";
+import { roomTitleBackIcon, copyIcon, setPageAvatarBg } from "../../imgs/index";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { showToast } from "../../utils/index";
 import { AvatarComp } from "../avatarComp/avatarComp";
@@ -19,7 +19,8 @@ const SetPage = ({ onBack }) => {
   }, []);
 
   const getProfileInfo = async () => {
-    const { avatar_url, displayname, wallet_address } = api.userData;
+    const userId = api.getUserId();
+    const { avatar_url, displayname, wallet_address } = await api._client.getProfileInfo(userId);
     setWalletAddr(wallet_address);
     setAvatarUrl(avatar_url);
     setOldDisplayname(displayname);
@@ -33,8 +34,10 @@ const SetPage = ({ onBack }) => {
         msg: "the display name not allow null",
       });
     } else {
-      await api._client.setDisplayName(displayname);
-      getProfileInfo();
+      if (displayname !== oldDisplayName) {
+        await api._client.setDisplayName(displayname);
+        getProfileInfo();
+      }
       showToast({
         type: "success",
         msg: "Success",
@@ -72,11 +75,10 @@ const SetPage = ({ onBack }) => {
           <div className="room_title_center">Settings</div>
         </div>
 
-        <div className="setPage_content">
+        {/* content */}
+        <div className="setPage_content" style={{backgroundImage: `url(${setPageAvatarBg})`}}>
           {/* avatar */}
-          <div
-            className="setPage_user_avatar"
-            onClick={() => uploadRef.current.click()}>
+          <div className="setPage_content_avatar" onClick={() => uploadRef.current.click()}>
             <AvatarComp url={avatarUrl} />
             <input
               ref={uploadRef}
@@ -86,44 +88,41 @@ const SetPage = ({ onBack }) => {
               style={{ display: "none" }}
             />
           </div>
-
-          {/* userName */}
-          <p className="alias-label">Display Name</p>
-          <input
-            className="alias-input"
-            value={displayname}
-            onChange={(e) => setDisplayname(e.target.value)}
-          />
-
-          {/* userInfo */}
-          <p className="alias-label">Wallet Address</p>
-          <div className="userinfo-box-item">
-            <p>{walletAddr}</p>
-            <CopyToClipboard
-              text={walletAddr}
-              onCopy={(text, result) => {
-                if (result) {
-                  showToast({
-                    type: "success",
-                    msg: "Copied",
-                  });
-                }
-              }}>
-              <img src={copyIcon} />
-            </CopyToClipboard>
+        
+          {/* info  */}
+          <div className="setPage_content_info">
+            {/* userName */}
+            <p className="alias-label">Display Name</p>
+            <input
+              className="alias-input"
+              value={displayname}
+              onChange={(e) => setDisplayname(e.target.value)}
+            />
+            {/* userInfo */}
+            <p className="alias-label">Wallet Address</p>
+            <div className="alias-address">
+              <p>{walletAddr}</p>
+              <CopyToClipboard
+                text={walletAddr}
+                onCopy={(text, result) => {
+                  if (result) {
+                    showToast({
+                      type: "success",
+                      msg: "Copied",
+                    });
+                  }
+                }}>
+                <img src={copyIcon} />
+              </CopyToClipboard>
+            </div>
           </div>
+
+          
         </div>
 
-        {/* userInfo */}
-        <div className="btns-box">
-          <button className="btns-box-item btn-confirm" onClick={handleSave}>
-            Save
-          </button>
-          <button
-            className="btns-box-item btn-cancel"
-            onClick={() => onBack()}>
-            Cancel
-          </button>
+        {/* btn */}
+        <div className="btns-box" onClick={handleSave}>
+          Save
         </div>
       </div>
     </Styled>

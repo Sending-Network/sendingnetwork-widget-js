@@ -32,6 +32,7 @@ const App = (props) => {
     window.toLogout = (callback) => { handleLogout(callback) };
     window.thirdLoginWatch = () => { handleLoginSuccess() };
     window.chatToAddressWatch = (addr, callback) => { handleChatToAddress(addr, callback) };
+    window.joinToPublicRoomWatch = (roomId, callback) => { handleJoinToPublicRoom(roomId, callback) }
     window.widgetChatDom = widgetChatRef.current;
     init();
     return stop;
@@ -58,7 +59,7 @@ const App = (props) => {
   }
 
   const initDragging = () => {
-    if (!props.useWidgetBtn) return;
+    if (!props.useWidgetBtn || isMobile()) return;
     const rootDom = widgetRootRef.current;
     rootDom && dragging(rootDom).enable();
     const widgetBtnStyle = parseUseWidgetBtn(
@@ -130,14 +131,16 @@ const App = (props) => {
         type: 'success',
         msg: 'Success',
         callback: () => {
+          const eventEmitter = api.eventEmitter;
           const keyList = ['sdn_access_token', 'sdn_user_id', 'sdn_user_address'];
           keyList.map(key => localStorage.removeItem(key));
           setRooms([]);
           api.setUserData(null);
+          api.resetEventEmitter();
           api.clearClient();
           callback && callback();
           init();
-          api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('logout');
+          eventEmitter && eventEmitter.emit && eventEmitter.emit('logout');
         }
       });
     })
@@ -188,6 +191,41 @@ const App = (props) => {
       setIsLoading(false);
       callback && callback(true);
     }, 500);
+  }
+
+  const handleJoinToPublicRoom = async (roomId, callback) => {
+    api.showWidget(true);
+    // to check
+    const access_token = localStorage.getItem("sdn_access_token");
+    const user_id = localStorage.getItem("sdn_user_id");
+    if (!access_token || !user_id || !api._client || !roomId) {
+      showToast({
+        type: 'warn',
+        msg: !roomId ? 'roomId is empty' : 'please log in first'
+      })
+      callback && callback(false);
+      return;
+    }
+    // do join public room
+    setIsLoading(true);
+    const room = api._client.getRoom(roomId);
+    if (room && room.hasMembershipState(user_id, "join")) {
+      setCurRoomId(roomId);
+        setPageType('roomPage');
+        setTimeout(() => {
+          setIsLoading(false);
+          callback && callback(true);
+        }, 500);
+    } else {
+      api.joinRoom(roomId, () => {
+        setCurRoomId(roomId);
+        setPageType('roomPage');
+        setTimeout(() => {
+          setIsLoading(false);
+          callback && callback(true);
+        }, 500);
+      });
+    }
   }
 
   const checkRoomExist = async (_roomId) => {
@@ -289,15 +327,18 @@ const App = (props) => {
           "--dropMenu-bg-color": props.dropMenuBgColor,
           "--dropMenu-item-hover-color": props.dropMenuItemHoverColor,
           "--userSettings-inputName-bg-color": props.userSettingsInputNameBgColor,
-          ...(props.useWidgetBtn ? btnStyle.btnPos : {})
+          ...(props.useWidgetBtn && !isMobile() ? btnStyle.btnPos : {})
         }}
-        className={[props.useWidgetBtn ? "widget_root" : ""].join(" ")}
+        className={[
+          props.useWidgetBtn && !isMobile() && "widget_root",
+          isMobile() && "widget_root_mobile"
+        ].join(" ")}
         ref={widgetRootRef}
         onScroll={e => e.stopPropagation()}
         onClick={e => e.stopPropagation()}
       >
         {/* widget btn */}
-        {props.useWidgetBtn && (
+        {props.useWidgetBtn && !isMobile() && (
           <div className="chat_widget_btn"
             onMouseDown={handleBtnMouseDown}
             onMouseUp={handleBtnMouseUp}
@@ -310,7 +351,7 @@ const App = (props) => {
         )}
         {/* chat widget */}
         <div
-          className={["chat_widget", props.useWidgetBtn ? "chat_widget_useBtn" : ""].join(" ")}
+          className={["chat_widget", props.useWidgetBtn && !isMobile() ? "chat_widget_useBtn" : ""].join(" ")}
           ref={widgetChatRef}
           style={{
             display: showWidget ? 'block' : 'none',
@@ -342,18 +383,18 @@ App.defaultProps = {
   widgetWidth: isMobile() ? "100vw" : "350px",
   widgetHeight: isMobile() ? "100vh" : "680px",
   widgetBoxShadow: "2px 0px 20px rgba(0, 0, 0, 0.3)",
-  bgColor: "#fff",
-  mainTextColor: "#333",
-  primaryColor: '#8448E1',
+  bgColor: "#F9F9FA",
+  mainTextColor: "#000",
+  primaryColor: '#00B36B',
   contactLastMessageTimeColor: "#B4B5B8",
   contactRoomBgColor: "red",
-  leftMessageColor: "#333",
-  leftMessageBgColor: "#E7EAF3",
+  leftMessageColor: "#000",
+  leftMessageBgColor: "#fff",
   leftMessageTsColor: "#999",
   rightMessageColor: "#fff",
-  rightMessageBgColor: "#8448E1",
+  rightMessageBgColor: "#00B36B",
   rightMessageTsColor: "rgba(255, 255, 255, 0.5)",
-  sendMessageBgColor: "#fff",
+  sendMessageBgColor: "#F2F3F7",
   messageSenderColor: "#333",
   sendMessageBorderColor: "#fff",
   dropMenuBgColor: "#fff",

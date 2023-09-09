@@ -4,47 +4,89 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 12px;
 }
 
-.rooms .rooms-header{
-  margin: 6px 0;
+/* rooms-header */
+.rooms-header{
+  width: 100%;
+  height: 50px;
+  padding: 0 13px 0 16px;
+  box-sizing: border-box;
+  background-color: #fff;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
+.rooms-header-left {
+  color: #000;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+.rooms-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+/* rooms-search */
+.rooms-search {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f7f7;
+  position: relative;
+  z-index: 0;
+}
+.rooms-search .filter-box {
+  width: calc(100% - 32px);
+  height: 36px;
+  padding: 0 10px;
+  font-size: 14px;
+  line-height: 20px;
+  outline: none;
+  color: #000;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #FFF;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+}
+.rooms-search .filter-box::placeholder {
+  color: #999;
+  padding-left: 25px;
+}
+.rooms-search .rooms-search-icon {
+  width: 14px;
+  position: absolute;
+  z-index: 1;
+  top: 23px;
+  left: 30px;
+}
+
+
+/* rooms-list */
 .rooms-list {
   flex: 1;
   overflow-y: scroll;
   position: relative;
+  box-sizing: border-box;
+  padding: 8px 16px;
 }
 .rooms-list::-webkit-scrollbar {
   display: none;
 }
 
-.filter-box {
-  display: flex;
-  flex-grow: 1;
-  height: 40px;
-  margin: 0 10px 10px 0;
-  padding: 0 10px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  line-height: 22px;
-  outline: none;
-  color: #333;
-}
-.filter-box::placeholder {
-  color: #999;
-}
+/* mobile-close-btn */
 .mobile-close-btn {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   margin-left: 10px;
   border-radius: 20px;
-  background-color: #E7EAF3;
   display: flex;
   align-items: center;
   justify-content: center;

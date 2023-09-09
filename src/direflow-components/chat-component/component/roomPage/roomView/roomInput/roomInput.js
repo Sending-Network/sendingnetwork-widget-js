@@ -388,7 +388,7 @@ const RoomInput = ({ roomId, useRoomFuncs, openUrlPreviewWidget, closeEmoji}) =>
                   uploadRef.current.click();
                 }}>
                   <img src={roomInputMorePic} />
-                  <span>Send Image</span>
+                  <span>File</span>
                 </div>
               )}
               {useRoomFuncs.split(',').includes('MoneyGun') && (

@@ -3,7 +3,7 @@ import { Styled } from "direflow-component";
 import styles from "./roomList.css";
 import RoomItem from "../roomItem/roomItem";
 import MainMenu from "../mainMenu/mainMenu";
-import { mainChatIcon, mobileCloseIcon } from "../../../imgs/index";
+import { mainChatIcon, mobileCloseIcon, searchInputIcon } from "../../../imgs/index";
 import { api } from "../../../api";
 import { isMobile } from "../../../utils";
 
@@ -34,18 +34,24 @@ const RoomList = ({ rooms, enterRoom, closeModalms, menuClick }) => {
     <Styled styles={styles}>
       <div className="rooms">
         <div className="rooms-header">
+          <div className="rooms-header-left">SendingNetwork</div>
+          <div className="rooms-header-right">
+            <MainMenu closeModalms={closeModalms} menuClick={menuClick} />
+            {isMobile() && (
+              <div className="mobile-close-btn" onClick={handleMobileCloseBtn}>
+                <img src={mobileCloseIcon} />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="rooms-search">
           <input
             className="filter-box"
             placeholder="Search"
             value={filterStr}
             onChange={(e) => setFilterStr(e.target.value)}
           />
-          <MainMenu closeModalms={closeModalms} menuClick={menuClick} />
-          {isMobile() && (
-            <div className="mobile-close-btn" onClick={handleMobileCloseBtn}>
-              <img src={mobileCloseIcon} />
-            </div>
-          )}
+          {!filterStr && <img className="rooms-search-icon" src={searchInputIcon} />}
         </div>
         <div className="rooms-list">
           {list.length > 0 ? 

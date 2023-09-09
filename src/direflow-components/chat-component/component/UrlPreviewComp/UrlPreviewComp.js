@@ -11,6 +11,7 @@ const UrlPreviewComp = (props) => {
 
   useEffect(() => {
     api.getUrlPreview(props.url, props.ts).then((res) => {
+      const isMoneyGun = res['og:site_nam'] === 'Money Gun';
       let url = res["og:image"];
       let description = res["og:description"];
       let title = res["og:title"];
@@ -20,6 +21,9 @@ const UrlPreviewComp = (props) => {
       }
       if (url && /^mxc\:\/\/.+/.test(url)) {
         url = api._client.mxcUrlToHttp(url);
+      }
+      if (isMoneyGun) {
+        url = 'https://hs.sending.me/_api/media/r0/download/hs.sending.me/TeqfFZWpSpFrwSUnNHlVhCDS';
       }
       setUrl(url);
       setTitle(title);
@@ -39,7 +43,7 @@ const UrlPreviewComp = (props) => {
         style={{alignItems: props.isRight ? "flex-end" : "flex-start"}}
       >
         <div className={props.isRight ? "urlPreview_url_right" : "urlPreview_url_left"}>
-          <a className="urlPreview_url_a" onClick={handleClick}>{props.message}</a>
+          <a className={props.isRight ? "urlPreview_url_a_right" : "urlPreview_url_a_left"} onClick={handleClick}>{props.message}</a>
           <span className={["urlPreview_url_time", props.isRight && "urlPreview_url_time_right"].join(" ")}>{renderTs(props.ts)}</span>
         </div>
         {(url || title || description) && (
@@ -51,7 +55,7 @@ const UrlPreviewComp = (props) => {
                 src={`${url}`}
               />
             )}
-            {title && (<div className="urlPreview_card_title">{title}</div>)}
+            {title && (<div className={props.isRight ? "urlPreview_card_title_right" : "urlPreview_card_title_left"}>{title}</div>)}
             {description && (<div className="urlPreview_card_description">{description}</div>)}
           </div>
         )}

@@ -3,6 +3,7 @@ import { Styled } from "direflow-component";
 import styles from "./roomProfile.css";
 import { api } from "../../../api";
 import {
+	setPageAvatarBg,
 	roomTitleBackIcon,
 	roomProfileInviteIcon,
 	roomProfileSetIcon
@@ -17,10 +18,14 @@ const RoomProfile = ({ room = {}, isDMRoom, backClick }) => {
 	const [showDialog, setShowDialog] = useState(false)
 	const [roomName, setRoomName] = useState("");
 	const [joinedMembers, setJoinedMembers] = useState([]);
+	const [meMember, setMeMember] = useState(null);
 
 	useEffect(() => {
 		const members = room?.getJoinedMembers ? room?.getJoinedMembers() : [];
 		const tmpName = room?.name ? calculateRoomName(room, true) : '';
+		const me = api.getUserId();
+		const meMember = room?.getMember(me);
+		setMeMember(meMember);
 		setJoinedMembers(members);
 		setRoomName(tmpName);
 	}, [room])
@@ -62,34 +67,45 @@ const RoomProfile = ({ room = {}, isDMRoom, backClick }) => {
 					<div className="title_back" onClick={() => handleBackClick()}>
 						<img src={roomTitleBackIcon} />
 					</div>
-					{showSetting && <span className="title_back_setting">Room Settings</span>}
+					<div className="title_back_content">{showSetting ? 'Room Settings' : 'Room Profile'}</div>
 				</div>
 
 				{showSetting ? (
 						<RoomSetting
 							room={room}
+							roomName={roomName}
+							joinedMembers={joinedMembers}
 							openLeaveDialog={() => setShowDialog(true)}
 							refreshRoomName={(text) => setRoomName(text)}
 						/>
 				) : (
 					<div className="room_profile_wrap">
 						{/* info */}
-						<div className="room_profile_info">
+						<div className="room_profile_info" style={{backgroundImage: `url(${setPageAvatarBg})`}}>
 							<div className="info_img_box">
 								{renderAvatar()}
 							</div>
 							<div className="info_room_title">{formatTextLength(roomName, 30, 15)}</div>
 							<div className="info_room_roomId">{formatTextLength(room?.roomId, 30, 15)}</div>
+							<div className="info_room_station_box"></div>
 						</div>
 						{/* btns */}
 						{!isDMRoom && (
 							<div className="info_room_btns">
-								<div className="info_room_btns-item info_room_btns-item-invite" onClick={() => backClick('invite')}>
+								<div
+									className="info_room_btns-item info_room_btns-item-invite"
+									style={{width: meMember && meMember.powerLevel >= 100 ? 'calc(50% - 8px)' : '100%'}}
+									onClick={() => backClick('invite')}
+								>
+									<img src={roomProfileInviteIcon} />
 									<span>Invite</span>
 								</div>
-								<div className="info_room_btns-item info_room_btns-item-setting" onClick={() => setShowSetting(true)}>
-									<span>Settings</span>
-								</div>
+								{meMember && meMember.powerLevel >= 100 && (
+									<div className="info_room_btns-item info_room_btns-item-setting" onClick={() => setShowSetting(true)}>
+										<img src={roomProfileSetIcon} />
+										<span>Settings</span>
+									</div>
+								)}
 							</div>
 						)}
 						{/* members */}
@@ -111,7 +127,7 @@ const RoomProfile = ({ room = {}, isDMRoom, backClick }) => {
 											</div>
 											<div className="room_members_item_desc">
 												<p className="room_members_item_desc_name">{member?.name}</p>
-												<p className="room_members_item_desc_addr">{addr}</p>
+												<p className="room_members_item_desc_addr">{formatTextLength(addr, 30, 8)}</p>
 											</div>
 										</div>
 									)
@@ -129,8 +145,7 @@ const RoomProfile = ({ room = {}, isDMRoom, backClick }) => {
           <div className="room_profile_dialog">
             <div className="room_profile_dialog_content">
               <div className="info">
-                <p className="info-title">Leave Room</p>
-                <p className="info-desc">Are you certain about leaving the room?</p>
+								Are you certain about<br />leaving the room?
               </div>
               <div className="btns">
                 <div className="btns-item btns-cancel" onClick={() => setShowDialog(false)}>Cancel</div>

@@ -5,7 +5,8 @@ import {
 	roomTitleBackIcon,
 	inviteSelectedIcon,
 	inviteUnselectIcon,
-	dialogLoadingIcon
+	dialogLoadingIcon,
+	searchInputIcon
 } from "../../imgs/index"
 import { api } from "../../api";
 import { formatTextLength, showToast, getAddressByUserId } from "../../utils/index";
@@ -91,13 +92,7 @@ const InvitePage = ({ roomId, onBack, title }) => {
 	}
 
 	const handleConfirmClick = async () => {
-		if (selectList.length <= 0) {
-      showToast({
-        type: 'info',
-        msg: 'None selected'
-      })
-			return;
-		}
+		if (selectList.length <= 0) return;
 		if (roomId) {
 			handleCreateAndInvite();
 		} else {
@@ -139,12 +134,15 @@ const InvitePage = ({ roomId, onBack, title }) => {
 				</div>
 
 				{/* search */}
-				<input
-          className="filter-box"
-          placeholder="Search"
-          value={filterStr}
-          onChange={(e) => setFilterStr(e.target.value)}
-        />
+				<div className="invite_page-search">
+					<input
+						className="filter-box"
+						placeholder="Search"
+						value={filterStr}
+						onChange={(e) => setFilterStr(e.target.value)}
+					/>
+					{!filterStr && <img className="rooms-search-icon" src={searchInputIcon} />}
+				</div>
 
 				{/* list */}
 				<div className="list-wrap">
@@ -172,7 +170,10 @@ const InvitePage = ({ roomId, onBack, title }) => {
 
 				{/* btn */}
 				<div className="select-box">
-					<div className="select-box-btn" onClick={handleConfirmClick}>
+					<div
+						className={["select-box-btn", selectList.length <= 0 && "select-box-btn_disable"].join(" ")}
+						onClick={handleConfirmClick}
+					>
 						<span>Selected </span>
 						{selectList.length > 0 && (
 							<span> ({selectList.length}) </span>

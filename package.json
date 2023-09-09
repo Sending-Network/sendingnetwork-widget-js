@@ -48,7 +48,7 @@
     "react-infinite-scroller": "^1.2.6",
     "react-scripts": "3.4.1",
     "rlp": "^3.0.0",
-    "sendingnetwork-js-sdk": "^0.1.4",
+    "sendingnetwork-js-sdk": "^0.1.6",
     "web3": "^1.8.2",
     "yarn": "^1.22.19"
   },

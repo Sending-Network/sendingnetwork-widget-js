@@ -109,6 +109,15 @@ textarea {
   display: flex;
   flex-direction: column;
 }
+.widget_root_mobile {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
 
 /* chat_widget */
 .chat_widget {

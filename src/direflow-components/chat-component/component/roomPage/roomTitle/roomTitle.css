@@ -1,38 +1,34 @@
 .roomPage_room_title {
     width: 100%;
-    height: 60px;
-    background: var(--bg-color);
+    height: 50px;
+    background: #fff;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #DCDEE0;
 }
 
 /* room_title_left */
 .room_title_left {
     width: 41px;
     height: 100%;
-    padding-left: 10px;
+    padding-left: 16px;
+    box-sizing: border-box;
     display: flex;
-    flex-shrink: 0;
     align-items: center;
-    /* background: #1B1D21; */
-    background: var(--bg-color);
     cursor: pointer;
-}
-.room_title_left img {
-    width: 24px;
-    height: 24px;
 }
 
 /* room_title_center */
 .room_title_center {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    letter-spacing: -0.3px;
+    box-sizing: border-box;
     color: var(--main-text-color);
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
     display: flex;
     flex-grow: 1;
+    align-items: center;
 }
 
 
@@ -47,6 +43,6 @@
     cursor: pointer;
 }
 .room_title_right img {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
 }

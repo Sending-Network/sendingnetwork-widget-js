@@ -179,7 +179,7 @@ class Api {
     }
   };
 
-  joinRoom = (roomId, callBack) => {
+  joinRoom = async (roomId, callBack) => {
     return this._client.joinRoom(roomId, {}, callBack);
   };
 
@@ -204,10 +204,7 @@ class Api {
     const roomid = await this.createRoom({
       name,
       preset: "public_chat",
-      visibility: "private",
-      power_level_content_override: {
-        users_default: 100
-      }
+      visibility: "private"
     });
     return roomid;
   };
@@ -315,6 +312,14 @@ class Api {
   chatToAddress = (addr, callback) => {
     if (window.chatToAddressWatch) {
       window.chatToAddressWatch(addr, callback);
+    } else {
+      callback && callback(false);
+    }
+  }
+
+  joinPublicRoom = (roomId, callback) => {
+    if (window.joinToPublicRoomWatch) {
+      window.joinToPublicRoomWatch(roomId, callback);
     } else {
       callback && callback(false);
     }
@@ -430,6 +435,10 @@ class Api {
 
   closeDappUrl = () => {
     this.eventEmitter.emit('closeDappUrl');
+  }
+
+  resetEventEmitter = () => {
+    this.eventEmitter = null;
   }
 
   bindThirdRegister = (promise) => {

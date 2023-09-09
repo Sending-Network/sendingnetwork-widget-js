@@ -14,10 +14,16 @@
   background: var(--left-message-bg-color);
   padding: 4px 8px;
 }
-.urlPreview_url_a {
+.urlPreview_url_a_left {
   color: #38ca9f;
   word-break: break-all;
-  text-decoration: none;
+  text-decoration: underline;
+  cursor: "pointer";
+}
+.urlPreview_url_a_right {
+  color: #fff;
+  word-break: break-all;
+  text-decoration: underline;
   cursor: "pointer";
 }
 .urlPreview_url_time {
@@ -36,17 +42,23 @@
   width: 60%;
   min-width: 180px;
   margin-top: 2px;
-  background: var(--right-message-bg-color);
+  background-color: #868A90;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
 }
 
-.urlPreview_card .urlPreview_card_title {
+.urlPreview_card_title_left {
   margin: 5px 8px 0 8px;
   font-size: 14px;
   font-weight: 700;
   color: #38ca9f;
+}
+.urlPreview_card_title_right {
+  margin: 5px 8px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
 }
 
 .urlPreview_card .urlPreview_card_description {

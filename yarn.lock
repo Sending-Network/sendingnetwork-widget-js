@@ -11531,10 +11531,10 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sendingnetwork-js-sdk@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.npmjs.org/sendingnetwork-js-sdk/-/sendingnetwork-js-sdk-0.1.4.tgz#3edc317728984f549ec438ee6aca5785d0548cf9"
-  integrity sha512-7V4mc14FXdQ1gqu8StmWhsPnb8lYDvxBV2VxHTAy862zuPKNtDgVe+DN0mbOK03F8lqfWbmcYTimzTYdTRwXIQ==
+sendingnetwork-js-sdk@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.npmjs.org/sendingnetwork-js-sdk/-/sendingnetwork-js-sdk-0.1.6.tgz#78595b9e04a88aa043da1509d6b6637d7a0ccc11"
+  integrity sha512-in6NgrZm2ai/YaTmHNPHeEeVmbgDeg7WLn/HYTKuzzjHdjAeBft0xAHNEXQG4GBaeU27RNX0PMl9FsGLgC4Kkg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"

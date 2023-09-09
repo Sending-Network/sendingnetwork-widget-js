@@ -4,40 +4,38 @@
     box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.28);
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color);
+    background-color: #fff;
 }
 
 /* title */
 .room_profile_title {
     width: 100%;
-    height: 60px;
+    height: 50px;
+    background-color: #fff;
     display: flex;
     align-items: center;
 }
 .room_profile_title .title_back {
     width: 41px;
     height: 100%;
-    padding-left: 10px;
+    padding-left: 16px;
+    box-sizing: border-box;
     display: flex;
-    flex-shrink: 0;
     align-items: center;
-    background: var(--bg-color);
     cursor: pointer;
 }
-.room_profile_title .title_back img {
-    width: 24px;
-    height: 24px;
-}
-.room_profile_title .title_back_setting {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 22px;
+.room_profile_title .title_back_content {
     color: var(--main-text-color);
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
 }
 
 .room_profile_wrap {
     width: 100%;
-    height: calc(100% - 60px);
+    height: calc(100% - 50px);
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -49,88 +47,110 @@
 /* info */
 .room_profile_info {
     width: 100%;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 .room_profile_info .info_img_box {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
+    margin-top: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 16px;
+    border-radius: 24px;
     overflow: hidden;
 }
 .room_profile_info .info_room_title {
     margin-top: 10px;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    color: #333;
     color: var(--main-text-color);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
 }
 .room_profile_info .info_room_roomId {
     margin-top: 5px;
-    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
     line-height: 20px;
-    color: #999;
+}
+.room_profile_info .info_room_station_box {
+    margin-top: 17px;
+    width: 100%;
+    height: 16px;
+    background-color: #fff;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
 }
 
 /* btns */
 .info_room_btns {
     width: 100%;
     height: 45px;
-    margin-top: 18px;
+    padding: 0 16px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    background-color: #fff;
 }
 .info_room_btns .info_room_btns-item {
-    width: 150px;
+    width: calc(50% - 8px);
     height: 45px;
-    margin: 0 10px;
-    background: var(--primary-color);
+    border-radius: 12px;
+    background: #DBE0E5;
     border-radius: 10px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
 }
-/* .info_room_btns .info_room_btns-item-invite {
-    background: #38CA9F;
-}
-.info_room_btns .info_room_btns-item-setting {
-    background: #50545A;
-} */
 .info_room_btns .info_room_btns-item img {
     height: 18px;
-    margin-bottom: 4px;
+    margin-right: 8px;
 }
 .info_room_btns .info_room_btns-item span {
-    height: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    color: #E7E8EC;
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; 
 }
 
 /* members */
 .room_members {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     justify-content: space-between;
+    background-color: #fff;
 }
+
+/* room_members_title */
 .room_members_title {
-    padding: 0 15px;
-    font-size: 15px;
-    color: #333;
+    padding-left: 16px;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    color: #000;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
 }
 .room_members_title_icon {
     display: inline-block;
@@ -154,22 +174,18 @@
     top: -2px;
 }
 
-.room_members .room_members_item {
-    width: 100%;
-    height: 42px;
-    display: flex;
-}
+/* room_members_item */
 .room_members_item {
     width: 100%;
-    height: 42px;
-    padding: 0 12px;
+    height: 44px;
+    padding: 0 16px;
     margin-bottom: 20px;
     box-sizing: border-box;
     display: flex;
 }
 .room_members_item .room_members_item_avatar {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 6px;
     margin-right: 12px;
     display: flex;
@@ -189,10 +205,12 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
     color: var(--main-text-color);
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
 }
 .room_members_item .room_members_item_desc .room_members_item_desc_addr {
     width: 100%;
@@ -200,25 +218,30 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    font-size: 12px;
-    line-height: 17px;
-    color: #B1B5C1;
+    color: #979797;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
 }
 
 /* room profile leave */
 .room_profile_leave {
-    height: 48px;
+    height: 44px;
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    background: #f7f7f7;
-    border-radius: 10px;
-    font-weight: 500;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.10);
+    margin: 0 16px 12px 16px;
+    color: #F03738;
+    font-family: Poppins;
     font-size: 16px;
-    line-height: 22px;
-    color: #FF675E;
-    margin: 0 12px 13px 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
     cursor: pointer;
 }
 
@@ -230,47 +253,36 @@
     z-index: 100;
     top: -60px;
     left: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
 }
 .room_profile_dialog_content{
     position: absolute;
-    left: calc(50% - 138px);
+    left: 24px;
     top: calc(50% - 100px);
-    width: 268px;
-    height: 158px;
-    background: #ccc;
-    border-radius: 14px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+    width: calc(100% - 56px);
+    height: 160px;
+    background: #fff;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
 }
-
 .room_profile_dialog_content .info {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-.room_profile_dialog_content .info-title {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    color: #333;
-}
-.room_profile_dialog_content .info-desc {
-    width: 186px;
-    margin-top: 5px;
-    font-size: 14px;
-    line-height: 20px;
-    color: #333;
+    width: 100%;
+    height: calc(100% - 56px);
+    margin-top: 28px;
+    color: #1B1B1B;
     text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
 .room_profile_dialog_content .btns {
     width: 100%;
-    height: 44px;
-    border-top: 1px solid #999;
+    height: 56px;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
     display: flex;
     cursor: pointer;
 }
@@ -279,17 +291,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
     cursor: pointer;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 .room_profile_dialog_content .btns-cancel {
-    border-right: 1px solid #999;
-    color: #666;
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
+    color: #1B1B1B;
 }
 .room_profile_dialog_content .btns-confirm {
-    color: #FF675E;
+    color: #F03738;
 }
 
 

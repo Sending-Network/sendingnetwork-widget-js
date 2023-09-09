@@ -112,30 +112,28 @@ const RoomItem = ({ room, enterRoom }) => {
 				<div className="room-item-left">
 					{renderAvatar()}
 				</div>
-				{membership === "join" && (
-					<div className="room-item-center">
-						<p className="room-item-roomName">{formatTextLength(room?.calculateName, 30, 10)}</p>
-						{showAtMention ? (
-							<p className="room-item-msg-at">@ You're mentioned</p>
-						) : (
-							<p className="room-item-msg">{lastMsg}</p>
+
+				<div className="room-item-right">
+					<div className="room-item-right-top">
+						<div className="room-item-right-top-name">{formatTextLength(room?.calculateName, 30, 8)}</div>
+						<div className="room-item-right-top-time">{lastTime}</div>
+					</div>
+					<div className="room-item-right-bottom">
+						{membership === "join" && (
+							<div className="room-item-right-bottom-msg" style={{color: showAtMention ? '#E53838' : '#979797' }}>
+								{showAtMention ? "@ You're mentioned" : lastMsg}
+							</div>
+						)}
+						{membership === "join" && room.notificationCounts.total > 0 && (
+							<div className="room-item-right-bottom-badge">{room.notificationCounts.total}</div>
+						)}
+						{membership === "invite" && (
+							<div className="room-item-right-bottom-invites">
+								<div className="room-item-invite-btns" onClick={() => accept(room.roomId)} >Accept</div>
+								<div className="room-item-invite-btns" onClick={() => reject(room.roomId)} >Reject</div>
+							</div>
 						)}
 					</div>
-				)}
-				{membership === "invite" && (
-					<div className="room-item-center">
-						<p className="room-item-roomName">{formatTextLength(room?.calculateName, 30, 10)}</p>
-						<div className="room-item-invite">
-							<div className="room-item-invite-btns" onClick={() => accept(room.roomId)} >Accept</div>
-							<div className="room-item-invite-btns" onClick={() => reject(room.roomId)} >Reject</div>
-						</div>
-					</div>
-				)}
-				<div className="room-item-right">
-					<p className="room-item-right-time">{lastTime}</p>
-					{room.notificationCounts.total > 0 && (
-						<div className="room-item-right-bage">{room.notificationCounts.total}</div>
-					)}
 				</div>
 			</div>
 		</Styled>

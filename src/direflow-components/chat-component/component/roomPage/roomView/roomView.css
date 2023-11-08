@@ -1,0 +1,284 @@
+.roomView {
+  flex-shrink: 0;
+  height: calc(100% - 102px);
+}
+.roomView .scroll-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  /* background-color: #ECF0F3; */
+  scrollbar-width: none;
+}
+.roomView .room_view_dialog {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+}
+.roomView .scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.roomView_scroll_noMore,
+.roomView_scroll_loader {
+  height: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  margin-top: 4px;
+}
+.room-scroll {
+  /* padding-top: 50px; */
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.room-scroll .msg-first-page {
+  min-height: 50px;
+  flex: 1;
+}
+
+/* message_join */
+.msgBox_join {
+  width: 100%;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 16px;
+  color: #999;
+}
+
+/* previewImg */
+.previewImg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewImg img {
+  width: 75%;
+}
+
+.msg-top-station  {
+  width: 100%;
+  height: 50px;
+  flex-shrink: 0;
+}
+.msg-bottom-station {
+  width: 100%;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.bottom-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  right: 16px;
+  bottom: 80px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+}
+.bottom-btn:hover {
+  background: #eee;
+}
+.bottom-btn svg {
+  width: 46px;
+  height: 46px;
+  margin-left: -3px;
+  margin-top: -1px;
+}
+.date-separator {
+  margin: 4px auto;
+  font-size: 13px;
+  border-radius: 16px;
+  line-height: 1;
+  padding: 8px;
+  /* background: #ddd; */
+  color: #979797;
+  text-align: center;
+}
+
+/* msgBox_more */
+.msgBox_more {
+  position: absolute;
+  width: 152px;
+  height: 28px;
+  border-radius: 100px;
+  background: #fff;
+  padding-right: 4px;
+  border: 1px solid #B4B5B8;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 4px;
+  cursor: pointer;
+  box-shadow: 0px 0px 12px 4px rgba(0, 0, 0, 0.08);
+  padding-left: 10px;
+}
+.msgBox_more_left {
+  left: 0;
+  top: -36px;
+}
+.msgBox_more_right {
+  /* left: -28px; */
+  right: 0;
+  top: -42px;
+}
+.msgBox_more_frequent_thumbsUp_emojs_item {
+  font-size: 18px;
+  /* letter-spacing: -0.24em; */
+}
+.msgBox_more_frequent_thumbsUp_emojs_item:hover {
+  background-color: var(--dropMenu-item-hover-color);
+}
+.msgBox_more_img {
+  height: 18px;
+}
+.msgBox_more_img.thumb_up_switch {
+  width: 18px;
+  border-radius: 9px;
+  background-color: #E8E8E8;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABySURBVHgB7Y7BDUBAEEX/kHBVEo5OowSVKEUJdEBJEicShuWyscRKuO07/vn/ZQDH98TM0ZubZwTDVKVpVhrjLaNhrB8FyxwUQmBdso9JWOYwP/cJV6/GHJE/tSRoFlU6xknXNb2VQJcAgruxFUoEx7+szHApeOqHOtYAAAAASUVORK5CYII=");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.msgBox_more_img.thumb_up_switch.active,
+.msgBox_more_img.thumb_up_switch:hover {
+  transform: rotate(180deg);
+  background-color: #00B36B;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABWSURBVHgB7Y7dCQAgCIQVGqCV2qyRagJHaJU2MIMeJIj+6K0PDuHkTgE+b2FmC6fUsCg1DYvMKCyDRLFZJJ5DxAwbl73y/OwTXUA63JWElQJ7svtcUAA+rENaPvrjhQAAAABJRU5ErkJggg==");
+}
+
+.msgBox_more_emojs_panel {
+  width: 343px;
+  height: 190px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #FFF;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 6px 5px;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.msgBox_more_emojs_panel::-webkit-scrollbar {
+  width: 0;
+}
+.msgBox_more_thumbsUp_emojs_item {
+  width: 24px;
+  height: 24px;
+  margin: 3px 4px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+}
+.msgBox_more_thumbsUp_emojs_item:hover {
+  background-color: var(--dropMenu-item-hover-color);
+}
+.msgBox_more_thumbsUp_emojs_item span {
+  color: red;
+}
+
+.msgBox_more_menu_wrap {
+  width: var(--widget-width);
+  height: var(--widget-height);
+  border-radius: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  /* background-color: red; */
+  /* background: rgba(0, 0, 0, .5); */
+}
+.msgBox_emotion_wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  top: 20%;
+  translate: -50% -50%;
+  z-index: 2;
+  /* background-color: lime; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.msgBox_more_menu {
+  position: absolute;
+  /* z-index: 3; */
+  left: 0;
+  top: 38px;
+  width: 125px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background: #FFF;
+  box-shadow: 0px 0px 12px 4px rgba(0, 0, 0, 0.08);
+}
+/* .msgBox_more_menu_left {
+  left: 0;
+}
+.msgBox_more_menu_right {
+  right: -0;
+} */
+.msgBox_more_menu_item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 16px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.msgBox_more_menu_item:first-child {
+  border-radius: 10px 10px 0 0;
+  padding-top: 16px;
+}
+.msgBox_more_menu_item:last-child {
+  border-radius: 0 0 10px 10px;
+  padding-bottom: 16px;
+}
+.msgBox_more_menu_item:hover {
+  background-color: var(--dropMenu-item-hover-color);
+}
+.msgBox_more_opt_item_icon {
+  height: 100%;
+  padding-right: 12px;
+}
+.msgBox_more_opt_item_text {
+  color:#272830;
+}
+.delete .msgBox_more_opt_item_text {
+  color:#FF543D;
+}

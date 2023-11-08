@@ -1,0 +1,9 @@
+body {
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
+}

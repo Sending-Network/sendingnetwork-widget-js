@@ -1,0 +1,9 @@
+node_modules
+# *.wasm
+sw.js
+build
+.DS_Store
+.history
+launch.json
+dist
+.DS_Store

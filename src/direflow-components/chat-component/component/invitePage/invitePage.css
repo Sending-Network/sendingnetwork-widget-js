@@ -1,0 +1,297 @@
+.invite_page {
+    background-color: var(--bg-color);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* title */
+.invite_page_title {
+    width: 100%;
+    height: 50px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+.invite_page_title .title_back {    
+    width: 41px;
+    height: 100%;
+    padding-left: 16px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.invite_page_title .title_text {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    color: var(--main-text-color);
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+/* search */
+.invite_page-search {
+    padding: 12px 16px;
+    position: relative;
+    z-index: 0;
+}
+.invite_page-search .search-bar {
+  width: 100%;
+  max-height: 72px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #FFF;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  padding: 6px 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  line-height: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+.search-bar .filter-box {
+  font-size: 14px;
+  line-height: 20px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-family: 'Poppins';
+  flex: 1;
+}
+.search-bar .search-icon {
+  width: 14px;
+  margin-right: 7px;
+}
+.search-bar .invited-item {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 0;
+  margin: 2px 0;
+}
+.search-bar .invited-user {
+  display: inline-block;
+  background: var(--primary-color);
+  color: #fff;
+  padding: 0 8px 0 2px;
+  max-width: calc(100% - 30px);
+  border-radius: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+.search-bar .invited-user .avatar {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 2px;
+  margin-right: 4px;
+}
+.search-bar .invited-user .name {
+  font-size: 14px;
+  line-height: 20px;
+  display: inline-block;
+  max-width: calc(100% - 20px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.search-bar .btn-close {
+  display: inline-block;
+  line-height: 0;
+}
+.search-bar input {
+  min-width: 40%;
+  display: block;
+  line-height: 22px;
+  flex: 1;
+}
+
+/* list */
+.invite_page .list-wrap {
+    width: 100%;
+    flex: 1;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding-top: 7px;
+    scrollbar-width: none;
+}
+.invite_page .list-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+/* members-item */
+.members_item {
+    width: 100%;
+    height: 60px;
+    padding: 4px 16px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.members_item:hover {
+  background: #eee;
+}
+.members_item .members_item_avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    margin-right: 12px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+.members_item .members_item_desc {
+    height: 100%;
+    width: calc(100% - 88px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
+}
+.members_item .members_item_desc .members_item_desc_name {
+    width: 100%;
+    height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--main-text-color);
+}
+.members_item .members_item_desc .members_item_desc_addr {
+    width: 100%;
+    height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-family: 'Poppins';
+    font-size: 14px;
+    line-height: 18px;
+    color: #979797;
+}
+.members_item .members_item_select {
+    width: 24px;
+    height: 100%;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.members_item .members_item_select img {
+    width: 20px;
+    height: auto;
+}
+
+/* select-btns */
+.invite_page .select-box {
+    width: 100%;
+    height: 68px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+
+}
+.invite_page .select-box-btn {
+    width: 100%;
+    height: 44px;
+    background: var(--primary-color);
+    border-radius: 10px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+}
+.invite_page .select-box-btn_disable {
+    background-color: #D8D8D8;
+}
+.invite_page .select-box-btn span {
+    padding-right: 4px;
+}
+
+/* leave dialog */
+.invite_page .invite_page_dialog {
+    width: 100%;
+    height: calc(100% + 60px);
+    position: absolute;
+    z-index: 100;
+    top: -60px;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+.invite_page .invite_page_dialog .invite_page_dialog_content{
+    position: absolute;
+    left: calc(50% - 138px);
+    top: calc(50% - 70px);
+    width: 268px;
+    height: 148px;
+    background: #f5f5f5;
+    border-radius: 14px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+    display: flex;
+    flex-direction: column;
+}
+.invite_page_dialog_content .info {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+.invite_page_dialog_content .info-desc {
+    width: 186px;
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000;
+    text-align: center;
+}
+.invite_page_dialog_loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #8a8a8a;
+}
+.invite_page_dialog_loading img {
+    width: 40px;
+    height: 40px;
+}
+
+.invite_page_dialog_content .btns {
+    width: 100%;
+    height: 44px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    cursor: pointer;
+    color: var(--primary-color);;
+}

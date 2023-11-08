@@ -1,0 +1,109 @@
+.rooms {
+  background-color: var(--bg-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* rooms-header */
+.rooms-header{
+  width: 100%;
+  height: 50px;
+  padding: 0 13px 0 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rooms-header-left {
+  color: #000;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+.rooms-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* rooms-search */
+.rooms-search {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f7f7;
+  position: relative;
+  z-index: 0;
+}
+.rooms-search .search-bar {
+  width: calc(100% - 32px);
+  height: 36px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #FFF;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+.search-bar .filter-box {
+  font-size: 14px;
+  line-height: 20px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-family: 'Poppins';
+  flex: 1;
+}
+.search-bar .search-icon {
+  width: 14px;
+  margin-right: 7px;
+}
+
+/* rooms-list */
+.rooms-list {
+  flex: 1;
+  overflow-y: scroll;
+  position: relative;
+  box-sizing: border-box;
+  padding: 8px 0;
+  scrollbar-width: none;
+}
+.rooms-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* mobile-close-btn */
+.mobile-close-btn {
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-close-btn img {
+  width: 20px;
+}
+
+/* no data */
+.rooms-list_noData {
+  margin-top: calc(50%);
+  text-align: center;
+  font-family: Poppins;
+  font-size: 14px;
+  color: #ccc;
+}
+.rooms-list_noData img {
+  width: 60px;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,42 @@
+.widget_webViewComp {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.widget_webViewComp .handleFun {
+  display: flex;
+  justify-content: flex-end;
+  height: 50px;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.widget_webViewComp .handleFun_item {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.widget_webViewComp .handleFun img {
+  height: 18px;
+  cursor: pointer;
+}
+
+.widget_webViewComp .iframeContainer {
+  flex: 1;
+}
+
+.iframe {
+  width: 100%;
+  border: none;
+  height: 100%;
+}

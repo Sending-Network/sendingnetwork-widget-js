@@ -1,0 +1,107 @@
+.roomPage {
+    width: 100%;
+    height: 100%;
+}
+
+.chat_widget_room_page {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.28);
+    display: flex;
+    flex-direction: column;
+}
+
+.msg_reply_dialog {
+    padding: 10px;
+}
+.msg_reply_dialog_content {
+  padding-left: 26px;
+  padding-right: 62px;
+}
+.msg_reply_target_tips {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+}
+.msg_reply_tips_icon {
+  width: 16px;
+}
+.msg_reply_tips_icon.cancel {
+  position: absolute;
+  right: -50px;
+  cursor: pointer;
+}
+.msg_reply_tips_text {
+  color: #999;
+  font-size: 12px;
+  line-height: 16px;
+  padding-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.msg_reply_target_info {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* delet msg dialog */
+.msg_delete_dialog {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .msg_delete_dialog_content{
+    width: calc(100% - 56px);
+    height: 160px;
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .msg_delete_dialog_content .info {
+    width: 100%;
+    height: calc(100% - 56px);
+    margin-top: 28px;
+    color: #1B1B1B;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  
+  .msg_delete_dialog_content .btns {
+    width: 100%;
+    height: 56px;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    display: flex;
+    cursor: pointer;
+  }
+  .msg_delete_dialog_content .btns-item {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .msg_delete_dialog_content .btns-cancel {
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
+    color: #1B1B1B;
+  }
+  .msg_delete_dialog_content .btns-confirm {
+    color: #F03738;
+  }

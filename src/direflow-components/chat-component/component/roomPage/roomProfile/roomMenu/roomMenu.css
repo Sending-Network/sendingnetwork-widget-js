@@ -1,0 +1,125 @@
+/* more menu */
+.chat_widget-menu {
+	display: flex;
+	flex-shrink: 0;
+}
+
+.chat_widget-menu-btn {
+	width: 24px;
+	height: 24px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.chat_widget-menu-btn svg{
+  width: 24px;
+}
+
+.chat_widget_title_setBox {
+	position: absolute;
+	z-index: 10;
+	right: 10px;
+	top: 45px;
+	width: 148px;
+	background: var(--dropMenu-bg-color);
+	box-shadow: -2px 4px 10px rgba(0, 0, 0, 0.3);
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.chat_widget_title_setBox_item {
+	width: 100%;
+	height: 40px;
+  border-radius: 8px;
+	padding: 0 15px;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	color: #F03738;
+	cursor: pointer;
+}
+.chat_widget_title_setBox_item:hover {
+	background: var(--dropMenu-item-hover-color);
+}
+
+.chat_widget_title_setBox_item img {
+	width: 20px;
+	margin-right: 12px;
+}
+
+.chat_widget_title_setBox_item_line {
+	width: calc(100% - 24px);
+	height: 0;
+	margin-left: 12px;
+	border-bottom: 1px solid #F4F4F4;
+}
+
+.chat_widget_title_setBox::after {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	position: absolute;
+	z-index: 11;
+	top: -6px;
+	right: 10px;
+	border: 6px solid #fff;
+	transform: rotate(45deg);
+	border-bottom-color: transparent;
+	border-right-color: transparent;
+	filter: drop-shadow(0px 4px 9px rgba(0, 0, 0, 0.3));
+}
+
+.chat_widget-menu .room-menu-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.room-menu-modal .room-menu-dialog {
+  width: 320px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.room-menu-dialog .dialog-content {
+  padding: 28px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.room-menu-dialog .dialog-btns {
+  height: 56px;
+  border-top: 1px solid #eee;
+  display: flex;
+}
+
+.dialog-btns .dialog-btn {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+.dialog-btn.btn-leave {
+  color: #F03738;
+}
+.dialog-btns .divider {
+  width: 1;
+  height: 100%;
+  background: #eee;
+}

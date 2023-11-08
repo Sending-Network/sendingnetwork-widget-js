@@ -1,0 +1,237 @@
+.widget_shareComp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+}
+
+/* title */
+.shareComp_title {
+  width: 100%;
+  height: 50px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+.shareComp_title_left {
+  width: 41px;
+  height: 100%;
+  padding-left: 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.shareComp_title_center {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  color: var(--main-text-color);
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+/* app share */
+.shareComp_app {
+  width: 100%;
+  height: 95px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.shareComp_app_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  width: 25%;
+}
+.shareComp_app_item_img {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shareComp_app_item_img img {
+  width: 22px;
+}
+.shareComp_app_item_text {
+  padding-top: 4px;
+  color: #666;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 150% */
+}
+.twitter_bg {
+  background-color: #1E96FF;
+}
+.telegram_bg {
+  background-color: #3DB9FF;
+}
+.discord_bg {
+  background-color: #6F7CEF;
+}
+.link_bg {
+  background-color: #878AA6;
+}
+
+/* search */
+.shareComp_search {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f7f7;
+  position: relative;
+  z-index: 0;
+}
+.shareComp_search .search-bar {
+  width: calc(100% - 32px);
+  height: 36px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #FFF;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+.search-bar .filter-box {
+  font-size: 14px;
+  line-height: 20px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-family: 'Poppins';
+  flex: 1;
+}
+.search-bar .search-icon {
+  width: 14px;
+  margin-right: 7px;
+}
+
+/* list */
+.list-wrap {
+  width: 100%;
+  height: calc(100% - 205px);
+  overflow-y: scroll;
+  box-sizing: border-box;
+  padding-top: 7px;
+}
+
+/* members-item */
+.members_item {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+  display: flex;
+  cursor: pointer;
+}
+.members_item .members_item_avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  margin-right: 12px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+.members_item .members_item_desc {
+  height: 100%;
+  width: calc(100% - 88px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.members_item .members_item_desc .members_item_desc_name {
+  width: 100%;
+  height: 22px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #333;
+  color: var(--main-text-color);
+}
+.members_item .members_item_desc .members_item_desc_addr {
+  width: 100%;
+  height: 17px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-family: Poppins;
+  font-size: 12px;
+  line-height: 17px;
+  color: #999;
+}
+.members_item .members_item_select {
+  width: 24px;
+  height: 100%;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.members_item .members_item_select img {
+  width: 20px;
+  height: auto;
+}
+
+/* select-btns */
+.widget_shareComp .select-box {
+  width: 100%;
+  height: 68px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  box-sizing: border-box;
+
+}
+.widget_shareComp .select-box-btn {
+  width: 100%;
+  height: 44px;
+  background: var(--primary-color);
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+}
+.widget_shareComp .select-box-btn_disable {
+  background-color: #D8D8D8;
+}
+.widget_shareComp .select-box-btn span {
+  padding-right: 4px;
+}

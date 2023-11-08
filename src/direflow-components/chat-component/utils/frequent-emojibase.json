@@ -1,0 +1,210 @@
+[{
+  "group": 0,
+  "hexcode": "1F600",
+  "label": "grinning face",
+  "order": 1,
+  "tags": [
+    "face",
+    "grin"
+  ],
+  "unicode": "😀"
+},
+{
+  "group": 1,
+  "hexcode": "1F44D",
+  "label": "thumbs up",
+  "order": 346,
+  "tags": [
+    "+1",
+    "hand",
+    "thumb",
+    "up"
+  ],
+  "unicode": "👍️",
+  "skins": [
+    {
+      "group": 1,
+      "hexcode": "1F44D-1F3FB",
+      "label": "thumbs up: light skin tone",
+      "order": 347,
+      "unicode": "👍🏻"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44D-1F3FC",
+      "label": "thumbs up: medium-light skin tone",
+      "order": 348,
+      "unicode": "👍🏼"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44D-1F3FD",
+      "label": "thumbs up: medium skin tone",
+      "order": 349,
+      "unicode": "👍🏽"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44D-1F3FE",
+      "label": "thumbs up: medium-dark skin tone",
+      "order": 350,
+      "unicode": "👍🏾"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44D-1F3FF",
+      "label": "thumbs up: dark skin tone",
+      "order": 351,
+      "unicode": "👍🏿"
+    }
+  ]
+},
+{
+  "group": 1,
+  "hexcode": "1F44C",
+  "label": "OK hand",
+  "order": 248,
+  "tags": [
+    "hand",
+    "ok"
+  ],
+  "unicode": "👌",
+  "skins": [
+    {
+      "group": 1,
+      "hexcode": "1F44C-1F3FB",
+      "label": "OK hand: light skin tone",
+      "order": 249,
+      "unicode": "👌🏻"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44C-1F3FC",
+      "label": "OK hand: medium-light skin tone",
+      "order": 250,
+      "unicode": "👌🏼"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44C-1F3FD",
+      "label": "OK hand: medium skin tone",
+      "order": 251,
+      "unicode": "👌🏽"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44C-1F3FE",
+      "label": "OK hand: medium-dark skin tone",
+      "order": 252,
+      "unicode": "👌🏾"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44C-1F3FF",
+      "label": "OK hand: dark skin tone",
+      "order": 253,
+      "unicode": "👌🏿"
+    }
+  ]
+},
+{
+  "group": 1,
+  "hexcode": "1F44F",
+  "label": "clapping hands",
+  "order": 382,
+  "tags": [
+    "clap",
+    "hand"
+  ],
+  "unicode": "👏",
+  "skins": [
+    {
+      "group": 1,
+      "hexcode": "1F44F-1F3FB",
+      "label": "clapping hands: light skin tone",
+      "order": 383,
+      "unicode": "👏🏻"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44F-1F3FC",
+      "label": "clapping hands: medium-light skin tone",
+      "order": 384,
+      "unicode": "👏🏼"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44F-1F3FD",
+      "label": "clapping hands: medium skin tone",
+      "order": 385,
+      "unicode": "👏🏽"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44F-1F3FE",
+      "label": "clapping hands: medium-dark skin tone",
+      "order": 386,
+      "unicode": "👏🏾"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F44F-1F3FF",
+      "label": "clapping hands: dark skin tone",
+      "order": 387,
+      "unicode": "👏🏿"
+    }
+  ]
+},
+{
+  "group": 1,
+  "hexcode": "1F64F",
+  "label": "folded hands",
+  "order": 438,
+  "tags": [
+    "ask",
+    "hand",
+    "high 5",
+    "high five",
+    "please",
+    "pray",
+    "thanks"
+  ],
+  "unicode": "🙏",
+  "skins": [
+    {
+      "group": 1,
+      "hexcode": "1F64F-1F3FB",
+      "label": "folded hands: light skin tone",
+      "order": 439,
+      "unicode": "🙏🏻"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F64F-1F3FC",
+      "label": "folded hands: medium-light skin tone",
+      "order": 440,
+      "unicode": "🙏🏼"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F64F-1F3FD",
+      "label": "folded hands: medium skin tone",
+      "order": 441,
+      "unicode": "🙏🏽"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F64F-1F3FE",
+      "label": "folded hands: medium-dark skin tone",
+      "order": 442,
+      "unicode": "🙏🏾"
+    },
+    {
+      "group": 1,
+      "hexcode": "1F64F-1F3FF",
+      "label": "folded hands: dark skin tone",
+      "order": 443,
+      "unicode": "🙏🏿"
+    }
+  ]
+}]

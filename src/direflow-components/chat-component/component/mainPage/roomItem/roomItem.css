@@ -1,0 +1,154 @@
+.rooms .room-invite {
+  font-size: 14px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  color: #fff;
+  display: flex;
+}
+
+/* room-item */
+.rooms .room-item {
+  height: 70px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 16px;
+}
+.rooms .room-item:hover {
+  background: #eee;
+}
+
+/* room-item-left */
+.room-item .room-item-left {
+  width: 44px;
+  height: 44px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.room-item .room-item-left .avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* room-item-right */
+.room-item-right {
+  width: calc(100% - 54px);
+  height: 44px;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+}
+.room-item-right-top {
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.room-item-right-top-name {
+  width: calc(100% - 64px);
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+}
+.room-item-right-top-time {
+  width: 64px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  color: #999;
+  text-align: right;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+}
+.room-item-right-bottom {
+  width: 100%;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.room-item-right-bottom-msg {
+  /* width: calc(100% - 64px); */
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #979797;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  flex: 1;
+}
+.room-item-right-bottom-msg .mentioned {
+  color: #E53838;
+  font-size: 12px;
+}
+.room-item-right-bottom-badge {
+  width: 18px;
+  height: 18px;
+  color: #FFF;
+  font-family: sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  border-radius: 18px;
+  background-color: var(--primary-color);
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+.room-item-right-bottom-invites {
+  width: calc(100% - 64px);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.room-item-invite-btns {
+  width: 80px;
+	margin-right: 20px;
+	line-height: 19px;
+  color: #292d32;
+  font-size: 14px;
+	border-radius: 3px;
+	background: #DBE0E5;
+  display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+.room-item-invite-btns:hover, .room-item-invite-btns:active {
+  color: #fff;
+  background: var(--primary-color);
+}

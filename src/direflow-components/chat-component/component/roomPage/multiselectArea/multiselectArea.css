@@ -1,0 +1,43 @@
+.multiselect-area {
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  height: 52px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 2;
+}
+
+.multiselect-area .content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.content .svg-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 12px;
+}
+.content .svg-btn.disabled svg {
+  stroke: #999;
+}
+.content .svg-btn.disabled:hover svg {
+  stroke: #999;
+}
+.content .svg-btn.btn-delete {
+  margin-right: 0;
+}
+.content .tip {
+  font-size: 12px;
+  flex: 1;
+}

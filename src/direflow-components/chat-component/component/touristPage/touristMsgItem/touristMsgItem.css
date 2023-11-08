@@ -1,0 +1,124 @@
+.message_item {
+  margin-bottom: 4px;
+}
+.msgBox_at_highlight {
+  color: #95DBAC;
+}
+
+/* message_left */
+.msgBox_left {
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+}
+.msgBox_left_avatar {
+  width: 34px;
+  height: 34px;
+  margin: 0 16px;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+.msgBox_left_info {
+  border-radius: 0 12px 12px 12px;
+  background: var(--left-message-bg-color);
+  margin-left: 8px;
+  margin-right: 48px;
+  /* padding: 0 8px 4px 8px; */
+  padding-bottom: 4px;
+  position: relative;
+}
+.msgBox_left_info_user {
+  height: 16px;
+  line-height: 1;
+  font-weight: 500;
+  font-size: 12px;
+  color: #95DBAC;
+}
+.msgBox_left_info_msg {
+  box-sizing: border-box;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--left-message-color);
+  word-break: break-all;
+}
+.msgBox_left_info_msg .msgBox_left_info_msg_time {
+  font-size: 12px;
+  line-height: 22px;
+  padding-left: 10px;
+  color: var(--left-message-ts-color);
+  float: right;
+}
+
+/* pin_event_item */
+.pin_event_item {
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+  padding: 0 10px;
+}
+
+/* red_envelope_event_item */
+.red_envelope_event_item {
+  color: #838791;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  padding: 0 10px;
+  text-align: center;
+}
+.red_envelope_event_item_cont {
+  width: calc(100% - 20px);
+  word-break: break-all;
+}
+.red_envelope_event_item_cont img {
+  width: 16px;
+  height: 16px;
+  margin: 0 8px 3px 0;
+  vertical-align: middle;
+}
+.red_envelope_event_item_cont .sender {
+  padding-right: 6px;
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: none;
+}
+.red_envelope_event_item_cont .link {
+  padding-left: 6px;
+  color: rgb(240, 212, 124);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* member_event_item */
+.member_event_item {
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+  padding: 0 10px;
+}
+.member_event_item_highlight {
+  color: #38ca9f;
+  cursor: pointer;
+  /* padding-right: 8px; */
+}

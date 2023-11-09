@@ -12,26 +12,33 @@ const RoomItem = ({ room, enterRoom }) => {
   const [lastTime, setLastTime] = useState("");
   const [lastMsg, setLastMsg] = useState("");
   const [showAtMention, setShowAtMention] = useState(false);
-  const myUserId = api.getUserId();
+  const [timestamp, setTimestamp] = useState(0);
 
   useEffect(() => {
     if (room) {
       const ship = room.getMyMembership();
       const members = room.getJoinedMembers();
-      setMembership(ship)
-      getLastEventMsg(room)
-      setMemberList(members)
+      setMembership(ship);
+      atCheck();
+      getLastEventMsg(room);
+      setMemberList(members);
+      room.on("Room.timeline", onTimeline);
     }
-  }, [room])
+    return (() => {
+      room.off("Room.timeline", onTimeline);
+    })
+  }, [room]);
 
   useEffect(() => {
-    atCheck();
-    getLastEventMsg(room);
-  }, [room.notificationCounts.total]);
+    if (timestamp && room?.notificationCounts.total) {
+      atCheck();
+      getLastEventMsg(room);
+    }
+  }, [timestamp, room?.notificationCounts.total]);
 
-  useEffect(() => {
-    getLastEventMsg(room);
-  }, [room?.getLiveTimeline()?.getEvents()?.length]);
+  const onTimeline = (sdnEvent) => {
+    setTimestamp(sdnEvent.getTs() || Date.now());
+  }
 
   const atCheck = () => {
     const { displayname } = api.userData;
@@ -47,9 +54,9 @@ const RoomItem = ({ room, enterRoom }) => {
         ) {
           setShowAtMention(true);
           return;
-          // } else if (ev.body.indexOf('@room') !== -1) {
-          //   setShowAtMention(true);
-          //   return;
+        } else if (ev.msgtype === 'm.text' && ev.body.indexOf('@room') !== -1) {
+          setShowAtMention(true);
+          return;
         }
       }
     }
@@ -66,7 +73,7 @@ const RoomItem = ({ room, enterRoom }) => {
       let lastEvent, timeStr, msgStr;
       for (let i = events.length - 1; i >= 0; i--) {
         lastEvent = events[i];
-        
+
         if (!lastEvent || !lastEvent.event) continue
         if (lastEvent.getType() === 'm.room.redaction' && lastEvent.event.redacts) {
           deletedIdMap[lastEvent.event.redacts] = 1;
@@ -74,7 +81,7 @@ const RoomItem = ({ room, enterRoom }) => {
         } else if (deletedIdMap[lastEvent.getId()] > 0) {
           continue;
         } else if (lastEvent.event.content && lastEvent.event.content['m.relates_to']) {
-          const {event_id, rel_type} = lastEvent.event.content['m.relates_to'];
+          const { event_id, rel_type } = lastEvent.event.content['m.relates_to'];
           if (rel_type === 'm.replace' && deletedIdMap[event_id] > 0) {
             continue;
           }
@@ -112,7 +119,7 @@ const RoomItem = ({ room, enterRoom }) => {
         onClick={() => membership === "join" && enterRoom(room.roomId)}
       >
         <div className="room-item-left">
-          {<RoomAvatar room={room}/>}
+          {<RoomAvatar room={room} />}
         </div>
 
         <div className="room-item-right">

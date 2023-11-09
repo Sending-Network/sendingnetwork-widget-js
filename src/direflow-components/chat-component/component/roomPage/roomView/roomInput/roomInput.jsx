@@ -20,6 +20,7 @@ import { addTimestamp } from "../../../webViewComp/webViewComp";
 import InputArea from "./inputArea";
 import { msgReplyIcon, msgEditIcon, cancelReplyOrEditIcon } from "../../../../imgs/index";
 import UserAvatar from "../../../userAvatar/userAvatar";
+import MentionList from "./mentionList";
 
 const RoomInput = ({
   room,
@@ -33,7 +34,7 @@ const RoomInput = ({
   showCheckbox,
   uploadFile
 }) => {
-  const [web3, setWeb3] = useState(new Web3(window.ethereum));
+  const [web3, setWeb3] = useState();
   const uploadRef = useRef(null);
   const emojis = getEmojis();
   const [sendValue, setSendValue] = useState(""); // text content which is going to be sent in input box
@@ -43,7 +44,10 @@ const RoomInput = ({
   const [showTokenSwapTip, setShowTokenSwapTip] = useState(false);
   const [showInputMaxPrompt, setShowInputMaxPrompt] = useState(false); // whether display tips dialog when text content letters exceed max limit
   const [showMemberList, setShowMemberList] = useState(false);
+  const [filteredMembers, setFilteredMembers] = useState([]);
+  const [selectionIndex, setSelectionIndex] = useState(-1);
   const [atIndex, setAtIndex] = useState(0);
+  const [memberFilter, setMemberFilter] = useState('')
   const [memberList, setMemberList] = useState([]);
   const [memberListFocus, setMemberListFocus] = useState(0);
   const [showMoreBox, setShowMoreBox] = useState(false);
@@ -54,8 +58,9 @@ const RoomInput = ({
   const [localInputFocus, setLocalInputFocus] = useState(0);
 
   useEffect(() => {
+    setWeb3(new Web3(window.ethereum));
     initMembers();
-    if(room && room.sendValue) {
+    if (room && room.sendValue) {
       setSendValue(room.sendValue);
     }
     document.addEventListener('click', handleClickInput);
@@ -133,6 +138,27 @@ const RoomInput = ({
         </span>
       </div>
     ) : null
+  }
+
+  const onSelectionChanged = (start, end) => {
+    if (isDmRoom) return
+    let shouldShowMentionList = false;
+    if (start === end) {
+      const lastIndex = sendValue.lastIndexOf('@');
+      if (lastIndex >= 0 && lastIndex < start) {
+        const editValue = (sendValue.slice(lastIndex + 1, start) || '').toLowerCase();
+        setAtIndex(lastIndex);
+        setMemberFilter(editValue);
+        const list = memberList?.filter(value =>
+          value.name && value.name.toLowerCase().includes(editValue)
+        )
+        setFilteredMembers(list);
+        if (list && list.length) {
+          shouldShowMentionList = true;
+        }
+      }
+    }
+    setShowMemberList(shouldShowMentionList);
   }
 
   const renderTokenSwapTip = () => {
@@ -352,16 +378,20 @@ const RoomInput = ({
     }
     const n = m?.user?.displayName || m?.name;
     let val;
+    let selectionIndex = -1;
     if (atIndex >= 0 && sendValue && sendValue.length >= atIndex) {
+      selectionIndex = atIndex + 1 + memberFilter.length
       const left = sendValue.slice(0, atIndex + 1);
-      const right = sendValue.slice(atIndex + 1, sendValue.length);
+      const right = sendValue.slice(selectionIndex, sendValue.length);
       val = left + n + ' ' + right;
+      selectionIndex = atIndex + 2 + n.length;
     } else {
       val = sendValue + n + ' ';
     }
     setShowMemberList(false);
     setMemberListFocus(0);
     setSendValue(val);
+    setSelectionIndex(selectionIndex);
     // setLocalInputFocus(Date.now());
   }
 
@@ -369,7 +399,7 @@ const RoomInput = ({
     const { key, keyCode } = e;
     if (['ArrowUp', 'ArrowDown'].includes(key) && showMemberList) {
       let index = memberListFocus;
-      const len = memberList.length - 1;
+      const len = filteredMembers.length - 1;
       if (key === 'ArrowDown') {
         index += 1;
         index = index > len ? 0 : index;
@@ -382,24 +412,24 @@ const RoomInput = ({
       return;
     }
     if (key === 'Enter' && keyCode === 13 && showMemberList) {
-      const m = memberList[memberListFocus];
+      const m = filteredMembers[memberListFocus];
       handleAtMemberClick(m);
       e.stopPropagation();
       e.preventDefault();
       return;
     }
-    if (key === '@') {
-      if (!isDmRoom) {
-        if (e.currentTarget) {
-          const { selectionStart, selectionEnd } = e.currentTarget;
-          if (selectionStart === selectionEnd && selectionEnd > 0) {
-            setAtIndex(selectionEnd);
-          }
-        }
-        setShowMemberList(true);
-        return
-      }
-    }
+    // if (key === '@') {
+    //   if (!isDmRoom) {
+    //     if (e.currentTarget) {
+    //       const { selectionStart, selectionEnd } = e.currentTarget;
+    //       if (selectionStart === selectionEnd && selectionEnd > 0) {
+    //         setAtIndex(selectionEnd);
+    //       }
+    //     }
+    //     setShowMemberList(true);
+    //     return
+    //   }
+    // }
   };
 
   const sendMessage = async () => {
@@ -530,6 +560,8 @@ const RoomInput = ({
               placeholder="Send a message"
               inputFocus={localInputFocus}
               onChange={inputChange}
+              onSelectionChanged={onSelectionChanged}
+              selectionIndex={selectionIndex}
               onKeyDown={onKeyDown}
               sendMessage={sendMessage}
               sendTimestamp={sendTimestamp}
@@ -546,45 +578,12 @@ const RoomInput = ({
           </div>
 
           {/* @ show box */}
-          {showMemberList && (
-            <div className="room-input_at">
-              <div
-                key={'room'}
-                className={[
-                  "room-input_at_item",
-                  0 === memberListFocus && "room-input_at_item_bgFocus"
-                ].join(' ')}
-                onClick={() => handleAtMemberClick(memberList[0])}
-              >
-                <div className="room-input_at_item_avatar">
-                  {(room && room.roomId) ? <RoomAvatar room={room} /> : null}
-                </div>
-                <div className="room-input_at_item_name">{`room`}</div>
-              </div>
-              <div className="divide"></div>
-              {memberList.map((m, mIndex) => {
-                if (mIndex == 0 || !m) return
-                return (
-                  <div
-                    key={m.userId}
-                    className={[
-                      "room-input_at_item",
-                      mIndex === memberListFocus && "room-input_at_item_bgFocus"
-                    ].join(' ')}
-                    onMouseDown={(e)=>handleAtMemberClick(m,e)}
-                    onTouchStart={(e)=>handleAtMemberClick(m,e)}
-                    // onClick={() => handleAtMemberClick(m)}
-                  >
-                    <div className="room-input_at_item_avatar">
-                      <UserAvatar member={m} />
-                      {/* <AvatarComp url={m.user?.avatarUrl} /> */}
-                    </div>
-                    <div className="room-input_at_item_name">{m.user?.displayName || m.name}</div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
+          {showMemberList && <MentionList
+            room={room}
+            memberList={filteredMembers}
+            memberListFocus={memberListFocus}
+            handleAtMemberClick={handleAtMemberClick}
+          />}
 
           {showMoreBox && (
             <div className="room-input-more-box" onClick={(e) => e.stopPropagation()}>
@@ -595,7 +594,7 @@ const RoomInput = ({
                   uploadRef.current.dispatchEvent(new MouseEvent('click'))
                 }}>
                   <img src={roomInputMorePic} />
-                  <span>File</span>
+                  <span>Image</span>
                 </div>
               )}
               {useRoomFuncs.split(',').includes('MoneyGun') && (
@@ -644,4 +643,4 @@ const RoomInput = ({
   );
 };
 
-export default RoomInput;
+export default React.memo(RoomInput);

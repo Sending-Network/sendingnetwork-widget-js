@@ -116,7 +116,8 @@ const InvitePage = ({ roomId, onBack, title }) => {
       // single person not show dialog
       if (selectList.length === 1) {
         const targetId = selectList[0].user_id;
-        api.chatToAddress(getAddressByUserId(targetId));
+        // api.chatToAddress(getAddressByUserId(targetId));
+        window.chatToUserWatch(targetId);
       } else {
         setShowInputDialog(true);
       }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { isMobile } from '../../../../utils';
 
 const InputArea = (props) => {
-  const { className, value, placeholder, inputFocus, onKeyDown, sendTimestamp, showMemberList } = props;
+  const { className, value, placeholder, inputFocus, onKeyDown, sendTimestamp, showMemberList, selectionIndex } = props;
   const inputRef = useRef(null);
   const [nextFrameTimeout, setNextFrameTimeout] = useState(0);
 
@@ -28,6 +28,20 @@ const InputArea = (props) => {
       focusInput();
     }
   }, [inputFocus])
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      const { selectionStart, selectionEnd } = inputRef.current
+      props.onSelectionChanged(selectionStart, selectionEnd);
+    }
+  }, [inputRef?.current, inputRef?.current?.selectionStart, inputRef?.current?.selectionEnd])
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.setSelectionRange(selectionIndex, selectionIndex);
+      delayResize();
+    }
+  }, [selectionIndex])
 
   const focusInput = () => {
     if (inputRef && inputRef.current) {

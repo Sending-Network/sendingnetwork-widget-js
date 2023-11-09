@@ -41,6 +41,9 @@
   text-overflow: ellipsis;
 }
 .msg_reply_target_info {
+  color: #000;
+  font-size: 12px;
+  line-height: 16px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

@@ -6,7 +6,8 @@ import { getDefaultAvatar } from "../../utils";
 
 const RoomAvatar = ({ room }) => {
 
-  const renderAvatar = useCallback((room) => {
+  const renderAvatar = (room) => {
+    if (!room || !room.roomId) return null
     const url = room.getMxcAvatarUrl();
     const myUserId = api.getUserId();
     if (url) {
@@ -32,7 +33,7 @@ const RoomAvatar = ({ room }) => {
     const fillArr = new Array(members.length - urls.length).fill(null);
     urls.push(...fillArr)
     return <AvatarMutiComp urls={urls} />
-  })
+  }
 
   return renderAvatar(room)
 }

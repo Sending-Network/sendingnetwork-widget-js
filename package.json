@@ -30,6 +30,8 @@
     "start": "direflow-scripts start",
     "build": "direflow-scripts build",
     "build:lib": "direflow-scripts build:lib",
+    "mac-build": "export NODE_OPTIONS=--openssl-legacy-provider && npm run build",
+    "win-build": "set NODE_OPTIONS=--openssl-legacy-provider && npm run build",
     "pack": "node ./scripts/after-build.js",
     "test": "direflow-scripts test",
     "dist": "vite build"

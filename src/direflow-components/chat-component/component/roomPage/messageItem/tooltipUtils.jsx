@@ -69,10 +69,10 @@ export function formatCommaSeparatedList(items, itemLimit) {
 
 		if (remaining > 0) {
 			// return _t("%(items)s and %(count)s others", { items: joinedItems, count: remaining } );
-			return items.join('--') + ' and ' + remaining + ' others';
+			return items.join(', ') + ' and ' + remaining + ' others';
 		} else {
 			// return _t("%(items)s and %(lastItem)s", { items: joinedItems, lastItem });
-			return items.join('--') + ' and ' + lastItem;
+			return items.join(', ') + ' and ' + lastItem;
 		}
 	}
 }

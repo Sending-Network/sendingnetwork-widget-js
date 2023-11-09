@@ -47,7 +47,7 @@ const RoomList = ({ rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
     <Styled styles={styles}>
       <div className="rooms">
         <div className="rooms-header">
-          <div className="rooms-header-left">SendingNetwork</div>
+          <div className="rooms-header-left">Messages</div>
           <div className="rooms-header-right">
             {isShowMenus() && (
               <MainMenu menuFuncs={menuFuncs} closeModalms={closeModalms} menuClick={menuClick} />

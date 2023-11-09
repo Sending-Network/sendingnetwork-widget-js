@@ -121,17 +121,20 @@ const RoomView = ({
         setLastMsgTs(ts);
       }
     }
+    handleScroll();
     backLoad(messages)
   }
 
   const backLoad = (messages) => {
+    // const messages = room.getLiveTimeline().getEvents();
+    if (!hasMore) return
     if (messages.length > 300) {
       return
     }
-    if (Date.now() -  messages[messages.length - 1].getTs() > 7 * 86400000) {
+    if (Date.now() - messages[0].getTs() > 7 * 86400000) {
       return
     }
-    if (wrapperRef?.current && hasMore) {
+    if (wrapperRef?.current) {
       const { scrollTop, clientHeight, scrollHeight } = wrapperRef.current;
       queryMessage(clientHeight, 300);
     }
@@ -159,7 +162,7 @@ const RoomView = ({
 
   const onAllLoaded = () => {
     setHasMore(false);
-    console.log(scrollRef);
+    // console.log(scrollRef);
     if (scrollRef && scrollRef.current) {
       const total = scrollRef.current.clientHeight;
       console.log(total);
@@ -184,9 +187,9 @@ const RoomView = ({
         }
         setMessages(events);
       }
-        setTimeout(() => {
-          scrollToBottom(d);
-        }, 200);
+      setTimeout(() => {
+        scrollToBottom(d);
+      }, 200);
     }).catch(e => {
       console.log('queryMessage error', e);
       setFetchDataLoading(false);
@@ -377,7 +380,7 @@ const RoomView = ({
       } else if (pinned.length < globalPinned.value.length) {
         msgContent = `${userNick} unpinned a message`;
       } else if (pinned.length > 0) {
-        msgContent = `${userNick} changed the pinned message for the room`;
+        msgContent = `${userNick} changed the pinned message`;
       }
       globalPinned.value = pinned;
     } else if (type === 'm.room.customized_events') {
@@ -537,8 +540,8 @@ const RoomView = ({
     if (wrapperRef?.current) {
       const { scrollTop, clientHeight, scrollHeight } = wrapperRef.current;
       if (e) {
-          setScrolled(true);
-          setBottomDistance(scrollHeight - scrollTop);
+        setScrolled(true);
+        setBottomDistance(scrollHeight - scrollTop);
       }
       // console.log([scrollTop, clientHeight, scrollHeight])
       if (scrollTop + clientHeight - scrollHeight > -1) {
@@ -552,7 +555,7 @@ const RoomView = ({
         queryMessage(clientHeight);
       }
     } else {
-      showBottomBtn(false);
+      setShowBottomBtn(false);
     }
   }
 
@@ -887,7 +890,7 @@ const RoomView = ({
                   left: `min(${showMoreMenu.left}px, calc(${widgetWidth} - 172px))`,
                   // top: Math.min(showMoreMenu.top, parseFloat(widgetHeight) - 266 - 60)
                   top: `min(${showMoreMenu.top}px, calc(${widgetHeight} - 326px))`
-                  }}>
+                }}>
                 {/* <div className="msgBox_more msgBox_more_right"> */}
                 <span className="msgBox_more_frequent_thumbsUp_emojs_item" onClick={() => handleEmotionClick(frequentThumbUpEmojiList[0])}>{frequentThumbUpEmojiList[0].unicode}</span>
                 <span className="msgBox_more_frequent_thumbsUp_emojs_item" onClick={() => handleEmotionClick(frequentThumbUpEmojiList[1])}>{frequentThumbUpEmojiList[1].unicode}</span>

@@ -139,7 +139,7 @@ import MsgForward from "./msgForward/msgForward";
 
   const memberAvatarClick = (id) => {
     setMemberProfileId(id);
-    setShowType('memberProfile');
+    // setShowType('memberProfile');
   }
 
   const startSelect = (sdnEvent) => {
@@ -183,9 +183,9 @@ import MsgForward from "./msgForward/msgForward";
       <div className="roomPage" onClick={() => { setCloseEmoji(new Date().getTime()) }}>
         {showType === 'profile' && <RoomProfile room={curRoom} isDMRoom={isDMRoom} backClick={handleProfileBack} memberClick={memberAvatarClick} onLeave={onBack} />}
         {showType === 'invite' && <InvitePage title="Invite User" roomId={curRoomId} onBack={() => setShowType('room')} />}
-        {showType === 'memberProfile' && <MemberProfile memberId={memberProfileId} roomId={curRoomId} onBack={() => {
+        {memberProfileId && <MemberProfile memberId={memberProfileId} roomId={curRoomId} onBack={() => {
           setMemberProfileId("");
-          setShowType('room');
+          // setShowType('room');
         }} onMessage={(roomId) => {
           setMemberProfileId("");
           setShowType('room');
@@ -206,6 +206,7 @@ import MsgForward from "./msgForward/msgForward";
                 roomId={curRoomId}
                 pinnedIds={pinnedIds}
                 pinnedCloseClick={pinnedCloseClick}
+                memberAvatarClick={memberAvatarClick}
               />
             )}
             <RoomView

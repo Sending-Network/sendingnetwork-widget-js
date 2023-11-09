@@ -42,7 +42,8 @@ const MemberProfile = ({ memberId, roomId, onBack, onMessage }) => {
       onBack();
     } else {
       // onMessage(nextRoom);
-      api.chatToAddress(getAddressByUserId(memberId))
+      // api.chatToAddress(getAddressByUserId(memberId))
+      window.chatToUserWatch(memberId);
     }
   }
 

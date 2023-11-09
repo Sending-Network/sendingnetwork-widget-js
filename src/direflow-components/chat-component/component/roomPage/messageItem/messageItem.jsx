@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./messageItem.css";
 import { api } from "../../../api";
-import { formatTextLength, getMemberName, renderTs } from "../../../utils/index";
+import { formatTextLength, getMemberName, isMobile, renderTs } from "../../../utils/index";
 import { AvatarComp } from "../../../component/avatarComp/avatarComp";
 import { roomTitleMoreIcon } from "../../../imgs/index";
 import { checkIcon, circleIcon, msgCheckIcon, msgCircleIcon } from "../../../imgs/svgs";
@@ -137,6 +137,18 @@ const MessageItem = ({
     return s;
   };
 
+  const onTouchMsgItem = (e) => {
+    if (isMobile()) {
+      clickMsgItem(e);
+    }
+  }
+
+  const onContext = (e) => {
+    if (!isMobile()) {
+      clickMsgItem(e);
+    }
+  }
+
   const clickMsgItem = (e) => { // open msg more operations dialog when clicked one msg
     if (showCheckbox) return
     if (sdnEvent.event.isDeleted) return // forbid more operations for deleted msg
@@ -245,7 +257,7 @@ const MessageItem = ({
             {senderId === userId ? (
               <div className="msgBox_right" key={event_id}>
                 <div className={`msgBox_right_info${combine ? " combine" + combine : ""}`}>
-                  <div className={["msgBox_right_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onContextMenu={clickMsgItem}>
+                  <div className={["msgBox_right_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onClick={onTouchMsgItem} onContextMenu={onContext}>
                     {msgContentView}
                     {showTime() && <span className="msg_time">{`${message.isEdited ? '(edited) ' : ''}${renderTime()}`}</span>}
                   </div>
@@ -263,13 +275,13 @@ const MessageItem = ({
                       )
                     })}
                   </div>} */}
-                  <ThumbupRow
+                  {!message.isDeleted && <ThumbupRow
                     mxEvent={sdnEvent}
                     reactions={reactions}
                     isOwn={true}
                     roomId={roomId}
                     room={room}
-                  />
+                  />}
                   {/* {reactions && genReactionsRowButton()} */}
                 </div>
                 {/* <div className="msg-read-icon">{readCount ? msgCheckIcon : msgCircleIcon}</div> */}
@@ -282,7 +294,7 @@ const MessageItem = ({
                 </div>}
                 <div className={`msgBox_left_info${combine ? " combine" + combine : ""}`}>
                   {shouldShowUserName() && <p className="msgBox_left_info_user">{getMemberName(sender)}</p>}
-                  <div className={["msgBox_left_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onContextMenu={clickMsgItem}>
+                  <div className={["msgBox_left_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onClick={onTouchMsgItem} onContextMenu={onContext}>
                     {msgContentView}
                     {showTime() && <span className="msg_time">{`${message.isEdited ? '(edited) ' : ''}${renderTime()}`}</span>}
                   </div>
@@ -300,13 +312,13 @@ const MessageItem = ({
                       )
                     })}
                   </div>} */}
-                  <ThumbupRow
+                  {!message.isDeleted && <ThumbupRow
                     mxEvent={sdnEvent}
                     reactions={reactions}
                     isOwn={false}
                     roomId={roomId}
                     room={room}
-                  />
+                  />}
                 </div>
               </div>
             )}

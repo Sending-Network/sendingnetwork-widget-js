@@ -32,6 +32,7 @@ const App = (props) => {
     window.toLogout = (callback) => { handleLogout(callback) };
     window.thirdLoginWatch = () => { handleLoginSuccess() };
     window.chatToAddressWatch = (addr, callback) => { handleChatToAddress(addr, callback) };
+    window.chatToUserWatch = (userId, callback) => { handleChatToUser(userId, callback) };
     window.joinToPublicRoomWatch = (roomId, callback) => { handleJoinToPublicRoom(roomId, callback) }
     window.widgetChatDom = widgetChatRef.current;
     init();
@@ -184,6 +185,45 @@ const App = (props) => {
       const { room_id } = await api._client.sendMessByWallet(addr, {})
       quickRoomId = room_id;
     }
+    await checkRoomExist(quickRoomId);
+    setCurRoomId(quickRoomId);
+    setPageType('roomPage');
+    setTimeout(() => {
+      setIsLoading(false);
+      callback && callback(true);
+    }, 0);
+  }
+
+  const handleChatToUser = async (userId, callback) => {
+    api.showWidget(true);
+    // to check
+    const access_token = localStorage.getItem("sdn_access_token");
+    const user_id = localStorage.getItem("sdn_user_id");
+    if (!access_token || !user_id || !api._client || !userId) {
+      showToast({
+        type: 'warn',
+        msg: !userId ? 'invalid user id is' : 'please log in first'
+      })
+      callback && callback(false);
+      return;
+    }
+    // do quick chat
+    setIsLoading(true);
+    let quickRoomId = null;
+    const rooms = api._client.getRooms();
+    for (let i = 0, len = rooms.length; i < len; i++) {
+      if (rooms[i].isDmRoom()) {
+        if (rooms[i].getDMAnotherMember() === userId) {
+          quickRoomId = rooms[i].roomId;
+          break;
+        }
+      }
+    }
+    if (!quickRoomId) {
+      const { dm_rooms } =  api._client.findDMRoomByUserId(userId);
+      quickRoomId = dm_rooms && dm_rooms.length > 0 ? dm_rooms[0] : await api.createDMRoom(userId);
+    }
+    
     await checkRoomExist(quickRoomId);
     setCurRoomId(quickRoomId);
     setPageType('roomPage');

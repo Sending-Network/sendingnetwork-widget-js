@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect } from "react";
 
 // import { _t } from './languageHandler';
 // import { unicodeToShortcode, formatCommaSeparatedList, replaceableComponent } from "./tooltipUtils.jsx";
@@ -16,7 +16,8 @@ const ThumbupRowButtonTooltip = ({
 	reactionEvents,
 	mxEvent,
 	visible,
-	room
+	room,
+	count
 }) => {
 	// static contextType = MatrixClientContext;
 
@@ -55,7 +56,7 @@ const ThumbupRowButtonTooltip = ({
 			// ) }</div>;
 			tooltipLabel = visible ? <div className="mx_Tooltip_wrapper">
 				Reacted by { formatCommaSeparatedList(senders, 6) }
-				{senders.length > 4 && 'and ' + senders.length - 4 + ' others'}
+				{/* {senders.length > 4 && 'and ' + senders.length - 4 + ' others'} */}
 			</div> : null
 		}
 
@@ -75,11 +76,10 @@ const ThumbupRowButtonTooltip = ({
 		}
 		return tooltip;
 	}
-	let tooltip
-	tooltip = genTooltip()
+	const [tooltip, setTooltip] = useState(genTooltip())
 	useEffect(() => {
-		tooltip = genTooltip()
-	}, [reactionEvents])
+		setTooltip(genTooltip())
+	}, [count])
 	return tooltip;
 }
 

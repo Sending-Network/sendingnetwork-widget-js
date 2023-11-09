@@ -46,6 +46,7 @@ const ThumbupRowButton = ({
       mxEvent={mxEvent}
       visible={true}
       room={room}
+      count={count}
     ></ThumbupRowButtonTooltip>
   </div>
 };

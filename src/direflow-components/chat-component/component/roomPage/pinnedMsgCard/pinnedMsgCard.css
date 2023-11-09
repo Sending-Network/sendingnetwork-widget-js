@@ -31,13 +31,15 @@
 
 .pinned_msg_card_center_user {
   margin-top: 6px;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 20px;
-  color: var(--primary-color);
   max-width: 260px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.pinned_msg_card_center_user >span {
+  color: var(--primary-color);
 }
 
 .pinned_msg_card_center_text {

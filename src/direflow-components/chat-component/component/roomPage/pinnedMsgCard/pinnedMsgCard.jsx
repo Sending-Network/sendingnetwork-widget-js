@@ -11,7 +11,7 @@ const jumpLinkMsg = (id) => {
 }
 
 const PinnedMsgCard = (props) => {
-  const { roomId, pinnedIds, pinnedCloseClick } = props;
+  const { roomId, pinnedIds, pinnedCloseClick, memberAvatarClick } = props;
   const [dataList, setDataList] = useState([]);
   const [index, setIndex] = useState(0);
 
@@ -35,6 +35,7 @@ const PinnedMsgCard = (props) => {
       const name = formatUserName(getMemberName(member));
       list.push({
         id: event_id,
+        userId: sender,
         name,
         body
       });
@@ -42,12 +43,20 @@ const PinnedMsgCard = (props) => {
     setDataList(list);
   }
 
+  const onClickUser = (e, userId) => {
+    memberAvatarClick(userId);
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   return (dataList[index] ?
     <Styled styles={styles}>
       <div className="pinned_msg_card">
         <div className="pinned_msg_card_left"></div>
-        <div className="pinned_msg_card_center" onClick={() => jumpLinkMsg(dataList[index].id)}>
-          <p className="pinned_msg_card_center_user">{dataList[index].name} Pinned Message</p>
+        <div className="pinned_msg_card_center">
+          <p className="pinned_msg_card_center_user" onClick={() => jumpLinkMsg(dataList[index].id)}>
+            <span onClick={(e) => { onClickUser(e, dataList[index].userId) }}>{dataList[index].name}</span> Pinned Message
+          </p>
           <p className="pinned_msg_card_center_text">{dataList[index].body}</p>
         </div>
         <div className="pinned_msg_card_right svg-btn svg-btn-fill" onClick={() => pinnedCloseClick(dataList[index].id)}>

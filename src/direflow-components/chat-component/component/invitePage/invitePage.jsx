@@ -9,12 +9,13 @@ import {
 } from "../../imgs/index"
 import { backIcon, closeIcon } from "../../imgs/svgs";
 import { api } from "../../api";
-import { formatTextLength, showToast, getAddressByUserId, getMemberName } from "../../utils/index";
+import { formatTextLength, showToast, getAddressByUserId, getMemberName, renderAnimation } from "../../utils/index";
 import InputDialogComp from "../inputDialogComp/inputDialogComp";
 import { AvatarComp } from "../avatarComp/avatarComp";
 import UserAvatar from "../userAvatar/userAvatar";
 
 const InvitePage = ({ roomId, onBack, title }) => {
+  const invitePageRef = useRef(null);
   const inputRef = useRef(null);
   const [filterStr, setFilterStr] = useState("");
   const [searchList, setSearchList] = useState([]);
@@ -43,6 +44,10 @@ const InvitePage = ({ roomId, onBack, title }) => {
       setCurrId(id);
     }
   }, [filterStr]);
+
+	useEffect(() => {
+		renderAnimation(invitePageRef.current, 'animate__slideInRight')
+	}, [])
 
   const applySearch = (term) => {
     api._client.searchUserDirectory({
@@ -196,7 +201,7 @@ const InvitePage = ({ roomId, onBack, title }) => {
 
   return (
     <Styled styles={styles}>
-      <div className="invite_page">
+      <div ref={invitePageRef} className="invite_page widget_animate_invisible">
         {/* title */}
         <div className="invite_page_title">
           <div className="title_back svg-btn svg-btn-stroke" onClick={handleBackClick}>

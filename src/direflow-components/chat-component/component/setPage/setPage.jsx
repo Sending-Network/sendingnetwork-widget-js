@@ -4,29 +4,37 @@ import styles from "./setPage.css";
 import { api } from "../../api";
 import { roomTitleBackIcon, copyIcon, setPageAvatarBg } from "../../imgs/index";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { getDefaultAvatar, showToast } from "../../utils/index";
+import { getDefaultAvatar, showToast, renderAnimation } from "../../utils/index";
 import { AvatarComp } from "../avatarComp/avatarComp";
 
 const SetPage = ({ onBack }) => {
+  const setPageRef = useRef(null);
   const [walletAddr, setWalletAddr] = useState("");
   const [displayname, setDisplayname] = useState("");
   const [oldDisplayName, setOldDisplayname] = useState("");
+  const [signature, setSignature] = useState("");
+  const [oldSignature, setOldSignature] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [userId, setUserId] = useState("");
   const uploadRef = useRef(null);
 
   useEffect(() => {
-    getProfileInfo();
   }, []);
+	useEffect(() => {
+		renderAnimation(setPageRef.current, 'animate__slideInRight')
+    getProfileInfo();
+	}, [])
 
   const getProfileInfo = async () => {
     const userId = api.getUserId();
-    const { avatar_url, displayname, wallet_address } = await api._client.getProfileInfo(userId);
+    const { avatar_url, displayname, wallet_address, signature } = await api._client.getProfileInfo(userId);
     setUserId(userId);
     setWalletAddr(wallet_address);
     setAvatarUrl(avatar_url);
     setOldDisplayname(displayname);
     setDisplayname(displayname);
+    setOldSignature(signature);
+    setSignature(signature);
   };
 
   const handleSave = async () => {
@@ -38,6 +46,10 @@ const SetPage = ({ onBack }) => {
     } else {
       if (displayname !== oldDisplayName) {
         await api._client.setDisplayName(displayname);
+        getProfileInfo();
+      }
+      if (signature !== oldSignature) {
+        await api._client.setSignature(signature);
         getProfileInfo();
       }
       showToast({
@@ -68,7 +80,7 @@ const SetPage = ({ onBack }) => {
 
   return (
     <Styled styles={styles}>
-      <div className="setPage">
+      <div ref={setPageRef} className="setPage widget_animate_invisible">
         {/* title */}
         <div className="setPage_room_title">
           <div className="setPage_room_title_left" onClick={() => onBack()}>
@@ -99,6 +111,13 @@ const SetPage = ({ onBack }) => {
               className="alias-input"
               value={displayname}
               onChange={(e) => setDisplayname(e.target.value)}
+            />
+            {/* user signature */}
+            <p className="alias-label">About Me</p>
+            <input
+              className="alias-input"
+              value={signature}
+              onChange={(e) => setSignature(e.target.value)}
             />
             {/* userInfo */}
             <p className="alias-label">Wallet Address</p>

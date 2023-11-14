@@ -1,4 +1,4 @@
-import sdk from "sendingnetwork-js-sdk";
+import sdk, { RemarkStore } from "sendingnetwork-js-sdk";
 import randomBytes  from 'randombytes'
 import EventEmitter from "event-emitter";
 import Web3 from "web3";
@@ -54,14 +54,17 @@ class Api {
         baseUrl,
         userId: user_id,
         accessToken: access_token,
+        timelineSupport: true,
         unstableClientRelationAggregation: true
       });
     } else {
       this._client = sdk.createClient({
         baseUrl,
+        timelineSupport: true,
         unstableClientRelationAggregation: true
       });
     }
+    RemarkStore.get(this._client);
     this.eventEmitter = new EventEmitter();
   };
 

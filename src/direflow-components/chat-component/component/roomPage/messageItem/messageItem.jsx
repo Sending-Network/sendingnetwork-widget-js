@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./messageItem.css";
 import { api } from "../../../api";
-import { formatTextLength, getMemberName, isMobile, renderTs } from "../../../utils/index";
+import { formatTextLength, getEventById, getMemberName, isMobile, renderTs } from "../../../utils/index";
 import { AvatarComp } from "../../../component/avatarComp/avatarComp";
 import { roomTitleMoreIcon } from "../../../imgs/index";
 import { checkIcon, circleIcon, msgCheckIcon, msgCircleIcon } from "../../../imgs/svgs";
@@ -26,7 +26,11 @@ const MessageItem = ({
   msgContentView,
   showCheckbox,
   onCheckChanged,
-  openUrlPreviewWidget
+  openUrlPreviewWidget,
+  handleUserScroll,
+  onPreviewLoaded,
+  handleJump,
+  previewStart
 }) => {
   const messageItemRef = useRef(null);
   const message = sdnEvent.event;// raw event
@@ -42,8 +46,11 @@ const MessageItem = ({
   const senderId = sender.userId; // user who has sent current msg
   const [checked, setChecked] = useState(false);
   const [readCount, setReadCount] = useState(0);
+  const [replyEvent, setReplyEvent] = useState(null);
+  const [contentView, setContentView] = useState(msgContentView);
   const showReactions = true; // RoomView
   const timelineSet = room.getUnfilteredTimelineSet(); // RoomView
+
   const getRelationsForEvent = ( // TimelinePanel
     eventId,
     relationType,
@@ -83,8 +90,23 @@ const MessageItem = ({
     "content": content,
   });
   useEffect(() => {
+    let isMounted = true;
     onRead(sdnEvent);
     // room.on("Room.receipt", onRead);
+    if (content['m.relates_to'] && content['m.relates_to']['m.in_reply_to']) { // reply msg
+      const replied_event_Id = content['m.relates_to']['m.in_reply_to'].event_id; // replied msg‘s id
+      if (!replied_event_Id) {
+        return
+      }
+      const replied_event = room.findEventById(replied_event_Id);
+      if (!replied_event) {
+        previewStart();
+        getEventById(roomId, replied_event_Id, false, true).then((res)=> {
+          if (!isMounted) return
+          setReplyEvent(res);
+        }).catch(e=>{})
+      }
+    }
 
     api.on('highlightRelateReply', (id) => {
       if (id === 'message_item_' + event_id) {
@@ -92,6 +114,7 @@ const MessageItem = ({
         if (!clickTarget) {
           return
         }
+        handleUserScroll();
         clickTarget.scrollIntoView({
           block: "center",
           behavior: "auto",
@@ -107,6 +130,7 @@ const MessageItem = ({
       sdnEvent.on("Event.relationsCreated", onReactionsCreated)
     }
     return (() => {
+      isMounted = false;
       // room.off("Room.receipt", onRead);
       if (showReactions) { // EventTile
         sdnEvent.removeListener("Event.relationsCreated", onReactionsCreated);
@@ -119,6 +143,13 @@ const MessageItem = ({
       setChecked(sdnEvent.checked);
     }
   }, [sdnEvent?.checked]);
+
+  useEffect(() => {
+    if (replyEvent) {
+      coverAliasMsg(replyEvent);
+      onPreviewLoaded();
+    }
+  }, [replyEvent])
 
   const onRead = (event) => {
     if (event?.getId() == sdnEvent?.getId()) {
@@ -245,7 +276,45 @@ const MessageItem = ({
     console.log(sdnEvent);
   }
 
-  return msgContentView ? (
+  const coverAliasMsg = (event) => {
+    const replied_event_sender = event.sender; // replied msg’s sender
+    const replied_event_content = event.content; // replied msg's userid and content
+    const replied_event_user = room.getMembers().find(m => m.userId === replied_event_sender);  // replied msg's user
+    let user = getMemberName(replied_event_user);
+    let value = '';
+    let msg = '';
+    if (content.body.match(/<@sdn_.+>/)) { // msg replied by sdm
+      var index = content.body.lastIndexOf(' ')
+      const [x, y] = content.body.slice(index + 1).split('\n\n')
+      if (replied_event_content && replied_event_content?.body && replied_event_content?.body.match(/<@sdn_.+>/)) { // once parse -> handle later
+        var _index = replied_event_content.body.lastIndexOf(' ')
+        const [_x, _y] = replied_event_content.body.slice(_index + 1).split('\n\n');
+        value = _y;
+        msg = y;
+      } else {
+        value = replied_event_content?.body;
+        msg = y;
+      }
+    } else { // msg edited by sdn
+      value = replied_event_content?.body;
+      msg = content.body;
+    }
+    const msgContent = getAliasMsg(event, user, value, msg, origin_server_ts, message.isEdited);
+    setContentView(msgContent);
+  }
+
+  const getAliasMsg = (event, user, value, msg, ts, isEdited) => {
+    return <div className="alias_msg">
+      {event ? <div className="alias_target_msg" onClick={() => handleJump(event.event_id)}>
+        <div className="alias_target_msg_user">{user}</div>
+        <div className="alias_target_msg_value">{value}</div>
+      </div> : null}
+      <span className="alias_treply_msg">{msg}</span>
+      <p className="msg_time">{`${isEdited ? '(edited) ' : ''}${renderTime(ts)}`}</p>
+    </div>
+  }
+
+  return contentView ? (
     <Styled styles={styles}>
       <div className={`msgItem ${checked ? 'checked' : ''}`} ref={messageItemRef} onClick={handleClick}>
         {/* m.room.message */}
@@ -258,7 +327,7 @@ const MessageItem = ({
               <div className="msgBox_right" key={event_id}>
                 <div className={`msgBox_right_info${combine ? " combine" + combine : ""}`}>
                   <div className={["msgBox_right_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onClick={onTouchMsgItem} onContextMenu={onContext}>
-                    {msgContentView}
+                    {contentView}
                     {showTime() && <span className="msg_time">{`${message.isEdited ? '(edited) ' : ''}${renderTime()}`}</span>}
                   </div>
                   {/* {content.userThumbsUpEmojiList?.length > 0 && <div className="msgBox_right_info_thumb_up">
@@ -295,7 +364,7 @@ const MessageItem = ({
                 <div className={`msgBox_left_info${combine ? " combine" + combine : ""}`}>
                   {shouldShowUserName() && <p className="msgBox_left_info_user">{getMemberName(sender)}</p>}
                   <div className={["msgBox_left_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onClick={onTouchMsgItem} onContextMenu={onContext}>
-                    {msgContentView}
+                    {contentView}
                     {showTime() && <span className="msg_time">{`${message.isEdited ? '(edited) ' : ''}${renderTime()}`}</span>}
                   </div>
                   {/* {content.userThumbsUpEmojiList?.length > 0 && <div className="msgBox_left_info_thumb_up">
@@ -327,22 +396,22 @@ const MessageItem = ({
 
         {/* m.room.pinned_events */}
         {type === 'm.room.pinned_events' && (
-          <div className="pin_event_item">{msgContentView}</div>
+          <div className="pin_event_item">{contentView}</div>
         )}
 
         {/* m.room.customized_events */}
         {type === 'm.room.customized_events' && (
-          <div className="red_envelope_event_item">{msgContentView}</div>
+          <div className="red_envelope_event_item">{contentView}</div>
         )}
 
         {/* m.room.member event */}
         {type === 'm.room.member' && (
-          <div className="member_event_item">{msgContentView}</div>
+          <div className="member_event_item">{contentView}</div>
         )}
 
         {/* m.room.create event */}
         {type === 'm.room.create' && (
-          <div className="member_event_item">{msgContentView}</div>
+          <div className="member_event_item">{contentView}</div>
         )}
       </div>
     </Styled>

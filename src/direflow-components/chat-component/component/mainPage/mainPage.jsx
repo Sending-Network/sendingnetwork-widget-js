@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./mainPage.css";
 import RoomList from './roomList/roomList'
+import InviteRoomList from './inviteRoomList/inviteRoomList'
 import { calculateRoomName, getAddressByUserId, getMsgStr } from "../../utils/index";
 import { api } from "../../api";
 
-const MainPage = ({ rooms, goToRoom, menuFuncs, onMenuClick }) => {
+const MainPage = ({ rooms, enterRoom, menuFuncs, onMenuClick }) => {
+	const [roomListType, setRoomListType] = useState('roomList')
 	const [closeModalms, setCloseModalms] = useState('');
 	const [roomList, setRoomList] = useState([]);
 
@@ -64,13 +66,21 @@ const MainPage = ({ rooms, goToRoom, menuFuncs, onMenuClick }) => {
   return (
 		<Styled styles={styles}>
 			<div className="chat_widget_main_page" onClick={() => { setCloseModalms(new Date().getTime()) }}>
-				<RoomList
+				{roomListType === 'roomList' ? <RoomList
+					setRoomListType={setRoomListType}
 					rooms={roomList}
 					menuFuncs={menuFuncs}
-					enterRoom={(roomId) => goToRoom(roomId)}
+					enterRoom={enterRoom}
 					closeModalms={closeModalms}
 					menuClick={onMenuClick}
-				/>
+				/> : 
+				<InviteRoomList
+					setRoomListType={setRoomListType}
+					rooms={roomList}
+					menuFuncs={menuFuncs}
+					closeModalms={closeModalms}
+					menuClick={onMenuClick}
+				/>}
 			</div>
 		</Styled>
   );

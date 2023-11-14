@@ -12,8 +12,11 @@ import WebviewComp from "../webViewComp/webViewComp";
 import RoomInput from "./roomView/roomInput/roomInput";
 import MultiselectArea from "./multiselectArea/multiselectArea";
 import MsgForward from "./msgForward/msgForward";
+import { renderAnimation } from "../../utils/index";
+import { TimelineWindow } from "sendingnetwork-js-sdk"
 
-  const RoomPage = ({ widgetWidth, widgetHeight, roomViewBgUrl, useRoomFuncs, roomId, callback, uploadFile }) => {
+const RoomPage = ({ widgetWidth, widgetHeight, roomViewBgUrl, useRoomFuncs, roomId, callback, uploadFile }) => {
+  const roomPageRef = useRef(null)
   const showMoreThumbsUpEmojiPanelRef = useRef(null)
   const [curRoomId, setCurRoomId] = useState(roomId);
   const [curRoom, setCurRoom] = useState(null);
@@ -33,6 +36,8 @@ import MsgForward from "./msgForward/msgForward";
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedMessages, setSelectedMessages] = useState([]);
   const [delStamp, setDelStamp] = useState('') // fix roomView com doesn't update instance afete delete msg operatiob
+  const [timelineWindow, setTimelineWindow] = useState(null);
+  const [focusEventId, setFocusEventId] = useState('');
 
   useEffect(() => {
     if (curRoomId) {
@@ -40,23 +45,74 @@ import MsgForward from "./msgForward/msgForward";
     }
   }, [curRoomId])
 
+  useEffect(() => {
+    setTimeout(() => {
+      roomPageRef.current && renderAnimation(roomPageRef.current, 'animate__slideInRight')
+    }, 20)
+  }, []);
+
   const initRoomData = (roomId) => {
     const room = api._client.getRoom(roomId);
-        const isDm = room.isDmRoom();
+    const isDm = room.isDmRoom();
     setIsDMRoom(isDm);
     if (room) {
+      initPinnedEvent(room);
+      setCurRoom(room);
+      const set = room.getUnfilteredTimelineSet();
+      const win = new TimelineWindow(api._client, set);
       const events = room.getLiveTimeline().getEvents();
       if (events.length) {
-        api._client.sendReadReceipt(events[events.length - 1]);
+        const lastEvent = events[events.length - 1];
+        api._client.sendReadReceipt(lastEvent);
       }
-      initPinnedEvent(room)
-      setCurRoom(room)
+      win.load(null, 20);
+      setTimelineWindow(win);
     }
   }
 
   const initPinnedEvent = (room) => {
     const pinnedList = room?.currentState?.getStateEvents("m.room.pinned_events", "")?.getContent().pinned || [];
     setPinnedIds(pinnedList)
+  }
+
+  const onPinnedClick = async (id) => {
+    if (pinnedIds && pinnedIds.length) {
+      handleJump(id);
+    }
+  }
+
+  const handleJump = async (eventId) => {
+    const sdnEvent = timelineWindow.getEvents().find((event) => {
+      return event.getId() === eventId
+    });
+    setFocusEventId(eventId);
+    if (sdnEvent) {
+      jumpLinkMsg(eventId);
+    } else {
+      await loadTimeline(eventId);
+      setTimeout(() => {
+        jumpLinkMsg(eventId);
+      }, 300);
+    }
+  }
+
+  const loadTimeline = async (eventId) => {
+    const set = curRoom.getUnfilteredTimelineSet();
+    const win = new TimelineWindow(api._client, set);
+    setTimelineWindow(null);
+    const res = await win.load(eventId, 20);
+    setTimelineWindow(win);
+    return res;
+  }
+
+  const keepFocus = () => {
+    if (focusEventId) {
+      jumpLinkMsg(focusEventId);
+    }
+  }
+
+  const jumpLinkMsg = (id) => {
+    api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('highlightRelateReply', 'message_item_' + id);
   }
 
   const openUrlPreviewWidget = (url) => {
@@ -79,8 +135,6 @@ import MsgForward from "./msgForward/msgForward";
 
   const handleProfileBack = (type) => {
     switch (type) {
-      case 'leaved': onBack();
-        break;
       case 'invite': setShowType('invite');
         break;
       default: setShowType('room');
@@ -137,7 +191,7 @@ import MsgForward from "./msgForward/msgForward";
     }
   }
 
-  const memberAvatarClick = (id) => {
+  const memberAvatarClick = (id) => { // click to show member profile view
     setMemberProfileId(id);
     // setShowType('memberProfile');
   }
@@ -167,6 +221,9 @@ import MsgForward from "./msgForward/msgForward";
     }
   }
 
+  // show forward view from blow two situations:
+  // 1.selected msg more forward opetation
+  // 2.mutiple selected msg more select operation then click forward btn
   const setShowForward = () => {
     setShowType('forward');
   }
@@ -178,19 +235,17 @@ import MsgForward from "./msgForward/msgForward";
     setShowMoreThumbsUpEmojiPanel(false);
   }
 
+  if (!curRoom) {
+    return null
+  }
+
   return (
     <Styled styles={styles}>
-      <div className="roomPage" onClick={() => { setCloseEmoji(new Date().getTime()) }}>
+      <div ref={roomPageRef} className="roomPage widget_animate_invisible" onClick={() => { setCloseEmoji(new Date().getTime()) }}>
         {showType === 'profile' && <RoomProfile room={curRoom} isDMRoom={isDMRoom} backClick={handleProfileBack} memberClick={memberAvatarClick} onLeave={onBack} />}
         {showType === 'invite' && <InvitePage title="Invite User" roomId={curRoomId} onBack={() => setShowType('room')} />}
         {memberProfileId && <MemberProfile memberId={memberProfileId} roomId={curRoomId} onBack={() => {
           setMemberProfileId("");
-          // setShowType('room');
-        }} onMessage={(roomId) => {
-          setMemberProfileId("");
-          setShowType('room');
-          setCurRoomId(roomId);
-          initRoomData(roomId);
         }} />}
         {showType === 'forward' && <MsgForward
           room={curRoom}
@@ -207,6 +262,7 @@ import MsgForward from "./msgForward/msgForward";
                 pinnedIds={pinnedIds}
                 pinnedCloseClick={pinnedCloseClick}
                 memberAvatarClick={memberAvatarClick}
+                onPinnedClick={onPinnedClick}
               />
             )}
             <RoomView
@@ -215,6 +271,9 @@ import MsgForward from "./msgForward/msgForward";
               roomViewBgUrl={roomViewBgUrl}
               useRoomFuncs={useRoomFuncs}
               roomId={curRoomId}
+              room={curRoom}
+              timelineWindow={timelineWindow}
+              loadTimeline={loadTimeline}
               openUrlPreviewWidget={openUrlPreviewWidget}
               pinnedIds={pinnedIds}
               setPinnedIds={setPinnedIds}
@@ -237,6 +296,10 @@ import MsgForward from "./msgForward/msgForward";
               onStartSelect={startSelect}
               onCheckChanged={onCheckChanged}
               setShowForward={setShowForward}
+              handleJump={handleJump}
+              keepFocus={keepFocus}
+              focusEventId={focusEventId}
+              setFocusEventId={setFocusEventId}
             />
             {curRoom ? <RoomInput
               room={curRoom}

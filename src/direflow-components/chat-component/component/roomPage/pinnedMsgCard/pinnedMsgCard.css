@@ -37,6 +37,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: #000;
 }
 .pinned_msg_card_center_user >span {
   color: var(--primary-color);

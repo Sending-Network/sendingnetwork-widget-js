@@ -14,13 +14,13 @@ const MultiselectArea = ({
 }) => {
   const len = selectedMessages?.length || 0;
 
-  const handleForward = () => {
+  const handleForward = () => { // click forward btn
     if (selectedMessages.length) {
       setShowForward();
     }
   }
 
-  const handleCopy = () => {
+  const handleCopy = () => { // click copy btn
     if (selectedMessages.length) {
       let result = '';
       let sdnEvent;

@@ -274,6 +274,15 @@
 .msgBox_left_info_msg .alias_msg .alias_target_msg  .alias_target_msg_user  {
   color: #00B36B;
 }
+.alias_msg .alias_target_msg .alias_target_loading {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+.alias_msg .alias_target_msg .alias_target_loading .loading {
+  width: 36px;
+  height: 36px;
+}
 
 /* message_right */
 .msgBox_right {

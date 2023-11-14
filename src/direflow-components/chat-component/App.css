@@ -34,6 +34,13 @@ html {
   font-family: 'Poppins', sans-serif;
 }
 
+.widget_root_animate {
+  --animate-duration: .2s;
+}
+.widget_animate_invisible {
+  visibility: hidden;
+}
+
 body,
 button,
 input,

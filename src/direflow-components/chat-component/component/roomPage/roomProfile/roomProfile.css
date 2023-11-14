@@ -252,16 +252,39 @@
 
 .room_members_item .room_members_item_desc .room_members_item_desc_name {
   width: 100%;
-  height: 20px;
+  font-family: 'Poppins';
+  display: flex;
+  align-items: center;
+}
+
+.room_members_item .room_members_item_desc .room_member_name {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--main-text-color);
-  font-family: 'Poppins';
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: 20px;
+}
+
+.room_members_item .room_members_item_desc .room_member_tag {
+  flex-shrink: 0;
+  font-size: 13px;
+  padding: 0 4px;
+  background: rgba(145,75,159,0.1600);;
+  border-radius: 4px;
+  margin-left: 4px;
+  text-transform: capitalize;
+}
+.room_member_tag.owner {
+  color: #FFA751;
+}
+.room_member_tag.admin {
+  color: #B27AFF;
+}
+.room_member_tag.mod {
+  color: #4D60F1;
 }
 
 .room_members_item .room_members_item_desc .room_members_item_desc_addr {

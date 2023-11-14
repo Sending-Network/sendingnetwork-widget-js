@@ -1,0 +1,112 @@
+/* invite-item */
+.invite .invite-item {
+  height: 70px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 16px;
+}
+.invite .invite-item:hover {
+  background: #eee;
+}
+
+.invite-item .invite-checkbox {
+  padding-right: 16px;
+}
+
+/* invite-item-left */
+.invite-item .invite-item-left {
+  width: 44px;
+  height: 44px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.invite-item .invite-item-left .avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* invite-item-right */
+.invite-item-right {
+  width: calc(100% - 54px);
+  height: 44px;
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+}
+
+.invite-item-right-before {
+  width: calc(100% - 118px - 10px);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.invite-item-right-before-name {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  color: #000;
+  font-family: Poppins;
+}
+.invite-item-right-before-time {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  color: #999;
+  text-align: right;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+}
+.invite-item-right-after {
+  width: 118px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.invite-item-right-after-invites {
+  width: calc(100% - 64px);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.invite-item-after-invite-btns {
+  width: 80px;
+  padding: 4px 6px;
+	line-height: 19px;
+  color: #292d32;
+  font-size: 12px;
+	border-radius: 6px;
+	background: #DBE0E5;
+  display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+.invite-item-after-invite-btns:first-child {
+	margin-right: 8px;
+}
+.invite-item-after-invite-btns.accept {
+  color: #fff;
+  background: var(--primary-color);
+}

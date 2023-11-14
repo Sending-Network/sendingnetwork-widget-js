@@ -7,7 +7,7 @@ import { filterLibrary, getEndOfDay, getDayStr, getGroupDateStr, formatTextLengt
 import { roomViewBg } from "../../../imgs/index";
 import MessageItem from "../messageItem/messageItem";
 import UrlPreviewComp from "../../UrlPreviewComp/UrlPreviewComp";
-import { downIcon } from "../../../imgs/svgs";
+import { downIcon, loadingIcon } from "../../../imgs/svgs";
 // import { msgMoreOptIcon, moreThumbUpSwitchIcons, deletedMsgIcon } from "../../../imgs/index";
 import { msgMoreOptIcon, deletedMsgIcon } from "../../../imgs/index";
 import { getEmojis, getFrequentThumbUpEmojiList } from "../../../utils/index";
@@ -19,6 +19,9 @@ const RoomView = ({
   roomViewBgUrl,
   useRoomFuncs,
   roomId,
+  room,
+  timelineWindow,
+  loadTimeline,
   openUrlPreviewWidget,
   pinnedIds,
   setPinnedIds,
@@ -40,14 +43,18 @@ const RoomView = ({
   showCheckbox,
   onStartSelect,
   onCheckChanged,
-  setShowForward
+  setShowForward,
+  handleJump,
+  keepFocus,
+  focusEventId,
+  setFocusEventId
 }) => {
   const frequentThumbUpEmojiList = getFrequentThumbUpEmojiList() // frequent thumbup emojis list
   const moreThumbsUpEmojiList = getEmojis(); // more thumbup emojis list
   const wrapperRef = useRef(null);
   const scrollRef = useRef(null);
   const moreMenuRef = useRef(null)
-  const room = api._client.getRoom(roomId);
+  // const room = api._client.getRoom(roomId);
   const censor = new Censor(filterLibrary.get())
   const myName = api.userData.displayname;
   const atUserName = '@' + myName;
@@ -58,10 +65,13 @@ const RoomView = ({
   const [members, setMembers] = useState([]);
   const [previewImgUrl, setPreviewImgUrl] = useState("");
   const [isShowPreviewImg, setIsShowPreviewImg] = useState(false);
-  const [fetchDataLoading, setFetchDataLoading] = useState(false);
+  const [fetchBackwardLoading, setBackwardLoading] = useState(false);
+  const [fetchForwardLoading, setForwardLoading] = useState(false);
   const [canStartFetchData, setCanStartFetchData] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [bottomDistance, setBottomDistance] = useState(0);
+  const [bottomDistance, setBottomDistance] = useState(1);
+  const [lastDir, setLastDir] = useState('');
+  const [loadingCount, setLoadingCount] = useState(0);
   const [firstPageGap, setFirstPageGap] = useState(0);
   const [isMounted, setIsMounted] = useState(true);
   const [showBottomBtn, setShowBottomBtn] = useState(false);
@@ -85,17 +95,24 @@ const RoomView = ({
   }
 
   useEffect(() => {
-    roomViewStart();
-    // api._client.on("Room.timeline", onTimeLine);
+    setIsMounted(true);
+    if (timelineWindow) {
+      setCanStartFetchData(false);
+      // console.log('timelineWindow changed', timelineWindow);
+      roomViewStart();
+      room.on("Room.timeline", onTimeLine);
+    } else {
+      setMessages([]);
+      setBackwardLoading(true);
+    }
     return () => {
       setIsMounted(false)
-      // api._client.removeListener("Room.timeline", onTimeLine);
+      room.removeListener("Room.timeline", onTimeLine);
       api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('unReadCount');
     };
-  }, []);
+  }, [timelineWindow]);
 
   useLayoutEffect(() => {
-    // handleScroll();
     if (wrapperRef?.current && messages?.length) {
       if (currId) {
         clearTimeout(currId);
@@ -107,92 +124,104 @@ const RoomView = ({
     }
   }, [wrapperRef?.current, messages?.length])
 
-  useEffect(() => {
-    roomViewStart();
-  }, [delStamp])
+  // useEffect(() => {
+  //   roomViewStart();
+  // }, [delStamp])
 
   const applyMessages = (messages) => {
-    console.log('applyMessages')
+    // console.log('applyMessages');
     const msg = messages[messages.length - 1];
     const ts = msg?.getTs();
-    if (ts && ts != lastMsgTs) {
+    if (ts && ts > lastMsgTs) {
+      setLastMsgTs(ts);
       if (msg.getType() === 'm.room.message') {
         scrollToBottom();
-        setLastMsgTs(ts);
       }
     }
+    setCanStartFetchData(true);
     handleScroll();
-    backLoad(messages)
   }
 
-  const backLoad = (messages) => {
-    // const messages = room.getLiveTimeline().getEvents();
-    if (!hasMore) return
-    if (messages.length > 300) {
-      return
-    }
-    if (Date.now() - messages[0].getTs() > 7 * 86400000) {
-      return
-    }
-    if (wrapperRef?.current) {
-      const { scrollTop, clientHeight, scrollHeight } = wrapperRef.current;
-      queryMessage(clientHeight, 300);
+  const backLoad = (dir) => {
+    // console.log('backLoad', dir);
+    if (timelineWindow && timelineWindow.canPaginate(dir)) {
+      timelineWindow.paginate(dir, 100).then((resp) => {
+        setTimeout(() => {
+          backLoad(dir);
+        }, 100);
+      });
+    } else {
+      const messages = timelineWindow.getEvents();
+      setMessages(messages);
+      if (dir === "f") {
+        setLastMsgTs(messages[messages.length - 1]?.getTs());
+      }
     }
   }
 
   // fun
   const roomViewStart = () => {
+    // console.log('roomViewStart', messages);
+    if (!lastMsgTs) {
+      setTimeout(scrollToBottom, 200);
+    }
+    setLoadingCount(0);
     if (!messages || messages.length < 1) {
       initMembers();
       initMessage();
-      setTimeout(scrollToBottom, 200);
+    } else {
+      initMessage();
     }
   };
 
   const initMessage = () => {
-    const events = room.getLiveTimeline().getEvents();
-    setMessages(events);
-    setCanStartFetchData(true);
-    setFetchDataLoading(false);
+    const events = timelineWindow.getEvents();
+    // console.log('initMessage', events);
+    msgCensorFilter(events);
+    setMessages([...events]);
+    setBackwardLoading(false);
     if (events && events.length && events[0].getType() == 'm.room.create') {
       onAllLoaded();
     }
-    // queryMessage();
   }
 
   const onAllLoaded = () => {
     setHasMore(false);
-    // console.log(scrollRef);
     if (scrollRef && scrollRef.current) {
       const total = scrollRef.current.clientHeight;
-      console.log(total);
       setFirstPageGap(Math.max(0, total));
     }
   }
 
-  const queryMessage = (d, len) => {
-    setFetchDataLoading(true);
-    const originToken = room.getLiveTimeline().getPaginationToken('b');
-    // console.log('originToken', originToken);
-    room.client.scrollback(room, len || 30).then(r => {
-      setFetchDataLoading(false);
-      const events = room.getLiveTimeline().getEvents();
-      const newToken = room.getLiveTimeline().getPaginationToken('b');
-      // console.log('new token', newToken);
-      if (!newToken || newToken == originToken) {
+  const queryMessage = (oh, dir) => {
+    dir = dir || "b";
+    if (dir === "b") {
+      setBackwardLoading(true);
+    } else {
+      setForwardLoading(true);
+    }
+    timelineWindow.paginate(dir, 20).then(r => {
+      if (!isMounted) return
+      setLastDir(dir);
+      setBackwardLoading(false);
+      setForwardLoading(false);
+      const events = timelineWindow.getEvents();
+      if (!timelineWindow.canPaginate("b")) {
         onAllLoaded();
-      } else {
-        if (events && events.length && events[0].getType() == 'm.room.create') {
-          onAllLoaded();
-        }
-        setMessages(events);
       }
-      setTimeout(() => {
-        scrollToBottom(d);
-      }, 200);
+      msgCensorFilter(events);
+      setMessages([...events]);
+
+      if (dir === "b") {
+        setTimeout(() => {
+          // scrollToBottom(oh);
+          keepDistance(oh);
+        }, 200);
+      }
     }).catch(e => {
-      console.log('queryMessage error', e);
-      setFetchDataLoading(false);
+      console.log('paginate error', e);
+      setBackwardLoading(false);
+      setForwardLoading(false);
     })
   };
 
@@ -209,18 +238,18 @@ const RoomView = ({
     setMembers(members);
   };
 
-  // const onTimeLine = async (event) => {
-  //   if (event.getRoomId() !== roomId) return;
-  //   if (event.getType() == "m.call.invite") {
-  //     // call func
-  //   } else {
-  //     const eventArr = msgCensorFilter([event.event])
-  //     handlePinEvent(eventArr);
-  //     setMessages((messages) => {
-  //       return [...messages, ...eventArr];
-  //     });
-  //   }
-  // };
+  const onTimeLine = (event, room, atStart, removed, data) => {
+    // console.log('onTimeLine', [event, room, atStart, removed, data])
+    if (event.getRoomId() !== roomId) return;
+    if (event.getType() == "m.call.invite") return;
+    if (!data || !data.liveEvent) return;
+
+    const eventArr = msgCensorFilter([event])
+    handlePinEvent(eventArr);
+    setMessages((messages) => {
+      return [...messages, ...eventArr];
+    });
+  };
 
   const handlePinEvent = (events) => {
     for (let index in events) {
@@ -231,17 +260,17 @@ const RoomView = ({
     }
   }
 
-  // const msgCensorFilter = (msgArr) => {
-  //   const resultArr = msgArr || [];
-  //   for (let i = 0; i < resultArr.length; i++) {
-  //     const msg = resultArr[i];
-  //     if (msg && msg.content && msg.content.msgtype === 'm.text') {
-  //       const { text } = censor.filter(msg.content.body || '', { replace: true })
-  //       resultArr[i]['content']['body'] = text
-  //     }
-  //   }
-  //   return resultArr
-  // }
+  const msgCensorFilter = (msgArr) => {
+    const resultArr = msgArr || [];
+    for (let i = 0; i < resultArr.length; i++) {
+      const msg = resultArr[i]?.event;
+      if (msg && msg.content && msg.content.msgtype === 'm.text') {
+        const { text } = censor.filter(msg.content.body || '', { replace: true })
+        resultArr[i]['event']['content']['body'] = text
+      }
+    }
+    return resultArr
+  }
 
   const formatSender = (sender) => {
     if (sender) {
@@ -340,26 +369,14 @@ const RoomView = ({
     }
   }
 
-  const jumpLinkMsg = (id) => {
-    // e.stopPropagation()
-    console.log('jumpLinkMsg', 'message_item_' + id)
-    // const domWrapper = roomViewRef.current;
-    // if (!domWrapper) return;
-    // if (oh) {
-    //   const h = roomViewRef.current.scrollHeight - oh;
-    //   domWrapper.scrollTo(0, h);
-    // } else {
-    //   domWrapper.scrollTo(0, domWrapper.scrollHeight);
-    // }
-    api.eventEmitter && api.eventEmitter.emit && api.eventEmitter.emit('highlightRelateReply', 'message_item_' + id);
-  }
-
-  const getAliasMsg = (sdnEvent, user, value, msg, ts, isEdited) => {
+  const getAliasMsg = (eventId, sdnEvent, user, value, msg, ts, isEdited) => {
     return <div className="alias_msg">
-      {sdnEvent ? <div className="alias_target_msg" onClick={() => jumpLinkMsg(sdnEvent.event.event_id)}>
+      {sdnEvent ? <div className="alias_target_msg" onClick={() => handleJump(sdnEvent.event.event_id)}>
         <div className="alias_target_msg_user">{user}</div>
         <div className="alias_target_msg_value">{value}</div>
-      </div> : null}
+      </div> : (eventId ? <div className="alias_target_msg">
+        <div className="alias_target_loading"><div className="loading">{loadingIcon}</div></div>
+      </div> : null)}
       <span className="alias_treply_msg">{msg}</span>
       <p className="msg_time">{`${isEdited ? '(edited) ' : ''}${renderTime(ts)}`}</p>
     </div>
@@ -375,6 +392,10 @@ const RoomView = ({
     if (type === 'm.room.pinned_events') {
       const { pinned = [] } = content;
       const userNick = formatSender(sender);
+      // use prev content
+      if (message.unsigned && message.unsigned.prev_content) {
+        globalPinned.value = message.unsigned.prev_content.pinned || [];
+      }
       if (pinned.length > globalPinned.value.length) {
         msgContent = `${userNick} pinned a message`;
       } else if (pinned.length < globalPinned.value.length) {
@@ -458,7 +479,7 @@ const RoomView = ({
               value = replied_event_content?.body;
               msg = content.body;
             }
-            msgContent = getAliasMsg(replied_event, user, value, msg, origin_server_ts, message.isEdited);
+            msgContent = getAliasMsg(replied_event_Id, replied_event, user, value, msg, origin_server_ts, message.isEdited);
           } else if (urls) { // msg contains link address
             const [urlBody] = urls;
             msgContent = (
@@ -470,6 +491,7 @@ const RoomView = ({
                 isRight={senderUserId === room.myUserId}
                 openUrlPreviewWidget={openUrlPreviewWidget}
                 onPreviewLoaded={onPreviewLoaded}
+                previewStart={previewStart}
               />
             );
           } else if (content.format &&
@@ -525,7 +547,7 @@ const RoomView = ({
     if (!domWrapper) return;
     const h = domWrapper.scrollHeight - (oh || 0);
     // console.log('scrollToBottom', h, domWrapper.scrollHeight, oh);
-    const { scrollTop, clientHeight, scrollHeight } = wrapperRef.current;
+    // const { scrollTop, clientHeight, scrollHeight } = wrapperRef.current;
     // console.log('scrollTop', scrollTop);
     // console.log('clientHeight', clientHeight);
     // console.log('scrollHeight', scrollHeight);
@@ -536,42 +558,83 @@ const RoomView = ({
     });
   };
 
+  const keepDistance = (toBottom) => {
+    const domWrapper = wrapperRef.current;
+    if (!domWrapper) return;
+    domWrapper.scrollTop = domWrapper.scrollHeight - toBottom;
+  }
+
+  const jumpToLatest = () => {
+    setFocusEventId(null);
+    if (timelineWindow && timelineWindow.canPaginate("f")) {
+      loadTimeline();
+      setTimeout(() => {
+        scrollToBottom();
+      }, 200);
+    } else {
+      scrollToBottom();
+    }
+  }
+
   const handleScroll = (e) => {
+    if (e && !canStartFetchData) return
+    if (fetchForwardLoading || fetchBackwardLoading) return
     if (wrapperRef?.current) {
       const { scrollTop, clientHeight, scrollHeight } = wrapperRef.current;
+      // console.log('handleScroll', [e, scrollTop, clientHeight, scrollHeight])
       if (e) {
-        setScrolled(true);
         setBottomDistance(scrollHeight - scrollTop);
-      }
-      // console.log([scrollTop, clientHeight, scrollHeight])
-      if (scrollTop + clientHeight - scrollHeight > -1) {
-        setShowBottomBtn(false);
-      } else {
-        setShowBottomBtn(true);
-      }
-      if (scrollTop < 1 && !fetchDataLoading && hasMore) {
-        queryMessage(scrollHeight);
+        if (scrollTop + clientHeight - scrollHeight > -1) {
+          setShowBottomBtn(false);
+          if (timelineWindow && timelineWindow.canPaginate("f") && !fetchForwardLoading) {
+            wrapperRef.current.scrollTop = scrollHeight - 1;
+            queryMessage(0, "f");
+          }
+        } else {
+          setShowBottomBtn(true);
+        }
+        if (scrollTop < 1 && !fetchBackwardLoading && hasMore) {
+          setBottomDistance(scrollHeight - 1);
+          wrapperRef.current.scrollTop = 1;
+          queryMessage(scrollHeight - 1);
+        }
       } else if (scrollHeight <= clientHeight && hasMore) {
-        queryMessage(clientHeight);
+        queryMessage(clientHeight - 1);
       }
     } else {
       setShowBottomBtn(false);
     }
   }
 
-  const loadMore = async () => {
-    // if (fetchDataLoading || !canStartFetchData) return;
-    // console.log('load more')
-    // queryMessage("start");
-  };
+  const handleUserScroll = () => {
+    setScrolled(true);
+    if (loadingCount <= 0) {
+      setFocusEventId(null);
+    }
+  }
 
-  const onPreviewLoaded = () => {
-    if (!scrolled) {
-      scrollToBottom();
-    } else {
-      console.log(bottomDistance);
-      scrollToBottom(bottomDistance);
-      // keepDistance();
+  const previewStart = () => {
+    // if (wrapperRef && wrapperRef.current) {
+    //   const { clientHeight, scrollHeight, scrollTop } = wrapperRef.current;
+    //   console.log('previewStart', [clientHeight, scrollHeight, scrollTop])
+    //   if (clientHeight < scrollHeight) {
+    //     const value = scrollHeight - scrollTop;
+    //     setBottomDistance(value);
+    //     return value
+    //   }
+    // }
+    // return 0
+    setLoadingCount((prev) => prev + 1);
+  }
+
+  const onPreviewLoaded = (value) => {
+    // console.log('onPreviewLoaded', bottomDistance)
+    // keepDistance(bottomDistance);
+    setLoadingCount((prev) => prev - 1);
+    if (focusEventId) {
+      keepFocus();
+    } else if (lastDir === "b") {
+      keepDistance(bottomDistance);
     }
   }
 
@@ -731,6 +794,10 @@ const RoomView = ({
         showCheckbox={needShowCheckbox}
         onStartSelect={onStartSelect}
         onCheckChanged={onCheckChanged}
+        handleUserScroll={handleUserScroll}
+        onPreviewLoaded={onPreviewLoaded}
+        handleJump={handleJump}
+        previewStart={previewStart}
       />);
     }
     return arr
@@ -778,7 +845,7 @@ const RoomView = ({
     setShowReplyOrEditMsgDialog('reply')
     setInputFocus(!inputFocus)
   }
-  const handleForwardClick = async (e) => {
+  const handleForwardClick = async (e) => { // click selected msg for forward operation
     console.log('start forward message')
     e.stopPropagation()
     setShowMoreMenu(false)
@@ -812,7 +879,7 @@ const RoomView = ({
     setShowMoreMenu(false);
   }
 
-  const handleSelectClick = async (e) => {
+  const handleSelectClick = async (e) => { // click selected msg for forward operation
     console.log('start select message')
     e.stopPropagation();
     setShowMoreMenu(false);
@@ -857,20 +924,23 @@ const RoomView = ({
             className="scroll-wrapper"
             ref={wrapperRef}
             onScroll={handleScroll}
+            onTouchMove={handleUserScroll}
+            onWheel={handleUserScroll}
           >
             <div
               className="room-scroll"
               ref={scrollRef}
             >
               <div className="msg-first-page"></div>
-              {hasMore ? <div className="roomView_scroll_loader" key={'loader'}>Loading ...</div>
+              {hasMore ? <div className="roomView_scroll_loader" key={'backward-loader'}>Loading ...</div>
                 : <div className="roomView_scroll_noMore">-- This is the beginning of the conversation --</div>}
               <div className="msg-top-station"></div>
               {spawnMessageItems(messages)}
+              {fetchForwardLoading ? <div className="roomView_scroll_loader" key={'forward-loader'}>Loading ...</div> : null}
               <div className="msg-bottom-station"></div>
             </div>
 
-            {showBottomBtn ? <div className="bottom-btn" onClick={() => { scrollToBottom() }}>
+            {showBottomBtn ? <div className="bottom-btn" onClick={() => { jumpToLatest() }}>
               {downIcon}
             </div> : null}
 

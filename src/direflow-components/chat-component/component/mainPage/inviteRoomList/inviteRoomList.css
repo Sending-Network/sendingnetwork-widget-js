@@ -1,0 +1,118 @@
+.invite {
+  background-color: var(--bg-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* invite-header */
+.invite-header {
+  width: 100%;
+  height: 50px;
+  padding: 0 13px 0 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.invite-header-left {
+  display: flex;
+  align-items: center;
+  color: #000;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+.invite-header-title {
+  color: #000;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+  padding-left: 8px;
+}
+.invite-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.invite-header-right.editing svg {
+  stroke: var(--primary-color);
+}
+
+/* invite-list */
+.invite-list {
+  flex: 1;
+  overflow-y: scroll;
+  position: relative;
+  box-sizing: border-box;
+  padding: 8px 0;
+  scrollbar-width: none;
+}
+.invite-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* mobile-close-btn */
+.mobile-close-btn {
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-close-btn img {
+  width: 20px;
+}
+
+/* no data */
+.invite-list-noData {
+  margin-top: calc(50%);
+  text-align: center;
+  font-family: Poppins;
+  font-size: 14px;
+  color: #ccc;
+}
+.invite-list-noData img {
+  width: 60px;
+  margin-bottom: 10px;
+}
+
+/* btns */
+.invite-box {
+  margin: 9px 15px 11px;
+}
+.invite-box.invalid .invite-box-btn {
+  opacity: .5;
+}
+.invite-box-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 54px;
+  border-radius: 6px;
+  color: #FFF;
+  text-align: right;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  cursor: pointer;
+}
+.invite-box-btn.reject {
+  color: #333;
+  background: #eee;
+  margin-right: 18px;
+}
+.invite-box-btn.accept {
+  color: #fff;
+  background: var(--primary-color);
+}

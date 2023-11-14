@@ -112,21 +112,20 @@
   font-size: 12px;
 }
 .room-item-right-bottom-badge {
-  width: 18px;
-  height: 18px;
   color: #FFF;
   font-family: sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
-  border-radius: 18px;
+  border-radius: 9px;
   background-color: var(--primary-color);
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   margin-left: 4px;
+  padding: 1px 6px;
 }
 .room-item-right-bottom-invites {
   width: calc(100% - 64px);

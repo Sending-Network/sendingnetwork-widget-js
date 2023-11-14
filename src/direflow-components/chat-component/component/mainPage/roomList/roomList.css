@@ -107,3 +107,76 @@
   width: 60px;
   margin-bottom: 10px;
 }
+
+/* invite-room */
+.rooms .invite-room {
+  height: 70px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 16px;
+  background: #f6f6f6;
+}
+.rooms .invite-room:hover {
+  background: #eee;
+}
+
+/* room-item-left */
+.invite-room .invite-room-left {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: #F78F16;
+}
+.invite-room .invite-room-left img {
+  width: 24px;
+  height: 24px;
+}
+
+/* invite-room-right */
+.invite-room-right {
+  width: calc(100% - 54px);
+  height: 44px;
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+.invite-room-right-name {
+  width: calc(100% - 64px);
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 44px;
+}
+
+.invite-room-right-count {
+  color: #FFF;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  border-radius: 9px;
+  background-color: var(--primary-color);
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  padding: 1px 6px;
+}

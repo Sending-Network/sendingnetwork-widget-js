@@ -60,7 +60,7 @@
 .memberProfile_info .info_img_box {
   width: 120px;
   height: 120px;
-  margin: 48px 0;
+  margin: 48px 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,6 +86,75 @@
 }
 
 /* alias */
+.memberProfile_alias-text {
+  width: calc(100% - 32px);
+  font-family: Poppins;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--main-text-color);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.memberProfile_alias-text p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* userinfo-box-item */
+.memberProfile_userinfo-box-item {
+
+  width: calc(100% - 32px);
+  font-family: Poppins;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--main-text-color);
+  opacity: .6;
+  text-align: center;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.memberProfile_userinfo-box-item p {
+  /* width: calc(100% - 30px);
+  font-size: 14px;
+  line-height: 17px;
+  color: rgba(0, 0, 0, 0.5); */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.memberProfile_userinfo-box-item img {
+  height: 16px;
+  margin-left: 14px;
+  cursor: pointer;
+  position: absolute;
+  right: -5px;
+}
+.memberProfile_userinfo_motto {
+  width: calc(100% - 32px);
+  font-family: Poppins;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--main-text-color);
+  opacity: .6;
+  text-align: center;
+  margin-bottom: 26px;
+}
+.memberProfile_userinfo_motto p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* alias */
 .memberProfile_alias-label {
   width: 100%;
   padding-left: 16px;
@@ -97,36 +166,12 @@
   font-weight: 500;
   line-height: 20px;
 }
-.memberProfile_alias-text {
-  width: calc(100% - 32px);
-  height: 48px;
-  margin: 8px 0 20px 16px;
-  padding: 0 12px;
-  box-sizing: border-box;
+.memberProfile_userinfo_remark {
   display: flex;
-  align-items: center;
-  background-color: var(--userSettings-inputName-bg-color);
-  outline: none;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  color: var(--main-text-color);
-  font-family: Poppins;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 20px;
-}
-.memberProfile_alias-text p {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* userinfo-box-item */
-.memberProfile_userinfo-box-item {
+  justify-content: space-between;
   width: calc(100% - 32px);
   height: 48px;
-  margin: 8px 0 20px 16px;
+  margin: 8px 16px 20px;
   padding: 0 12px;
   box-sizing: border-box;
   display: flex;
@@ -145,19 +190,26 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.memberProfile_userinfo-box-item p {
+.memberProfile_userinfo_remark p {
   width: calc(100% - 30px);
   font-size: 14px;
   line-height: 17px;
   color: rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
-.memberProfile_userinfo-box-item img {
-  height: 16px;
-  margin-left: 14px;
+.memberProfile_userinfo_remark input {
+  width: calc(100% - 30px);
+  font-size: 14px;
+  line-height: 17px;
+  color: var(--main-text-color);
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.memberProfile_userinfo_remark img {
+  width: 18px;
   cursor: pointer;
+
+  transform: rotate(180deg);
 }
 .memberProfile .info_btns {
   width: 100%;

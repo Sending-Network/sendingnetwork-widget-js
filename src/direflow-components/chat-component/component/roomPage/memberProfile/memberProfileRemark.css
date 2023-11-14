@@ -1,0 +1,118 @@
+.memberProfileRemark {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+}
+
+/* memberProfile_room_title */
+.memberProfileRemark_room_title {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memberProfileRemark_room_title .memberProfileRemark_room_title_left {
+  width: 41px;
+  height: 100%;
+  padding-left: 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.memberProfileRemark_room_title .room_title_center {
+  color: var(--main-text-color);
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+/* memberProfile_info_wrap */
+.memberProfileRemark_info_wrap {
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+.memberProfileRemark_info_wrap::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.memberProfileRemark_userinfo_remark {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 32px);
+  height: 48px;
+  margin: 8px 16px 20px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background-color: var(--userSettings-inputName-bg-color);
+  outline: none;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  color: var(--main-text-color);
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.memberProfileRemark_userinfo_remark .remark-input {
+  width: calc(100% - 30px);
+  font-size: 14px;
+  line-height: 17px;
+  color: var(--main-text-color);
+  border: none;
+  outline: none;
+}
+
+.memberProfileRemark .info_btns {
+  width: 100%;
+  height: 45px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  margin-bottom: 12px;
+}
+.memberProfileRemark .info_btns.forbidden {
+  opacity: .3;
+}
+.memberProfileRemark .info_btns .info_btns-item {
+  width: 100%;
+  height: 45px;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--primary-color);;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: 'Poppins';
+}
+.memberProfileRemark .info_btns.forbidden .info_btns-item {
+  cursor: not-allowed;
+}
+.info-grow {
+  flex: 1;
+}

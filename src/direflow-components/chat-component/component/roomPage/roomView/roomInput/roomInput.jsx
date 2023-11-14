@@ -364,6 +364,7 @@ const RoomInput = ({
   const handleEmojiClick = (e) => {
     e.stopPropagation();
     setShowEmojiPanel(!showEmojiPanel);
+    setShowMemberList(false);
   }
 
   const handleEmojiItemClick = (emoji) => {
@@ -519,6 +520,13 @@ const RoomInput = ({
           {/* { renderTransferTip() }
           { renderTokenSwapTip() } */}
 
+          {showMemberList && <MentionList
+            room={room}
+            memberList={filteredMembers}
+            memberListFocus={memberListFocus}
+            handleAtMemberClick={handleAtMemberClick}
+          />}
+
           {/* input maximum prompt */}
           {showInputMaxPrompt && (
             <div className="room-input-box-maxsize">Input charatars exceeds maximum 4000</div>
@@ -531,6 +539,7 @@ const RoomInput = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowMoreBox(!showMoreBox)
+                  setShowMemberList(false);
                 }}
               >
                 {plusIcon}
@@ -543,18 +552,6 @@ const RoomInput = ({
                 />
               </div>
             )}
-
-            {/* <textarea
-              value={sendValue}
-              id="sendMessage"
-              className="room-input-box-input"
-              type="text"
-              autoComplete="off"
-              placeholder="Send a message"
-              onChange={inputChange}
-              onKeyDown={sendMessage}
-              maxLength={2001}
-            /> */}
             <InputArea
               value={sendValue}
               placeholder="Send a message"
@@ -568,7 +565,7 @@ const RoomInput = ({
               showMemberList={showMemberList}
             />
 
-            <div className="room-input-emoji" onClick={handleEmojiClick}>
+            <div className="room-input-emoji svg-btn svg-btn-fill" onClick={handleEmojiClick}>
               {emojiIcon}
             </div>
 
@@ -576,14 +573,6 @@ const RoomInput = ({
               {sendIcon}
             </div>
           </div>
-
-          {/* @ show box */}
-          {showMemberList && <MentionList
-            room={room}
-            memberList={filteredMembers}
-            memberListFocus={memberListFocus}
-            handleAtMemberClick={handleAtMemberClick}
-          />}
 
           {showMoreBox && (
             <div className="room-input-more-box" onClick={(e) => e.stopPropagation()}>

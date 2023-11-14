@@ -3,15 +3,20 @@ import { Styled } from "direflow-component";
 import styles from "./roomList.css";
 import RoomItem from "../roomItem/roomItem";
 import MainMenu from "../mainMenu/mainMenu";
-import { mainChatIcon, mobileCloseIcon, searchInputIcon } from "../../../imgs/index";
+import { mainChatIcon, mobileCloseIcon, searchInputIcon, inviteRoomIcon } from "../../../imgs/index";
 import { api } from "../../../api";
-import { isMobile } from "../../../utils";
+import { isMobile, renderAnimation } from "../../../utils";
 
-const RoomList = ({ rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
+const RoomList = ({ setRoomListType, rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
   const inputRef = useRef(null);
+  const roomListRef = useRef(null);
   const [filterStr, setFilterStr] = useState("");
-  const [list, setList] = useState([]);
+  const [joinRoomList, setJoinRoomList] = useState([])
+  const [inviteRoomList, setInviteRoomList] = useState([])
 
+  useEffect(() => {
+		renderAnimation(roomListRef.current, 'animate__slideInLeft')
+	}, [])
   useEffect(() => {
     let fRooms = rooms.filter((r) => {
       const nameStr = String.prototype.toLowerCase.call(r.name || r.calculateName || "");
@@ -24,7 +29,8 @@ const RoomList = ({ rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
     const joinRooms = fRooms.filter((room) => {
       return room.getMyMembership() === "join";
     });
-    setList([...inviteRooms, ...joinRooms])
+    setInviteRoomList(inviteRooms)
+    setJoinRoomList(joinRooms)
   }, [rooms, filterStr]);
 
   const handleMobileCloseBtn = () => {
@@ -45,7 +51,7 @@ const RoomList = ({ rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
 
   return (
     <Styled styles={styles}>
-      <div className="rooms">
+      <div ref={roomListRef} className="rooms widget_animate_invisible">
         <div className="rooms-header">
           <div className="rooms-header-left">Messages</div>
           <div className="rooms-header-right">
@@ -76,8 +82,21 @@ const RoomList = ({ rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
           </div>
         </div>
         <div className="rooms-list">
-          {list.length > 0 ?
-            list.map((room) => {
+          <div
+            className="invite-room"
+            onClick={() => setRoomListType('inviteRoomList')}
+          >
+            <div className="invite-room-left">
+              <img src={inviteRoomIcon} />
+            </div>
+            <div className="invite-room-right">
+              <div className="invite-room-right-name">Invitations</div>
+              {inviteRoomList.length ? <div className="invite-room-right-count">{inviteRoomList.length}</div> : null}
+              {/* <div className="invite-room-right-count">{inviteRoomList.length}</div> */}
+            </div>
+          </div>
+          {joinRoomList.length > 0 ?
+            joinRoomList.map((room) => {
               return <RoomItem key={room.roomId} room={room} enterRoom={enterRoom} />
             })
             : (

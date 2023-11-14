@@ -2532,6 +2532,11 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.npmjs.org/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha512-0FcBfdcmaumGPQ0qPn7Q5qTgz/ooXgIyp1rf8ik5bGX8mpE2YHjC0P/eyQvxu1GURYQgq9ozf2mteQ5ZD9YiyQ==
 
+animate.css@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmmirror.com/animate.css/-/animate.css-4.1.1.tgz#614ec5a81131d7e4dc362a58143f7406abd68075"
+  integrity sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==
+
 another-json@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/another-json/-/another-json-0.2.0.tgz#b5f4019c973b6dd5c6506a2d93469cb6d32aeedc"
@@ -11725,10 +11730,10 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sendingnetwork-js-sdk@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/sendingnetwork-js-sdk/-/sendingnetwork-js-sdk-0.1.7.tgz#8308cb3c4221493c3b82da5a51ccea2c2f9252f8"
-  integrity sha512-uNgziP6qUcZa1C1V5fHs8ApDmTJFiIXHA3j4halkT+58vLe6hhJm2MiG7AttqEY7mOddCYO/kwL6cTYIDhSRPQ==
+sendingnetwork-js-sdk@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/sendingnetwork-js-sdk/-/sendingnetwork-js-sdk-0.1.9.tgz#eb52608aa4da1561ca0f064fa47226fa47ac8361"
+  integrity sha512-nu0ozXPZM8b2zMUPj/jYO8nWEt1hCuwLVf/HLFvnjqwQRtOa0VGUfeoygXDNMMth6wZaUcpYn5GTHRWcJ5piAw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"

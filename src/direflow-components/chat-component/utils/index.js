@@ -4,6 +4,9 @@ import FREQUENTEMOJIOBASE from './frequent-emojibase.json';
 import { api } from "../api";
 import { toastInfoIcon, toastErrorIcon, toastSuccessIcon, copySuccessIcon } from "../imgs/index";
 
+const EventType = {
+  RemarkedRoomList: "m.remarked_room_list"
+}
 class FilterWordsLibrary {
   constructor() {
     this.filterWordsArray = [];
@@ -206,7 +209,30 @@ export const calculateRoomName = (room, isShowCount) => {
   return result
 };
 
+export const calculateRoomTopic = (room) => {
+  const topicEvent = room.currentState.getStateEvents("m.room.topic", "");
+  const topic = topicEvent && topicEvent.getContent()
+    ? topicEvent.getContent()["topic"] || ""
+    : "";
+  return topic;
+}
 
+export const calculateRemark = (room) => {
+  const remarkEvent = api._client.getAccountData(EventType.RemarkedRoomList);
+  const remark = remarkEvent && remarkEvent.getContent()
+    ? remarkEvent.getContent()?.remarked_room[room.roomId]?.remark || ""
+    : "";
+  return remark;
+}
+
+export const calculateNickName = (room) => {
+  const spaceRoom = room.getParentRoom();
+
+  if (spaceRoom) {
+    room = spaceRoom;
+  }
+  return room.getNickName();
+}
 
 /**
  * 
@@ -700,4 +726,21 @@ export const timeFormat = (timeStr) => {
   } else {
     return time.format('MMM') + ' ' + time.format('DD');
   }
+}
+
+/* 
+ * render Animation
+ */
+export const renderAnimation = (animateDom, animateName, animateStartCb, animateEndCb) => {
+  animateDom.classList.add('animate__animated', animateName)
+  animateDom.classList.remove('widget_animate_invisible')
+  animateDom.addEventListener('animationstart', (evt) => {
+    console.log('animationstart', evt)
+    animateStartCb && animateStartCb()
+  })
+  animateDom.addEventListener('animationend', (evt) => {
+    console.log('animationend', evt)
+    animateDom.classList.remove('animate__animated', animateName)
+    animateEndCb && animateEndCb()
+  })
 }

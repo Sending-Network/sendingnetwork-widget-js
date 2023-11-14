@@ -38,6 +38,12 @@ export const moreIcon = <svg width="24" height="24" viewBox="0 0 24 24" fill="#0
   <path d="M10.0001 12C10.0001 13.1 10.9001 14 12.0001 14C13.1001 14 14.0001 13.1 14.0001 12C14.0001 10.9 13.1001 10 12.0001 10C10.9001 10 10.0001 10.9 10.0001 12Z" />
 </svg>
 
+export const editIcon = 
+<svg width="20" height="20" viewBox="0 0 20 20" stroke="#292D32" fill="none">
+  <path d="M10.1923 2.5H6.5C4.29086 2.5 2.5 4.29086 2.5 6.5V13.5C2.5 15.7091 4.29086 17.5 6.5 17.5H13.5C15.7091 17.5 17.5 15.7091 17.5 13.5V9.80769" strokeWidth="1.5" strokeLinecap="round"/>
+  <path d="M10 10.4166L16.9109 3.57738" strokeWidth="1.5" strokeLinecap="round"/>
+</svg>
+
 export const menuIcon = <svg width="24" height="24" viewBox="0 0 24 24" stroke="#292D32">
   <path d="M3 7H21" strokeWidth="1.5" strokeLinecap="round" />
   <path d="M3 12H21" strokeWidth="1.5" strokeLinecap="round" />

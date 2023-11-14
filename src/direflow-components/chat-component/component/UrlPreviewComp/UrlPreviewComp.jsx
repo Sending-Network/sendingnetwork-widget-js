@@ -8,11 +8,13 @@ const UrlPreviewComp = (props) => {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     if (props.url && props.ts) {
-      api.getUrlPreview(props.url, props.ts).then((res) => {
+      const fetchPreview = async () => {
+        const res = await api.getUrlPreview(props.url, props.ts);
+        if (!res) return
         if (!isMounted) return
         const isMoneyGun = res['og:site_nam'] === 'Money Gun';
         let url = res["og:image"];
@@ -31,10 +33,12 @@ const UrlPreviewComp = (props) => {
         setUrl(url);
         setTitle(title);
         setDescription(description);
-      }).catch(e=>{})
+      }
+      props.previewStart();
+      fetchPreview();
     }
     return () => {
-      setIsMounted(false);
+      isMounted = false;
     }
   }, [props.url, props.ts]);
 
@@ -64,7 +68,7 @@ const UrlPreviewComp = (props) => {
     <Styled styles={styles}>
       <div
         className="urlPreviewComp"
-        style={{alignItems: props.isRight ? "flex-end" : "flex-start"}}
+        style={{ alignItems: props.isRight ? "flex-end" : "flex-start" }}
       >
         <div className={props.isRight ? "urlPreview_url_right" : "urlPreview_url_left"}>
           {/* <a className={props.isRight ? "urlPreview_url_a_right" : "urlPreview_url_a_left"} onClick={handleClick}>{props.message}</a> */}

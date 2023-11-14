@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import RoomAvatar from "../../../roomAvatar/roomAvatar";
 import UserAvatar from "../../../userAvatar/userAvatar";
-import { getMemberName } from "../../../../utils";
+import { getAddressByUserId, getMemberName } from "../../../../utils";
 
 const MentionList = (props) => {
   const { room, memberList, memberListFocus, handleAtMemberClick } = props;
@@ -12,7 +12,7 @@ const MentionList = (props) => {
       const m = memberList[memberListFocus];
       const k = m.isRoom ? 'room' : m.userId;
       const ref = listRef.current[k];
-      ref && ref.scrollIntoView({block: 'nearest'});
+      ref && ref.scrollIntoView({ block: 'nearest' });
     }
   }, [memberListFocus]);
 
@@ -30,16 +30,20 @@ const MentionList = (props) => {
           ].join(' ')}
           onMouseDown={(e) => handleAtMemberClick(m, e)}
           onTouchStart={(e) => handleAtMemberClick(m, e)}
-          ref={(ref) => {listRef.current[k] = ref}}
+          ref={(ref) => { listRef.current[k] = ref }}
         >
           <div className="room-input_at_item_avatar">
             {m.isRoom ? <RoomAvatar room={room} /> : <UserAvatar member={m} />}
           </div>
-          <div className="room-input_at_item_name">{m.isRoom ? 'room' : getMemberName(m)}</div>
+          {m.isRoom ? <div className="room-input_at_item_name">Room</div> :
+            <div className="room-input_at_item_name">
+              <div>{getMemberName(m)}</div>
+              <span>{getAddressByUserId(m.userId)}</span>
+            </div>}
         </div>);
-        if (m.isRoom && data.length > 1) {
-          arr.push(<div className="divide" key={'divide'}></div>);
-        }
+        // if (m.isRoom && data.length > 1) {
+        //   arr.push(<div className="divide" key={'divide'}></div>);
+        // }
       }
     }
     return arr;

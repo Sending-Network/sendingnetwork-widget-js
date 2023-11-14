@@ -7,6 +7,7 @@ import SetPage from './component/setPage/setPage';
 import TouristPage from './component/touristPage/touristPage';
 import TopFrame from './component/topFrame/topFrame';
 import PropTypes from "prop-types";
+import animateStyles from 'animate.css';
 import styles from "./App.css";
 import { Styled } from "direflow-component";
 import { api } from "./api";
@@ -215,6 +216,10 @@ const App = (props) => {
       if (rooms[i].isDmRoom()) {
         if (rooms[i].getDMAnotherMember() === userId) {
           quickRoomId = rooms[i].roomId;
+          // invite the other user
+          if (!["join", "invite"].includes(rooms[i].getMember(userId)?.membership)) {
+            api._client.invite(rooms[i].roomId, userId)
+          }
           break;
         }
       }
@@ -312,7 +317,7 @@ const App = (props) => {
       case 'mainPage':
         return <MainPage
           rooms={rooms}
-          goToRoom={(roomId) => {
+          enterRoom={(roomId) => {
             setCurRoomId(roomId)
             setPageType('roomPage')
           }}
@@ -348,7 +353,7 @@ const App = (props) => {
   }
 
   return (
-    <Styled styles={styles}>
+    <Styled styles={styles + animateStyles}>
       <div
         style={{
           "--widget-width": props.widgetWidth,
@@ -374,6 +379,7 @@ const App = (props) => {
           ...(props.useWidgetBtn && !isMobile() ? btnStyle.btnPos : {})
         }}
         className={[
+          'widget_root_animate',
           props.useWidgetBtn && !isMobile() && "widget_root",
           isMobile() && "widget_root_mobile"
         ].join(" ")}

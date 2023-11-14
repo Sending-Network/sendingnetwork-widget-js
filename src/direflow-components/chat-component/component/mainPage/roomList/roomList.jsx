@@ -52,11 +52,11 @@ const RoomList = ({ rooms, menuFuncs, enterRoom, closeModalms, menuClick }) => {
             {isShowMenus() && (
               <MainMenu menuFuncs={menuFuncs} closeModalms={closeModalms} menuClick={menuClick} />
             )}
-            {/* {isMobile() && (
+            {isMobile() && (
               <div className="mobile-close-btn" onClick={handleMobileCloseBtn}>
                 <img src={mobileCloseIcon} />
               </div>
-            )} */}
+            )}
           </div>
         </div>
         <div className="rooms-search">

@@ -434,7 +434,7 @@ App.defaultProps = {
   widgetWidth: isMobile() ? "100vw" : "375px",
   widgetHeight: isMobile() ? "100vh" : "667px",
   widgetBoxShadow: "2px 0px 20px rgba(0, 0, 0, 0.3)",
-  bgColor: "#F9F9FA",
+  bgColor: "#fff",
   mainTextColor: "#000",
   primaryColor: '#00B36B',
   contactLastMessageTimeColor: "#B4B5B8",

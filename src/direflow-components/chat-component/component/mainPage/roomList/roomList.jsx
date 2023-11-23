@@ -91,7 +91,7 @@ const RoomList = ({ setRoomListType, rooms, menuFuncs, enterRoom, closeModalms, 
             </div>
             <div className="invite-room-right">
               <div className="invite-room-right-name">Invitations</div>
-              {inviteRoomList.length ? <div className="invite-room-right-count">{inviteRoomList.length}</div> : null}
+              {inviteRoomList.length ? <div className={`invite-room-right-count ${inviteRoomList.length < 100 && 'circle'}`}>{inviteRoomList.length}</div> : null}
               {/* <div className="invite-room-right-count">{inviteRoomList.length}</div> */}
             </div>
           </div>

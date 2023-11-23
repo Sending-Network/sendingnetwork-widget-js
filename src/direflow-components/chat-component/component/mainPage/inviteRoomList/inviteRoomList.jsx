@@ -69,7 +69,7 @@ const RoomList = ({ setRoomListType, rooms, menuFuncs, closeModalms, menuClick }
   const rejectInvite= (roomId) => { // reject one invite
     api.leave(roomId, () => {
       showToast({
-        type: 'success',
+        type: 'none',
         msg: 'Invitation rejected',
       })
     });
@@ -86,7 +86,7 @@ const RoomList = ({ setRoomListType, rooms, menuFuncs, closeModalms, menuClick }
   const rejectMutipleSelectedInvite = async () => { // reject mutiple selected invite
     await Promise.all(selectedInvite.map(room => api.leave(room.roomId)))
     showToast({
-      type: 'success',
+      type: 'none',
       msg: 'Invitations rejected',
     })
   }

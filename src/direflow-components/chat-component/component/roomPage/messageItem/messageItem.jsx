@@ -326,7 +326,7 @@ const MessageItem = ({
             {senderId === userId ? (
               <div className="msgBox_right" key={event_id}>
                 <div className={`msgBox_right_info${combine ? " combine" + combine : ""}`}>
-                  <div className={["msgBox_right_info_msg", isPreviewCard() && "msgBox_show_card", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onClick={onTouchMsgItem} onContextMenu={onContext}>
+                  <div className={["msgBox_right_info_msg", message.isDeleted && 'wrapper_deleted_msg', isImage && 'image'].join(" ")} onClick={onTouchMsgItem} onContextMenu={onContext}>
                     {contentView}
                     {showTime() && <span className="msg_time">{`${message.isEdited ? '(edited) ' : ''}${renderTime()}`}</span>}
                   </div>

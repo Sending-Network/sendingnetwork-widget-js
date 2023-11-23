@@ -3,7 +3,7 @@ import { Styled } from "direflow-component";
 import styles from "./mainPage.css";
 import RoomList from './roomList/roomList'
 import InviteRoomList from './inviteRoomList/inviteRoomList'
-import { calculateRoomName, getAddressByUserId, getMsgStr } from "../../utils/index";
+import { calculateRoomName, getAddressByUserId, getMsgStr, getInviteSendEvent } from "../../utils/index";
 import { api } from "../../api";
 
 const MainPage = ({ rooms, enterRoom, menuFuncs, onMenuClick }) => {
@@ -29,6 +29,10 @@ const MainPage = ({ rooms, enterRoom, menuFuncs, onMenuClick }) => {
 		setRoomList(resultList);
 	}
 
+	const getInviteSendTs = (senderEvent) => {
+    return senderEvent?.event?.origin_server_ts
+  }
+
 	const getLastMsgTs = (room) => {
 		if (!room) return 0;
 		const timeline = room.getLiveTimeline();
@@ -42,6 +46,10 @@ const MainPage = ({ rooms, enterRoom, menuFuncs, onMenuClick }) => {
         if (getMsgStr(lastEvent, isDmRoom, userId)) {
           return lastEvent.getTs();
         }
+				else { // just join room
+					const senderEvent = getInviteSendEvent(room)
+					return getInviteSendTs(senderEvent)
+				}
       }
 		}
 		return 0;

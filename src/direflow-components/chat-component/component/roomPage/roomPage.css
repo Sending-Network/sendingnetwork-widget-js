@@ -12,6 +12,7 @@
 
 .msg_reply_dialog {
     padding: 10px;
+    background: #fff;
 }
 .msg_reply_dialog_content {
   padding-left: 26px;

@@ -137,7 +137,7 @@ const RoomItem = ({ room, enterRoom }) => {
               <div className="room-item-right-bottom-badge">@</div>
             )}
             {membership === "join" && room.notificationCounts.total > 0 && (
-              <div className="room-item-right-bottom-badge">{room.notificationCounts.total}</div>
+              <div className={`room-item-right-bottom-badge ${room.notificationCounts.total < 100 && 'circle'}`}>{room.notificationCounts.total}</div>
             )}
             {membership === "invite" && (
               <div className="room-item-right-bottom-invites">

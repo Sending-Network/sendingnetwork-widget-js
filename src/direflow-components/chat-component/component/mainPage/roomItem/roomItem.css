@@ -1,20 +1,7 @@
-.rooms .room-invite {
-  font-size: 14px;
-  height: 60px;
-  line-height: 60px;
-  padding: 0 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-  user-select: none;
-  color: #fff;
-  display: flex;
-}
 
 /* room-item */
 .rooms .room-item {
-  height: 70px;
+  height: 65px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -45,11 +32,9 @@
 .room-item-right {
   width: calc(100% - 54px);
   height: 44px;
-  padding: 12px 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 1px solid #eee;
 }
 .room-item-right-top {
   width: 100%;
@@ -66,7 +51,7 @@
   text-overflow: ellipsis;
   color: #000;
   font-family: Poppins;
-  font-size: 16px;
+  font-size: 15px;
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
@@ -81,7 +66,7 @@
   color: #999;
   text-align: right;
   font-family: Poppins;
-  font-size: 14px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px;
@@ -101,7 +86,7 @@
   text-overflow: ellipsis;
   color: #979797;
   font-family: Poppins;
-  font-size: 14px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px;
@@ -117,15 +102,18 @@
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px;
-  border-radius: 9px;
+  line-height: 18px;
+  border-radius: 10px;
   background-color: var(--primary-color);
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   margin-left: 4px;
-  padding: 1px 6px;
+  padding: 1px 7px;
+}
+.room-item-right-bottom-badge.circle {
+  width: 6px;
 }
 .room-item-right-bottom-invites {
   width: calc(100% - 64px);

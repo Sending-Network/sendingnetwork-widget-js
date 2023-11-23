@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./inviteRoomItem.css";
 import { api } from "../../../api"; 
-import { formatTextLength, timeFormat, formatUserName, getMsgStr, getDefaultAvatar } from "../../../utils/index";
+import { getInviteSendEvent, timeFormat } from "../../../utils/index";
 import { Filter, SendingNetworkEvent } from "sendingnetwork-js-sdk";
 import RoomAvatar from "../../roomAvatar/roomAvatar";
 import UserAvatar from "../../userAvatar/userAvatar";
@@ -15,7 +15,7 @@ const RoomItem = ({ room, isEditing, onCheckChanged, acceptInvite, rejectInvite}
   const [lastTime, setLastTime] = useState("");
   const [lastMsg, setLastMsg] = useState("");
   const [timestamp, setTimestamp] = useState(0);
-  const [inviteSender, setInviteSender] = useState(null)
+  const [senderEvent, setSenderEvent] = useState()
 
   useEffect(() => {
     if (room) {
@@ -23,7 +23,7 @@ const RoomItem = ({ room, isEditing, onCheckChanged, acceptInvite, rejectInvite}
       const members = room.getJoinedMembers();
       setMembership(ship);
       setMemberList(members);
-      setInviteSender(getInviteSendUser(room))
+      setSenderEvent(getInviteSendEvent(room))
       room.on("Room.timeline", onTimeline);
     }
     return (() => {
@@ -37,10 +37,12 @@ const RoomItem = ({ room, isEditing, onCheckChanged, acceptInvite, rejectInvite}
     }
   }, [room?.checked])
 
-  const getInviteSendUser = (room) => {
-    const userId = api.getUserId()
-    const senderEvent = room.currentState?.members[userId]?.events?.member // send invite event(SendingNetworkEvent)
-    return api._client.getUser(senderEvent?.event?.sender)
+  const getInviteSendUser = () => {
+    const res = api._client.getUser(senderEvent?.event?.sender)
+    console.error('getInviteSendUser: ', senderEvent, senderEvent?.event?.sender, res)
+  }
+  const getInviteSendTs = () => {
+    return senderEvent?.event?.origin_server_ts
   }
 
   const onTimeline = (sdnEvent) => {
@@ -67,13 +69,13 @@ const RoomItem = ({ room, isEditing, onCheckChanged, acceptInvite, rejectInvite}
           {checked ? checkIcon : circleIcon}
         </div> : null}
         <div className="invite-item-left">
-          <UserAvatar member={inviteSender} />
+          <UserAvatar member={getInviteSendUser()} />
         </div>
 
         <div className="invite-item-right">
           <div className="invite-item-right-before">
             <div className="invite-item-right-before-name">{room.name || room.calculateName}</div>
-            <div className="invite-item-right-before-time">{timestamp || ''}</div>
+            <div className="invite-item-right-before-time">{timeFormat(getInviteSendTs())}</div>
           </div>
           <div className="invite-item-right-after">
             {!isEditing && membership === "invite" && (

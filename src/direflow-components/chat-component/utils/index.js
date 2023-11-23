@@ -39,6 +39,7 @@ export const showToast = ({ type, msg, duration = 1250, callback }) => {
     case 'success': typeIcon = toastSuccessIcon; break;
     case 'error': typeIcon = toastErrorIcon; break;
     case 'info': typeIcon = toastInfoIcon; break;
+    case 'none': typeIcon = ''; break;
     default: typeIcon = toastInfoIcon; break;
   }
 
@@ -64,17 +65,18 @@ export const showToast = ({ type, msg, duration = 1250, callback }) => {
   content.style.display = 'flex';
   content.style.alignItems = 'center';
 
-  const contentLeft = document.createElement('img');
-  contentLeft.src = typeIcon;
-  contentLeft.style.height = '24px';
+  if (type !== 'none') {
+    const contentLeft = document.createElement('img');
+    contentLeft.src = typeIcon;
+    contentLeft.style.height = '24px';
+    contentLeft.style.marginRight = '10px';
+    content.appendChild(contentLeft);
+  }
 
   const contentRight = document.createElement('div');
   contentRight.style.fontSize = '14px';
-  contentRight.style.marginLeft = '10px';
   contentRight.style.color = '#CDCDCD';
   contentRight.innerText = msg;
-
-  content.appendChild(contentLeft);
   content.appendChild(contentRight);
   wrap.appendChild(content);
   const rootDom = window.widgetChatDom;
@@ -743,4 +745,12 @@ export const renderAnimation = (animateDom, animateName, animateStartCb, animate
     animateDom.classList.remove('animate__animated', animateName)
     animateEndCb && animateEndCb()
   })
+}
+
+/* 
+ * get invite SendingNetworkEvent
+ */
+export const getInviteSendEvent = (room) => {
+  const userId = api.getUserId()
+  return room.currentState?.members[userId]?.events?.member
 }
